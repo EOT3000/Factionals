@@ -2,9 +2,8 @@ package fly.factions.impl.dynmap;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
+import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
-import javafx.util.Pair;
-import jdk.nashorn.internal.ir.Block;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

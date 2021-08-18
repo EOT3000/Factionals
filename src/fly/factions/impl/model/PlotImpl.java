@@ -2,14 +2,14 @@ package fly.factions.impl.model;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
-import fly.factions.api.permissions.PlotPermission;
+import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
-import javafx.util.Pair;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlotImpl implements Plot {
     private final int x;

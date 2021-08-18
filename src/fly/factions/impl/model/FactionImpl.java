@@ -7,8 +7,8 @@ import fly.factions.api.model.*;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.Permissibles;
 import fly.factions.api.serialization.Serializer;
+import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
-import javafx.util.Pair;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -29,6 +29,8 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     public FactionImpl(String name, User leader, long time) {
         super(name, leader);
+
+        leader.setFaction(this);
 
         Permissibles.add(name, this);
         Permissibles.add(getId(), this);
@@ -401,13 +403,13 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
             sender.sendMessage(region.getName());
         }
 
-        sender.sendMessage();
+        sender.sendMessage("");
 
         for(ExecutiveDivision division : user.getFaction().getDepartments()) {
             sender.sendMessage(division.getName());
         }
 
-        sender.sendMessage();
+        sender.sendMessage("");
 
         for(Plot plot : user.getFaction().getPlots()) {
             sender.sendMessage(plot.getFaction().getName());

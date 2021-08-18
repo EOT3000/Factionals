@@ -1,9 +1,12 @@
 package fly.factions.impl.commands.faction.region.set.leader;
 
 import fly.factions.api.commands.CommandDivision;
+import fly.factions.api.commands.CommandRequirement;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.Region;
 import fly.factions.api.model.User;
+import fly.factions.api.permissions.FactionPermission;
+import fly.factions.impl.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -18,38 +21,45 @@ public class RegionSetLeaderCommand extends CommandDivision {
 
     @SuppressWarnings({"Pain please tell me what the NPE supression is", "unused", "deprecation"})
     public boolean run(CommandSender sender, String region, String newUser) {
-        if(CommandDivision.ArgumentType.checkAll(sender, new String[] {newUser}, ArgumentType.USER)) {
-            User user = USERS.get(Bukkit.getPlayer(sender.getName()).getUniqueId());
-            Faction faction = user.getFaction();
-            Region regionr = faction.getRegion(region);
+        User user = USERS.get(Bukkit.getPlayer(sender.getName()).getUniqueId());
+        Faction faction = user.getFaction();
+        Region regionr = faction.getRegion(region);
 
-            User victim = USERS.get(Bukkit.getOfflinePlayer(newUser).getUniqueId());
+        User victim = USERS.get(Bukkit.getOfflinePlayer(newUser).getUniqueId());
 
-            if(regionr == null) {
-                sender.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + region + ChatColor.LIGHT_PURPLE + " does not exist");
+        if (regionr == null) {
+            sender.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + region + ChatColor.RED + " does not exist");
 
-                return false;
-            }
-
-            if(!victim.getFaction().equals(faction)) {
-                sender.sendMessage(ChatColor.RED + "ERROR: this user is not in your faction");
-
-                return false;
-            }
-
-            if(faction.getLeader().equals(user)) {
-                regionr.setLeader(victim);
-
-                sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully set region leader to " + ChatColor.YELLOW + newUser);
-
-                return true;
-            } else {
-                sender.sendMessage(ChatColor.RED + "ERROR: you do not have permission to run that command");
-
-                return false;
-            }
+            return false;
         }
 
-        return false;
+        if (!victim.getFaction().equals(faction)) {
+            sender.sendMessage(ChatColor.RED + "ERROR: this user is not in your faction");
+
+            return false;
+        }
+
+        regionr.setLeader(victim);
+
+        sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully set region leader to " + ChatColor.YELLOW + newUser);
+
+        return true;
+    }
+
+    @Override
+    public ArgumentType[] getRequiredTypes() {
+        return new ArgumentType[] {
+                ArgumentType.STRING,
+                ArgumentType.USER
+        };
+    }
+
+    @Override
+    public Pair<CommandRequirement, Object>[] getUserRequirements() {
+        return new Pair[] {
+                new Pair<>(CommandRequirement.REQUIRE_PLAYER, null),
+                new Pair<>(CommandRequirement.REQUIRE_MEMBER_FACTION, null),
+                new Pair<>(CommandRequirement.REQUIRE_USER_PERMISSION, FactionPermission.OWNER)
+        };
     }
 }

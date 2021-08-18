@@ -87,7 +87,7 @@ public class ChatListener extends ListenerImpl {
                     }
 
                     for(String string : ret) {
-                        event.getPlayer().sendMessage(string);
+                        event.getPlayer().format(string);
                     }
 
                     return;

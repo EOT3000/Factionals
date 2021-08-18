@@ -7,18 +7,15 @@ import fly.factions.api.permissions.PlotPermission;
 import fly.factions.api.registries.Registry;
 import fly.factions.api.serialization.Serializer;
 import fly.factions.impl.model.*;
+import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
-import javafx.util.Pair;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class FactionSerializer extends Serializer<Faction> {
@@ -333,7 +330,7 @@ public class FactionSerializer extends Serializer<Faction> {
 
                 factionLot.put("permissions", permissions);
                 factionLot.put("areas", areas);
-                factionLot.put("town", lot.getTown().getName());
+                factionLot.put("town", lot.getTown() != null ? lot.getTown().getName() : "");
 
                 regionLots.put("" + lot.getId(), factionLot);
             }

@@ -1,9 +1,7 @@
 package fly.factions.impl.util;
 
 import fly.factions.Factionals;
-import fly.factions.api.model.ExecutiveDivision;
 import fly.factions.api.model.Faction;
-import fly.factions.api.model.Region;
 import fly.factions.api.model.User;
 import fly.factions.api.registries.Registry;
 

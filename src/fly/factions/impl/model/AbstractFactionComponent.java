@@ -1,6 +1,5 @@
 package fly.factions.impl.model;
 
-import fly.factions.api.model.Faction;
 import fly.factions.api.model.FactionComponent;
 import fly.factions.api.model.User;
 

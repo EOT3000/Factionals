@@ -2,9 +2,12 @@ package fly.factions.api.commands;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.Faction;
+import fly.factions.api.model.Plot;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
+import fly.factions.api.permissions.Permissibles;
 import fly.factions.api.registries.Registry;
+import fly.factions.impl.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,11 +17,10 @@ import org.bukkit.command.CommandSender;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import javafx.util.Pair;
-
 public abstract class CommandDivision implements CommandExecutor {
     protected static Factionals API = Factionals.getFactionals();
     protected static Registry<User, UUID> USERS = API.getRegistry(User.class, UUID.class);
+    protected static Registry<Plot, Integer> PLOTS = API.getRegistry(Plot.class, Integer.class);
     protected static Registry<Faction, String> FACTIONS = API.getRegistry(Faction.class, String.class);
 
     private Map<String, CommandDivision> subCommands = new HashMap<>();
@@ -66,7 +68,31 @@ public abstract class CommandDivision implements CommandExecutor {
             for(Method method : methods) {
                 if(method.getName().equalsIgnoreCase("run")) {
                     try {
-                        method.invoke(division, pushIntoStart(strings, commandSender));
+                        System.out.println("command check start");
+                        
+                        for(Pair<CommandRequirement, Object> pair : division.getUserRequirements()) {
+                            if(!pair.getKey().has(commandSender, parse(pair.getValue(), strings))) {
+                                commandSender.sendMessage(pair.getKey().format(commandSender));
+
+                                return false;
+                            }
+                        }
+
+                        int count = 0;
+
+                        for(ArgumentType type : division.getRequiredTypes()) {
+                            if(!type.check(strings[count])) {
+                                commandSender.sendMessage(type.format(strings[count]));
+                                
+                                return false;
+                            }
+
+                            count++;
+                        }
+
+                        System.out.println("command invoked");
+
+                        return (boolean) method.invoke(division, pushIntoStart(strings, commandSender));
                     } catch (Exception e) {
                         e.printStackTrace();
 
@@ -89,6 +115,22 @@ public abstract class CommandDivision implements CommandExecutor {
         division.onCommand(commandSender, command, s, clean(strings));
 
         return false;
+    }
+
+    private Object parse(Object obj, String[] args) {
+        if(obj instanceof Integer) {
+            return args[(Integer) obj];
+        }
+
+        return obj;
+    }
+    
+    public ArgumentType[] getRequiredTypes() {
+        return new ArgumentType[0];
+    }
+    
+    public Pair<CommandRequirement, Object>[] getUserRequirements() {
+        return new Pair[0];
     }
 
     //TODO: deal with manual array copy
@@ -119,13 +161,14 @@ public abstract class CommandDivision implements CommandExecutor {
     // If nothing but it terminates here, itself
     // If nothing and it doesn't terminate here, null
      public CommandDivision getNext(String string) {
+         if(subCommands.containsKey(string)) {
+             return subCommands.get(string);
+         }
+        
         if(string.isEmpty()) {
             return null;
         }
-
-        if(subCommands.containsKey(string)) {
-            return subCommands.get(string);
-        }
+        
         if(subCommands.containsKey("*")) {
             return this;
         }
@@ -189,6 +232,18 @@ public abstract class CommandDivision implements CommandExecutor {
             }
         },
 
+        CHOICE {
+            @Override
+            public boolean check(String string) {
+                return string.toLowerCase().replace("on", "false").replace("off", "false").replace("true", "false").equalsIgnoreCase("false");
+            }
+
+            @Override
+            public String format(String string) {
+                return ChatColor.RED + "ERROR: " + ChatColor.YELLOW + string + ChatColor.RED + " needs to be a 'on', 'off', 'true' or 'false'";
+            }
+        },
+
         STRING {
             @Override
             public boolean check(String string) {
@@ -232,6 +287,17 @@ public abstract class CommandDivision implements CommandExecutor {
             @Override
             public String format(String string) {
                 return ChatColor.RED + "ERROR: the user " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
+            }
+        },
+        PERMISSIBLE {
+            @Override
+            public boolean check(String string) {
+                return Permissibles.get(string).size() > 0;
+            }
+
+            @Override
+            public String format(String string) {
+                return ChatColor.RED + "ERROR: the string " + ChatColor.YELLOW + string + ChatColor.RED + " does not represent a permissible entity";
             }
         },
         @SuppressWarnings("all")

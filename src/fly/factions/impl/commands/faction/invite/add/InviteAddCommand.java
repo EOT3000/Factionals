@@ -1,8 +1,11 @@
 package fly.factions.impl.commands.faction.invite.add;
 
 import fly.factions.api.commands.CommandDivision;
+import fly.factions.api.commands.CommandRequirement;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.User;
+import fly.factions.api.permissions.FactionPermission;
+import fly.factions.impl.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -17,22 +20,37 @@ public class InviteAddCommand extends CommandDivision {
 
     @SuppressWarnings({"unused", "deprecation"})
     public boolean run(CommandSender sender, String name) {
-        if(CommandDivision.ArgumentType.checkAll(sender, new String[] {name}, ArgumentType.USER)) {
-            Faction faction = USERS.get(((Player) sender).getUniqueId()).getFaction();
-            User user = USERS.get(Bukkit.getOfflinePlayer(name).getUniqueId());
+        Faction faction = USERS.get(((Player) sender).getUniqueId()).getFaction();
+        User user = USERS.get(Bukkit.getOfflinePlayer(name).getUniqueId());
 
-            if(user.getFaction() != faction) {
-                user.addInvite(faction);
+        if (user.getFaction() != faction) {
+            user.addInvite(faction);
 
-                user.sendMessage(ChatColor.LIGHT_PURPLE + "You have been invited to the faction " + ChatColor.YELLOW + faction.getName() + ChatColor.LIGHT_PURPLE + ". Join using /f join ");
+            user.sendMessage(ChatColor.LIGHT_PURPLE + "You have been invited to the faction " + ChatColor.YELLOW + faction.getName() + ChatColor.LIGHT_PURPLE + ". Join using /f join ");
 
-                faction.broadcast(ChatColor.YELLOW + name + ChatColor.LIGHT_PURPLE + " has been invited to the faction by " + ChatColor.YELLOW + sender.getName());
-                return true;
-            }
-
-            sender.sendMessage(ChatColor.RED + "ERROR: user is already in your faction");
+            faction.broadcast(ChatColor.YELLOW + name + ChatColor.LIGHT_PURPLE + " has been invited to the faction by " + ChatColor.YELLOW + sender.getName());
+            return true;
         }
+
+        sender.sendMessage(ChatColor.RED + "ERROR: user is already in your faction");
 
         return false;
     }
+
+    @Override
+    public ArgumentType[] getRequiredTypes() {
+        return new ArgumentType[] {
+                ArgumentType.USER
+        };
+    }
+
+    @Override
+    public Pair<CommandRequirement, Object>[] getUserRequirements() {
+        return new Pair[] {
+                new Pair<>(CommandRequirement.REQUIRE_PLAYER, null),
+                new Pair<>(CommandRequirement.REQUIRE_MEMBER_FACTION, null),
+                new Pair<>(CommandRequirement.REQUIRE_USER_PERMISSION, FactionPermission.USERS)
+        };
+    }
 }
+

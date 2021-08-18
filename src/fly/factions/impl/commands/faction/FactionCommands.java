@@ -1,9 +1,11 @@
-package fly.factions.impl.commands;
+package fly.factions.impl.commands.faction;
 
 import fly.factions.api.commands.CommandDivision;
+import fly.factions.impl.commands.faction.claim.ClaimCommand;
 import fly.factions.impl.commands.faction.create.CreateCommand;
 import fly.factions.impl.commands.faction.department.DepartmentCommand;
 import fly.factions.impl.commands.faction.invite.InviteCommand;
+import fly.factions.impl.commands.faction.join.FactionJoinCommand;
 import fly.factions.impl.commands.faction.region.RegionCommand;
 
 public class FactionCommands extends CommandDivision {
@@ -34,15 +36,26 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f department", "View department commands");
 
+        addHelpEntry("/f plot", "View plot commands");
+
 
         addSubCommand("create", new CreateCommand());
 
         addSubCommand("invite", new InviteCommand());
+
+        addSubCommand("join", new FactionJoinCommand());
+
+        
+        
+        addSubCommand("claim", new ClaimCommand());
 
 
 
         addSubCommand("region", new RegionCommand());
 
         addSubCommand("department", new DepartmentCommand());
+
+        //Broken shit
+        addSubCommand("plot", null);
     }
 }

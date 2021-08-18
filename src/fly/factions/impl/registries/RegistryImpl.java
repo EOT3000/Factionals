@@ -2,7 +2,10 @@ package fly.factions.impl.registries;
 
 import fly.factions.api.registries.Registry;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistryImpl<V, K> implements Registry<V, K> {
     private Map<K, V> map = new HashMap<>();

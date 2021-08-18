@@ -1,11 +1,9 @@
 package fly.factions.api.model;
 
 import fly.factions.api.permissions.PlotPermission;
-import javafx.util.Pair;
 import org.bukkit.World;
 
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Set;
 
 public interface Lot extends LandDivision {

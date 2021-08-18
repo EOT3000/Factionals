@@ -4,7 +4,9 @@ import fly.factions.api.model.*;
 import fly.factions.api.permissions.PlotPermission;
 import org.bukkit.World;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LotImpl implements Lot {
     private PlotOwner owner;

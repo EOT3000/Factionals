@@ -2,10 +2,11 @@ package fly.factions.api.serialization;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.Savable;
-import fly.factions.api.registries.Registry;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class Serializer<T extends Savable> {
     protected Factionals factionals;

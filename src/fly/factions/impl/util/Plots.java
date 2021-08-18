@@ -2,18 +2,16 @@ package fly.factions.impl.util;
 
 import fly.factions.Factionals;
 import fly.factions.api.commands.CommandRegister;
-import fly.factions.api.model.*;
+import fly.factions.api.model.Faction;
+import fly.factions.api.model.Plot;
+import fly.factions.api.model.Region;
+import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
-import fly.factions.api.permissions.Permissibles;
-import fly.factions.api.permissions.PlotPermission;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 public class Plots {
     static {

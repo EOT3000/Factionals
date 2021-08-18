@@ -1,7 +1,7 @@
 package fly.factions.api.model;
 
+import fly.factions.impl.util.Pair;
 import org.bukkit.Location;
-import javafx.util.Pair;
 
 import java.util.Map;
 

@@ -19,18 +19,51 @@ public enum CommandRequirement {
         }
 
         @Override
-        public String sendMessage(CommandSender sender) {
+        public String format(CommandSender sender) {
             return ChatColor.RED + "ERROR: you must be a player to run this command";
+        }
+    },
+    REQUIRE_MEMBER_FACTION {
+        @Override
+        public boolean has(CommandSender sender, Object info) {
+            return USERS.get(((Player) sender).getUniqueId()).getFaction() != null;
+        }
+
+        @Override
+        public String format(CommandSender sender) {
+            return ChatColor.RED + "ERROR: you must be in a faction to run this command";
         }
     },
     REQUIRE_USER_PERMISSION {
         @Override
         public boolean has(CommandSender sender, Object info) {
-            return REQUIRE_PLAYER.has(sender, info) && getUser(sender).getFaction().hasPermission(getUser(sender), (FactionPermission) info);
+            return getUser(sender).getFaction().hasPermission(getUser(sender), (FactionPermission) info);
         }
 
         @Override
-        public String sendMessage(CommandSender sender) {
+        public String format(CommandSender sender) {
+            return ChatColor.RED + "ERROR: no permission";
+        }
+    },
+    REQUIRE_REGION_LEADER {
+        @Override
+        public boolean has(CommandSender sender, Object info) {
+            return getUser(sender).getFaction().getRegion((String) info).getLeader().equals(getUser(sender));
+        }
+
+        @Override
+        public String format(CommandSender sender) {
+            return ChatColor.RED + "ERROR: no permission";
+        }
+    }, 
+    REQUIRE_DEPARTMENT_LEADER {
+        @Override
+        public boolean has(CommandSender sender, Object info) {
+            return getUser(sender).getFaction().getRegion((String) info).getLeader().equals(getUser(sender));
+        }
+
+        @Override
+        public String format(CommandSender sender) {
             return ChatColor.RED + "ERROR: no permission";
         }
     };
@@ -45,9 +78,21 @@ public enum CommandRequirement {
 
     public abstract boolean has(CommandSender sender, Object info);
 
-    public abstract String sendMessage(CommandSender sender);
+    public abstract String format(CommandSender sender);
 
-    public static boolean checkAll() {
-        return false;
+    public static boolean checkAll(CommandSender sender, Object[] objects, CommandRequirement... commandRequirements) {
+        int count = 0;
+
+        for(Object object : objects) {
+            if(!commandRequirements[count].has(sender, object)) {
+                sender.sendMessage(commandRequirements[count].format(sender));
+
+                return false;
+            }
+
+            count++;
+        }
+
+        return true;
     }
 }

@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -110,7 +109,7 @@ public abstract class CommandRegister implements TabExecutor {
     public static void requireMoreThan(int number, int check, String message, CommandSender sender) {
         if(number <= check) {
             sender.sendMessage(message);
-            throw new CommandRegister.ReturnNowException();
+            throw new ReturnNowException();
         }
     }
 

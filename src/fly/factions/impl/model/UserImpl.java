@@ -1,17 +1,13 @@
 package fly.factions.impl.model;
 
-import fly.factions.Factionals;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.Permissibles;
-import fly.factions.api.registries.Registry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;

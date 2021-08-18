@@ -5,33 +5,27 @@ import fly.factions.api.model.PlayerGroup;
 import fly.factions.api.model.Plot;
 import fly.factions.api.model.User;
 import fly.factions.api.registries.Registry;
+import fly.factions.api.serialization.Serializer;
 import fly.factions.impl.commands.FactionCommand;
-//import fly.factions.impl.listeners.ChatListener;
-import fly.factions.impl.commands.FactionCommands;
 import fly.factions.impl.commands.PlotCommand;
+import fly.factions.impl.commands.faction.FactionCommands;
 import fly.factions.impl.dynmap.DynmapManager;
 import fly.factions.impl.listeners.JoinLeaveListener;
-//import fly.factions.impl.listeners.MenusListener;
 import fly.factions.impl.listeners.PlotListener;
 import fly.factions.impl.registries.RegistryImpl;
 import fly.factions.impl.serialization.FactionSerializer;
-import fly.factions.api.serialization.Serializer;
 import fly.factions.impl.serialization.UserSerializer;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.dynmap.DynmapAPI;
 import org.dynmap.markers.MarkerSet;
 
-import java.io.File;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -99,11 +93,12 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         }
 
         Collection<Faction> factionList = Serializer.loadAll(Faction.class);
-        Serializer.loadAll(Faction.class);
 
         for(Faction faction : factionList) {
             registries.get(Faction.class).set(faction.getName(), faction);
         }
+        
+        Serializer.loadAll(Faction.class);
 
 
 
