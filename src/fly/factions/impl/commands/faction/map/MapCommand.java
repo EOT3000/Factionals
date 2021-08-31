@@ -17,7 +17,7 @@ import java.util.*;
 
 public class MapCommand extends CommandDivision {
     public MapCommand() {
-        addSubCommand("*", this);
+        addSubCommand("", this);
     }
 
     public boolean run(CommandSender sender) {

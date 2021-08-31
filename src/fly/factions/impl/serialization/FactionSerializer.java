@@ -47,6 +47,8 @@ public class FactionSerializer extends Serializer<Faction> {
             Faction faction;
 
             if(!plots) {
+                System.out.println(file.getPath());
+
                 faction = new FactionImpl(configuration.getString("name"), r.get(UUID.fromString(configuration.getString("leader"))), configuration.getLong("creationTime"));
 
                 faction.setBorderColor(Color.fromRGB(configuration.getInt("br"), configuration.getInt("bg"), configuration.getInt("bb")));
@@ -130,7 +132,6 @@ public class FactionSerializer extends Serializer<Faction> {
                 for (String string : plots.getKeys(false)) {
                     ConfigurationSection plot = plots.getConfigurationSection(string);
                     Plot factionPlot = new PlotImpl(plot.getInt("x"), plot.getInt("z"), Plots.getWorld(plot.getInt("w")), faction);
-
 
                     factionPlot.setAdministrator((LandAdministrator) getPlotOwner(plot.getString("administrator")));
                     /*

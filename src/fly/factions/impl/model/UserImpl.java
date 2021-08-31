@@ -135,7 +135,7 @@ public class UserImpl implements User {
 
     @Override
     public void setFaction(Faction faction) {
-        if(this.faction != null) {
+        if(this.faction != null && this.faction != faction) {
             this.faction.removeMember(this);
         }
 

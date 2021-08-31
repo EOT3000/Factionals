@@ -2,10 +2,7 @@ package fly.factions.api.permissions;
 
 import fly.factions.api.model.Permissible;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Permissibles {
     private static Map<String, List<Permissible>> MAP = new HashMap<>();
@@ -23,6 +20,8 @@ public class Permissibles {
     }
 
     public static List<Permissible> get(String a) {
+        System.out.println(MAP);
+
         return new ArrayList<>(MAP.getOrDefault(a.toLowerCase(), new ArrayList<>()));
     }
 }

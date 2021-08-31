@@ -29,9 +29,11 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f claim fill", "Fills in a hollow-ly filled area with chunks");
 
-        addHelpEntry("/f info", "View information about your faction");
+        addHelpEntry("/f info <faction name>", "View information about a faction");
 
         addHelpEntry("/f map", "View a map of nearby chunks and their factions");
+
+        addHelpEntry("/f list", "Get a list of all factions");
 
         addHelpEntry("/f set", "View faction settings commands");
 

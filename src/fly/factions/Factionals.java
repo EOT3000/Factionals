@@ -13,6 +13,7 @@ import fly.factions.impl.dynmap.DynmapManager;
 import fly.factions.impl.listeners.JoinLeaveListener;
 import fly.factions.impl.listeners.PlotListener;
 import fly.factions.impl.registries.RegistryImpl;
+import fly.factions.impl.registries.StringRegistryImpl;
 import fly.factions.impl.serialization.FactionSerializer;
 import fly.factions.impl.serialization.UserSerializer;
 import net.milkbowl.vault.economy.Economy;
@@ -58,7 +59,7 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         logger.info(ChatColor.DARK_AQUA + "---------------------------------------------");
 
 
-        registries.put(Faction.class, new RegistryImpl<Faction, String>(Faction.class));
+        registries.put(Faction.class, new StringRegistryImpl<>(Faction.class));
         registries.put(Serializer.class, new RegistryImpl<Serializer, Class>(Serializer.class));
         registries.put(User.class, new RegistryImpl<User, UUID>(User.class));
         registries.put(Plot.class, new RegistryImpl<Plot, Integer>(Plot.class));

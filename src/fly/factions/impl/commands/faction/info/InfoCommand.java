@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 public class InfoCommand extends CommandDivision {
     public InfoCommand() {
         addSubCommand("*", this);
+
+        addHelpEntry("/f info <faction name>", "View information about a faction");
     }
 
     public boolean run(CommandSender sender, String faction) {
