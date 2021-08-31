@@ -168,4 +168,11 @@ public class UserImpl implements User {
     public boolean userHasPlotPermissions(User user, boolean owner, boolean pub) {
         return user.equals(this);
     }
+
+    @Override
+    public String toString() {
+        return "UserImpl{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }
