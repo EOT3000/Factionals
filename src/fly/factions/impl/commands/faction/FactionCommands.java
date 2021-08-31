@@ -34,7 +34,7 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f town", "View town commands");
 
-        addHelpEntry("/f department", "View department commands");
+        addHelpEntry("/f department", "Not Yet Implemented (WIP)");
 
         addHelpEntry("/f plot", "View plot commands");
 
@@ -53,7 +53,7 @@ public class FactionCommands extends CommandDivision {
 
         addSubCommand("region", new RegionCommand());
 
-        addSubCommand("department", new DepartmentCommand());
+        //addSubCommand("department", new DepartmentCommand());
 
         //Broken shit
         addSubCommand("plot", null);

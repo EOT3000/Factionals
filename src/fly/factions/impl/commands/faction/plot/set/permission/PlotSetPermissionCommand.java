@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
 public class PlotSetPermissionCommand extends CommandDivision {
     private static final Pattern permType = Pattern.compile("[adfpr]");
 
+    //TODO: plot owner requirement
+
     public PlotSetPermissionCommand() {
         addSubCommand("*", this);
     }
@@ -105,7 +107,7 @@ public class PlotSetPermissionCommand extends CommandDivision {
 
             lot.setPermission(result.get(0), plotPermission, p(type));
 
-            sender.sendMessage(ChatColor.GREEN + "Successfully set " + ChatColor.YELLOW + plotPermission + ChatColor.RED + " of " + ChatColor.YELLOW + permissible + ChatColor.RED + " to " + ChatColor.YELLOW + p(type));
+            sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully set " + ChatColor.YELLOW + plotPermission + ChatColor.LIGHT_PURPLE + " of " + ChatColor.YELLOW + permissible + ChatColor.LIGHT_PURPLE + " to " + ChatColor.YELLOW + p(type));
 
             return true;
         } catch (IllegalArgumentException e) {
@@ -128,7 +130,6 @@ public class PlotSetPermissionCommand extends CommandDivision {
         return new Pair[] {
                 new Pair<>(CommandRequirement.REQUIRE_PLAYER, null),
                 new Pair<>(CommandRequirement.REQUIRE_MEMBER_FACTION, null),
-                new Pair<>(CommandRequirement.REQUIRE_REGION_LEADER, 0)
         };
     }
 

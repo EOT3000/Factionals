@@ -1,20 +1,23 @@
-package fly.factions.impl.commands.faction.plot.set.town;
+package fly.factions.impl.commands.faction.town.create;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
-import fly.factions.api.model.*;
+import fly.factions.api.model.Region;
+import fly.factions.api.model.User;
+import fly.factions.impl.model.RegionImpl;
+import fly.factions.impl.model.TownImpl;
 import fly.factions.impl.util.Pair;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-public class PlotSetTownCommand extends CommandDivision {
-    public PlotSetTownCommand() {
+public class TownCreateCommand extends CommandDivision {
+    public TownCreateCommand() {
         addSubCommand("*", this);
     }
 
-    public boolean run(CommandSender sender, int id, String region, String town) {
-        User user = USERS.get(((Player) sender).getUniqueId());
+    public boolean run(CommandSender sender, String region, String name) {
+        User user = USERS.get(Bukkit.getPlayer(sender.getName()).getUniqueId());
 
         Region factionRegion = user.getFaction().getRegion(region);
 
@@ -24,25 +27,14 @@ public class PlotSetTownCommand extends CommandDivision {
             return false;
         }
 
-        Town factionTown = factionRegion.getTown(town);
-
-        if(factionTown == null) {
-            sender.sendMessage(ChatColor.RED + "ERROR: the town " + ChatColor.YELLOW + town + " does not exist");
-
+        if (user.getFaction().getRegion(name) != null) {
+            user.sendMessage(ChatColor.RED + "ERROR: the town " + ChatColor.YELLOW + name + ChatColor.RED + " already exists");
             return false;
         }
 
-        Lot lot = factionRegion.getLots().get(id);
+        user.getFaction().getRegion(region).addTown(new TownImpl(name, user, factionRegion));
 
-        if(lot == null) {
-            sender.sendMessage(ChatColor.RED + "ERROR: the lot " + ChatColor.YELLOW + id + " does not exist");
-
-            return false;
-        }
-
-        lot.setTown(factionTown);
-
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully added lot " + ChatColor.YELLOW + id + ChatColor.LIGHT_PURPLE + " to town " + ChatColor.YELLOW);
+        user.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully created town " + ChatColor.YELLOW + name);
 
         return true;
     }
@@ -50,8 +42,6 @@ public class PlotSetTownCommand extends CommandDivision {
     @Override
     public ArgumentType[] getRequiredTypes() {
         return new ArgumentType[] {
-                ArgumentType.INT,
-                ArgumentType.STRING,
                 ArgumentType.STRING
         };
     }
