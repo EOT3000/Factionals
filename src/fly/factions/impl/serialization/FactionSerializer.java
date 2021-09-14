@@ -176,9 +176,16 @@ public class FactionSerializer extends Serializer<Faction> {
                         }
 
                         lot.setPrice(lotSection.getInt("price"));
-                        lot.setOwner(getPlotOwner(lotSection.getString("owner")));
 
-                        lot.setTown(region.getTown(lotSection.getString("town")));
+                        if(!lotSection.getString("town").isEmpty()) {
+                            lot.setTown(region.getTown(lotSection.getString("town")));
+                        }
+
+                        if(!lotSection.getString("owner").isEmpty()) {
+                            lot.setOwner(getPlotOwner(lotSection.getString("owner")));
+                        } else {
+                            lot.setOwner(lot.getTown() == null ? lot.getRegion() : lot.getTown());
+                        }
 
                         ConfigurationSection lotPermissions = lotSection.getConfigurationSection("permissions");
 
@@ -398,6 +405,8 @@ public class FactionSerializer extends Serializer<Faction> {
         configuration.set("fg", faction.getFillColor().getGreen());
         configuration.set("fb", faction.getFillColor().getBlue());
         configuration.set("fo", faction.getFillOpacity());
+
+        configuration.set("creationTime", faction.getCreationTime());
 
         try {
             configuration.save(file);

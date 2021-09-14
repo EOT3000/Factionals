@@ -195,6 +195,16 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "FactionImpl{" +
+                "leader=" + leader +
+                ", name='" + name + '\'' +
+                ", creationTime=" + creationTime +
+                ", isDeleted=" + isDeleted +
+                '}';
+    }
+
     //TODO: Move commands into separate class
 
     private static void requireFactionNotExist(CommandSender sender, String name) {

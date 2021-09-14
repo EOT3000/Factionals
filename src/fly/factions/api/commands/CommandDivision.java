@@ -177,9 +177,15 @@ public abstract class CommandDivision implements CommandExecutor {
     }
 
     public void help(CommandSender sender, int page) {
+        sender.sendMessage(ChatColor.GOLD + "Help");
+
         for(Pair<String, String> command : helpEntries) {
             sender.sendMessage(ChatColor.DARK_AQUA + command.getKey() + ChatColor.DARK_GRAY + " - " + ChatColor.AQUA + command.getValue());
         }
+    }
+
+    protected String translate(String s) {
+        return ChatColor.translateAlternateColorCodes('&', s);
     }
 
     public enum ArgumentType {

@@ -48,7 +48,7 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
     @Override
     public boolean userHasPlotPermissions(User user, boolean owner, boolean pub) {
-        return owner ? leader.equals(user) : members.contains(user);
+        return (!owner && members.contains(user)) || leader.equals(user);
     }
 
     @Override

@@ -4,9 +4,7 @@ import fly.factions.api.model.LandAdministrator;
 import fly.factions.api.model.User;
 import org.bukkit.Color;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public abstract class AbstractLandAdministrator<T> extends AbstractFactionComponent implements LandAdministrator<T> {
     protected Color fillColor = Color.fromRGB(255,255,255);
@@ -14,7 +12,7 @@ public abstract class AbstractLandAdministrator<T> extends AbstractFactionCompon
 
     protected Color borderColor = Color.fromRGB(255,255,255);
 
-    protected List<T> plots = new ArrayList<>();
+    protected Set<T> plots = new HashSet<>();
 
     protected AbstractLandAdministrator(String name, User leader) {
         super(name, leader);

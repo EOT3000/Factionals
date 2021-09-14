@@ -24,7 +24,7 @@ public class TownImpl extends AbstractLandAdministrator<Lot> implements Town {
 
     @Override
     public boolean userHasPlotPermissions(User user, boolean owner, boolean pub) {
-        return false;
+        return (!owner && members.contains(user)) || leader.equals(user);
     }
 
     @Override

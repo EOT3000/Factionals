@@ -20,8 +20,6 @@ public class Permissibles {
     }
 
     public static List<Permissible> get(String a) {
-        System.out.println(MAP);
-
         return new ArrayList<>(MAP.getOrDefault(a.toLowerCase(), new ArrayList<>()));
     }
 }

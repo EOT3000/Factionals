@@ -2,6 +2,7 @@ package fly.factions.impl.commands.faction.region;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.impl.commands.faction.region.create.RegionCreateCommand;
+import fly.factions.impl.commands.faction.region.info.RegionInfoCommand;
 import fly.factions.impl.commands.faction.region.lot.RegionLotCommand;
 import fly.factions.impl.commands.faction.region.set.RegionSetCommand;
 
@@ -19,5 +20,7 @@ public class RegionCommand extends CommandDivision {
         addSubCommand("create", new RegionCreateCommand());
 
         addSubCommand("lot", new RegionLotCommand());
+
+        addSubCommand("info", new RegionInfoCommand());
     }
 }

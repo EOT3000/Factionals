@@ -161,6 +161,8 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
     @Override
     public void onDisable() {
+        System.out.println(registries.get(Faction.class).list());
+
         Serializer.saveAll(registries.get(Faction.class).list(), Faction.class);
         Serializer.saveAll(registries.get(User.class).list(), User.class);
     }

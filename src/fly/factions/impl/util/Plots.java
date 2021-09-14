@@ -88,15 +88,7 @@ public class Plots {
     }
 
     public static World getWorld(int worldId) {
-        World x = getWorld0(worldId);
-
-        for(World world : Bukkit.getWorlds()) {
-            System.out.println(world.getName());
-        }
-
-        System.out.println(worldId + " " + x.getName());
-
-        return x;
+        return getWorld0(worldId);
     }
 
     public static World getWorld0(int worldId) {

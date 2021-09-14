@@ -98,4 +98,13 @@ public class PlotImpl implements Plot {
     public Map<Pair<Integer, Integer>, Integer> getLocations() {
         return new HashMap<>(areas);
     }
+
+    @Override
+    public String toString() {
+        return "PlotImpl{" +
+                "x=" + x +
+                ", z=" + z +
+                ", w=" + w +
+                '}';
+    }
 }

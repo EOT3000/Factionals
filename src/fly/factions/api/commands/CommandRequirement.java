@@ -48,7 +48,7 @@ public enum CommandRequirement {
     REQUIRE_REGION_LEADER {
         @Override
         public boolean has(CommandSender sender, Object info) {
-            return getUser(sender).getFaction().getRegion((String) info).getLeader().equals(getUser(sender));
+            return getUser(sender).getFaction().getRegion((String) info).getLeader().equals(getUser(sender)) || getUser(sender).getFaction().hasPermission(getUser(sender), FactionPermission.OWNER);
         }
 
         @Override
@@ -59,7 +59,7 @@ public enum CommandRequirement {
     REQUIRE_DEPARTMENT_LEADER {
         @Override
         public boolean has(CommandSender sender, Object info) {
-            return getUser(sender).getFaction().getRegion((String) info).getLeader().equals(getUser(sender));
+            return getUser(sender).getFaction().getDepartment((String) info).getLeader().equals(getUser(sender)) || getUser(sender).getFaction().hasPermission(getUser(sender), FactionPermission.OWNER);
         }
 
         @Override

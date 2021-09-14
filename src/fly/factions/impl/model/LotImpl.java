@@ -27,6 +27,8 @@ public class LotImpl implements Lot {
         this.faction = region.getFaction();
         this.region = region;
 
+        this.owner = region;
+
         for(PlotPermission permission : PlotPermission.values()) {
             permissionMap.put(permission, new HashSet<>());
         }
@@ -108,6 +110,10 @@ public class LotImpl implements Lot {
                 this.town.removePlot(this);
             }
 
+            if(owner == region) {
+                owner = town;
+            }
+
             this.town = town;
             town.addPlot(this);
         }
@@ -116,5 +122,10 @@ public class LotImpl implements Lot {
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public Region getRegion() {
+        return region;
     }
 }

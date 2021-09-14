@@ -15,6 +15,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -86,7 +87,7 @@ public class PlotListener extends ListenerImpl {
             }
 
             if (!lot.hasPermission(getUserFromPlayer(event.getPlayer()), PlotPermission.DETAILS)) {
-                if (t.equals(Material.PAINTING) || t.equals(Material.ITEM_FRAME) || t.equals(Material.ARMOR_STAND)) {
+                if (t.equals(Material.PAINTING) || t.equals(Material.ITEM_FRAME) || t.equals(Material.GLOW_ITEM_FRAME) || t.equals(Material.ARMOR_STAND)) {
                     event.setCancelled(true);
                 }
             }
@@ -98,13 +99,13 @@ public class PlotListener extends ListenerImpl {
             }
         }
 
-        for (PlotPermission permission : PlotPermission.values()) {
+        /*for (PlotPermission permission : PlotPermission.values()) {
             System.out.println(event.getPlayer().getName() + " " + permission + " " + permission.required(event.getClickedBlock(), event.getAction(), event.getPlayer().isSneaking()) + " " + lot.hasPermission(getUserFromPlayer(event.getPlayer()), permission));
 
             if (permission.required(event.getClickedBlock(), event.getAction(), event.getPlayer().isSneaking()) && !lot.hasPermission(getUserFromPlayer(event.getPlayer()), permission)) {
                 event.setCancelled(true);
             }
-        }
+        }*/
     }
 
     @EventHandler
@@ -120,6 +121,10 @@ public class PlotListener extends ListenerImpl {
         Lot lot = plot.getLot(event.getBlock().getLocation());
 
         if (lot == null) {
+            if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer((Player) event.getPlayer()), false, false)) {
+                event.setCancelled(true);
+            }
+
             return;
         }
 
@@ -145,6 +150,10 @@ public class PlotListener extends ListenerImpl {
         Lot lot = plot.getLot(event.getBlock().getLocation());
 
         if (lot == null) {
+            if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer((Player) event.getPlayer()), false, false)) {
+                event.setCancelled(true);
+            }
+
             return;
         }
 
@@ -176,10 +185,14 @@ public class PlotListener extends ListenerImpl {
 
         if(plot != null) {
             if (lot == null) {
+                if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer((Player) event.getPlayer()), false, false)) {
+                    event.setCancelled(true);
+                }
+
                 return;
             }
 
-            if(!lot.hasPermission(Factionals.getFactionals().getRegistry(User.class, UUID.class).get(event.getPlayer().getUniqueId()), PlotPermission.CONTAINER)) {
+            if(!lot.hasPermission(getUserFromPlayer((Player) event.getPlayer()), PlotPermission.CONTAINER)) {
                 event.setCancelled(true);
             }
         }

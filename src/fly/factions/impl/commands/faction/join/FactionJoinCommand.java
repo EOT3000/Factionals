@@ -23,6 +23,9 @@ public class FactionJoinCommand extends CommandDivision {
 
         if(user.getInvites().contains(factionObject)) {
             user.setFaction(factionObject);
+
+            user.getFaction().broadcast(ChatColor.YELLOW + user.getName() + ChatColor.LIGHT_PURPLE + " has joined the faction");
+
             return true;
         } else {
             sender.sendMessage(ChatColor.RED + "ERROR: you do not have an invite to this faction");

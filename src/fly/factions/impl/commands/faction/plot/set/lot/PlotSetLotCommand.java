@@ -20,10 +20,17 @@ public class PlotSetLotCommand extends CommandDivision {
         addSubCommand("*", this);
     }
 
-    public boolean run(CommandSender sender, int x1, int z1, int x2, int z2, String region, int id) {
+    public boolean run(CommandSender sender, String x1s, String z1s, String x2s, String z2s, String region, String ids) {
+        int x1 = Integer.parseInt(x1s);
+        int z1 = Integer.parseInt(z1s);
+        int x2 = Integer.parseInt(x2s);
+        int z2 = Integer.parseInt(z2s);
+
         Location location = ((Player) sender).getLocation();
 
         User user = USERS.get(((Player) sender).getUniqueId());
+
+        int id = Integer.parseInt(ids);
 
         int xL = Math.min(x1, x2);
         int zL = Math.min(z1, z2);

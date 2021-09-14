@@ -26,7 +26,7 @@ public class InviteAddCommand extends CommandDivision {
         if (user.getFaction() != faction) {
             user.addInvite(faction);
 
-            user.sendMessage(ChatColor.LIGHT_PURPLE + "You have been invited to the faction " + ChatColor.YELLOW + faction.getName() + ChatColor.LIGHT_PURPLE + ". Join using /f join ");
+            user.sendMessage(ChatColor.LIGHT_PURPLE + "You have been invited to the faction " + ChatColor.YELLOW + faction.getName() + ChatColor.LIGHT_PURPLE + ". Join using " + ChatColor.YELLOW + "/f join " + faction.getName());
 
             faction.broadcast(ChatColor.YELLOW + name + ChatColor.LIGHT_PURPLE + " has been invited to the faction by " + ChatColor.YELLOW + sender.getName());
             return true;

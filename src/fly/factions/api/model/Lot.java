@@ -28,4 +28,6 @@ public interface Lot extends LandDivision {
     void setTown(Town town);
 
     int getId();
+
+    Region getRegion();
 }
