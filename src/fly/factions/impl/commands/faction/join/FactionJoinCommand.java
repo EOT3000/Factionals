@@ -13,6 +13,8 @@ import java.util.UUID;
 
 public class FactionJoinCommand extends CommandDivision {
     public FactionJoinCommand() {
+        addHelpEntry("/f join <faction>", "Attempt to join the given faction");
+
         addSubCommand("*", this);
     }
 

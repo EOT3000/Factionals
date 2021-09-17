@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 
 public class PlotSetTownCommand extends CommandDivision {
     public PlotSetTownCommand() {
+        addHelpEntry("/f plot set region <lot id> <region> <town>", "Set the lot's town");
+
         addSubCommand("*", this);
     }
 

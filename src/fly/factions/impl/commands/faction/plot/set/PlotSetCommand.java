@@ -9,9 +9,9 @@ import fly.factions.impl.commands.faction.plot.set.town.PlotSetTownCommand;
 public class PlotSetCommand extends CommandDivision {
     public PlotSetCommand() {
         addHelpEntry("/f plot set permission <lot id> <permission> <permissible> <on|off>", "Set the lot's permission for some entity (uses region currently standing in)");
-        addHelpEntry("/f plot set region <lot id> <permission> <permissible> <on|off>", "Set the lot's permission for some entity (uses region currently standing in)");
-        addHelpEntry("/f plot set town <lot id> <permission> <permissible> <on|off>", "Set the lot's permission for some entity (uses region currently standing in)");
-        addHelpEntry("/f plot set lot <lot id> <permission> <permissible> <on|off>", "Set the lot's permission for some entity (uses region currently standing in)");
+        addHelpEntry("/f plot set region <region>", "Set a plot's region");
+        addHelpEntry("/f plot set town <lot id> <region> <town>", "Set the lot's town");
+        addHelpEntry("/f plot set lot <x1> <z1> <x2> <z2> <region> <lot id>", "Set an area to a lot");
 
         addSubCommand("permission", new PlotSetPermissionCommand());
         addSubCommand("region", new PlotSetRegionCommand());

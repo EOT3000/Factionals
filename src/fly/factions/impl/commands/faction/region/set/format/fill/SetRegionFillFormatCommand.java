@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 
 public class SetRegionFillFormatCommand extends CommandDivision {
     public SetRegionFillFormatCommand() {
-        addHelpEntry("/f region set format fill <region> <fillRed> <fillGreen> <fillBlue> <fillOpacity>", "Set the region dynmap fill format");
+        addHelpEntry("/f region set format fill <region name> <fillRed> <fillGreen> <fillBlue> <fillOpacity>", "Set the region dynmap fill format");
 
 
         addSubCommand("*", this);

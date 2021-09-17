@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 
 public class SetRegionBorderFormatCommand extends CommandDivision {
     public SetRegionBorderFormatCommand() {
-        addHelpEntry("/f region set format border <region> <borderRed> <borderGreen> <borderBlue>", "Set the region dynmap border color");
+        addHelpEntry("/f region set format border <region name> <borderRed> <borderGreen> <borderBlue>", "Set the region dynmap border color");
 
 
         addSubCommand("*", this);

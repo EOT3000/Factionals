@@ -56,6 +56,8 @@ public class FactionSerializer extends Serializer<Faction> {
 
                 faction.setFillOpacity(configuration.getDouble("fo"));
 
+                //System.out.println("a");
+
                 //Departments
 
                 ConfigurationSection departments = configuration.getConfigurationSection("departments");
@@ -70,6 +72,8 @@ public class FactionSerializer extends Serializer<Faction> {
 
                     faction.addDepartment(division);
                 }
+
+                //System.out.println("b");
 
                 //Regions
 
@@ -98,6 +102,8 @@ public class FactionSerializer extends Serializer<Faction> {
                         factionRegion.setLot(factionLot.getId(), factionLot);
                     }
 
+                    //System.out.println("b2");
+
                     //Towns
 
                     ConfigurationSection towns = region.getConfigurationSection("towns");
@@ -121,11 +127,15 @@ public class FactionSerializer extends Serializer<Faction> {
 
                 //Members
 
+                //System.out.println("c");
+
                 for (String member : configuration.getStringList("members")) {
                     r.get(UUID.fromString(member)).setFaction(faction);
                 }
 
                 //Plots
+
+                //System.out.println("d");
 
                 ConfigurationSection plots = configuration.getConfigurationSection("plots");
 
@@ -149,7 +159,11 @@ public class FactionSerializer extends Serializer<Faction> {
                         }
                     }*/
                 }
+
+                //System.out.println("e");
             } else {
+                //System.out.println("f");
+
                 faction = factionals.getRegistry(Faction.class, String.class).get(configuration.getString("name"));
 
                 for(Region region : faction.getRegions()) {
@@ -175,6 +189,8 @@ public class FactionSerializer extends Serializer<Faction> {
                             plot.setLot(location, lot);
                         }
 
+                        //System.out.println("f1a");
+
                         lot.setPrice(lotSection.getInt("price"));
 
                         if(!lotSection.getString("town").isEmpty()) {
@@ -197,6 +213,8 @@ public class FactionSerializer extends Serializer<Faction> {
                                 lot.setPermission(plotPermissible, permission, true);
                             }
                         }
+
+                        //System.out.println("f1b");
                     }
                 }
             }

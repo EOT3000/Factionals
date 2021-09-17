@@ -23,6 +23,8 @@ public class PlotSetPermissionCommand extends CommandDivision {
     //TODO: plot owner requirement
 
     public PlotSetPermissionCommand() {
+        addHelpEntry("/f plot set permission <lot id> <permission> <permissible> <on|off>", "Set the lot's permission for some entity (uses region currently standing in)");
+
         addSubCommand("*", this);
     }
 

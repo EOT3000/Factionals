@@ -14,6 +14,8 @@ public class RegionCommand extends CommandDivision {
 
         addHelpEntry("/f region lot <region name>", "Add a lot");
 
+        addHelpEntry("/f region info <faction name> <region name>", "View information about a region");
+
 
         addSubCommand("set", new RegionSetCommand());
 

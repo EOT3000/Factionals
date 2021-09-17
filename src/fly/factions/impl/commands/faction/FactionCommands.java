@@ -35,7 +35,7 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f list", "Get a list of all factions");
 
-        addHelpEntry("/f set", "View faction settings commands");
+        //addHelpEntry("/f set", "View faction settings commands");
 
         addHelpEntry("/f region", "View region commands");
 

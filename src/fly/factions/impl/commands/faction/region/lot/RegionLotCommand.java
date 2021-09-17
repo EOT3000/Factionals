@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 
 public class RegionLotCommand extends CommandDivision {
     public RegionLotCommand() {
+        addHelpEntry("/f region lot <region name>", "Add a lot");
+
         addSubCommand("*", this);
     }
 

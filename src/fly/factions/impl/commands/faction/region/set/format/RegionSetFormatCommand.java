@@ -6,13 +6,13 @@ import fly.factions.impl.commands.faction.region.set.format.fill.SetRegionFillFo
 
 public class RegionSetFormatCommand extends CommandDivision {
     public RegionSetFormatCommand() {
-        addHelpEntry("/f region set format fill <region> <fillRed> <fillGreen> <fillBlue> <fillOpacity>", "Set the region dynmap fill format");
+        addHelpEntry("/f region set format fill <region name> <fillRed> <fillGreen> <fillBlue> <fillOpacity>", "Set the region dynmap fill format");
 
-        addHelpEntry("/f region set format border <region> <borderRed> <borderGreen> <borderBlue>", "Set the region dynmap border color");
+        addHelpEntry("/f region set format border <region name> <borderRed> <borderGreen> <borderBlue>", "Set the region dynmap border color");
 
 
         addSubCommand("fill", new SetRegionFillFormatCommand());
 
-        addSubCommand("fill", new SetRegionBorderFormatCommand());
+        addSubCommand("border", new SetRegionBorderFormatCommand());
     }
 }
