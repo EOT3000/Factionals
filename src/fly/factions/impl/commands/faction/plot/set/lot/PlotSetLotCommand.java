@@ -4,6 +4,9 @@ import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
 import fly.factions.api.model.*;
 import fly.factions.api.permissions.FactionPermission;
+import fly.factions.impl.commands.faction.plot.set.lot.primary.PlotSetLotPrimaryCommand;
+import fly.factions.impl.commands.faction.plot.set.lot.secondary.PlotSetLotSecondaryCommand;
+import fly.factions.impl.commands.faction.plot.set.lot.tertiary.PlotSetLotTertiaryCommand;
 import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
 import org.bukkit.ChatColor;
@@ -17,10 +20,12 @@ public class PlotSetLotCommand extends CommandDivision {
         addHelpEntry("/f plot set lot <x1> <z1> <x2> <z2> <region> <lot id>", "Set an area to a lot");
 
 
-        addSubCommand("*", this);
+        addSubCommand("primary", new PlotSetLotPrimaryCommand());
+        addSubCommand("secondary", new PlotSetLotSecondaryCommand());
+        addSubCommand("tertiary", new PlotSetLotTertiaryCommand());
     }
 
-    public boolean run(CommandSender sender, String x1s, String z1s, String x2s, String z2s, String region, String ids) {
+    public static boolean doSet(CommandSender sender, String x1s, String z1s, String x2s, String z2s, String region, String ids, int requirement, int type) {
         int x1 = Integer.parseInt(x1s);
         int z1 = Integer.parseInt(z1s);
         int x2 = Integer.parseInt(x2s);
@@ -42,6 +47,13 @@ public class PlotSetLotCommand extends CommandDivision {
 
         Faction faction = PLOTS.get(Plots.getLocationId(new Location(world, x1, 0, z1))).getFaction();
 
+        int area = (xG-xL+1)*(zG-zL+1);
+
+        if(area < requirement) {
+            sender.sendMessage(translate("&4ERROR: selected region not large enough. Is: &e" + area + "&4. Area should be at least &d" + requirement));
+            return false;
+        }
+
         if(faction.getRegion(region) == null) {
             sender.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + region + " does not exist");
 
@@ -54,44 +66,65 @@ public class PlotSetLotCommand extends CommandDivision {
                 LandAdministrator admin = plot.getAdministrator();
 
                 if(faction != plot.getFaction() || !(admin instanceof Region && admin.getName().equalsIgnoreCase(region))) {
+                    sender.sendMessage(ChatColor.RED + "ERROR: part of the selected area is not within your selected region or faction");
+
+                    return false;
+                }
+
+                if(((Region) admin).getLot(world, x, z) != null) {
+                    sender.sendMessage(ChatColor.RED + "ERROR: part of the selected area overlaps with another lot");
+
                     return false;
                 }
             }
         }
 
-        Lot lotObject = null;
+        Lot lotObject = faction.getRegion(region).getLots().get(id);
 
-        for(int x = xL; x <= xG; x++) {
-            for(int z = zL; z <= zG; z++) {
-                Plot plot = PLOTS.get(Plots.getLocationId(new Location(world, x, 0, z)));
+        int xO1;
+        int zO1;
 
-                plot.setLot(new Location(world, x, 0, z), lotObject == null ? lotObject = ((Region) plot.getAdministrator()).getLots().get(id) : lotObject);
-            }
+        int xO2 = 0;
+        int zO2 = 0;
+
+        switch (type) {
+            case 1:
+                xO1 = lotObject.getXP();
+                zO1 = lotObject.getZP();
+
+                xO2 = lotObject.getXP2();
+                zO2 = lotObject.getZP2();
+
+                break;
+
+            case 2:
+                xO1 = lotObject.getXS();
+                zO1 = lotObject.getZS();
+
+                xO2 = lotObject.getXS2();
+                zO2 = lotObject.getZS2();
+                break;
+
+            case 3:
+                xO1 = lotObject.getXT();
+                zO1 = lotObject.getZT();
+
+                xO2 = lotObject.getXT2();
+                zO2 = lotObject.getZT2();
+                break;
+
+            default:
+                xO1 = Integer.MAX_VALUE;
+                zO1 = Integer.MAX_VALUE;
+                break;
         }
+
+        faction.getRegion(region).setLotsAndValidate(world, xL, zL, xG, zG, xO1, zO1, xO2, zO2, lotObject, type);
+
+
 
         sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully changed lot borders");
 
         return true;
-    }
-
-    @Override
-    public ArgumentType[] getRequiredTypes() {
-        return new ArgumentType[] {
-                ArgumentType.INT,
-                ArgumentType.INT,
-                ArgumentType.INT,
-                ArgumentType.INT,
-                ArgumentType.STRING,
-                ArgumentType.STRING,
-        };
-    }
-
-    @Override
-    public Pair<CommandRequirement, Object>[] getUserRequirements() {
-        return new Pair[] {
-                new Pair<>(CommandRequirement.REQUIRE_PLAYER, null),
-                new Pair<>(CommandRequirement.REQUIRE_MEMBER_FACTION, null),
-                new Pair<>(CommandRequirement.REQUIRE_REGION_LEADER, 4)
-        };
     }
 }

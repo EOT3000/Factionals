@@ -184,7 +184,7 @@ public abstract class CommandDivision implements CommandExecutor {
         }
     }
 
-    protected String translate(String s) {
+    protected static String translate(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
     }
 

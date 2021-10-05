@@ -2,7 +2,9 @@ package fly.factions.impl.model;
 
 import fly.factions.api.model.*;
 import fly.factions.api.permissions.Permissibles;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -13,6 +15,8 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
     private Faction faction;
 
     private Set<Town> towns = new HashSet<>();
+
+    private Map<Location, Lot> lotMap = new HashMap<>();
 
     public RegionImpl(String name, User leader, Faction faction) {
         super(name, leader);
@@ -99,5 +103,75 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
     @Override
     public void removeTown(Town town) {
         towns.remove(town);
+    }
+
+    @Override
+    public boolean setLotsAndValidate(World world, int xL, int zL, int xG, int zG, int xO1, int zO1, int xO2, int zO2, Lot lot, int type) {
+        if(!lot.getWorld().equals(world)) {
+            return false;
+        }
+
+        if(xO1 != Integer.MAX_VALUE) {
+            int xOL = Math.min(xO1, xO2);
+            int zOL = Math.min(zO1, zO2);
+
+            int xOG = Math.max(xO1, xO2);
+            int zOG = Math.max(zO1, zO2);
+
+            for (int x = xOL; x <= xOG; x++) {
+                for (int z = zOL; z <= zOG; z++) {
+                    lotMap.remove(new Location(world, x, 0, z));
+                }
+            }
+
+            for (int x = xL; x <= xG; x++) {
+                for (int z = zL; z <= zG; z++) {
+                    lotMap.put(new Location(world, x, 0, z), lot);
+                }
+            }
+
+            switch (type) {
+                case 1:
+                    lot.setXP(xL);
+                    lot.setZP(zL);
+
+                    lot.setXP2(xG);
+                    lot.setZP2(zG);
+
+                    break;
+
+                case 2:
+                    lot.setXS(xL);
+                    lot.setZS(zL);
+
+                    lot.setXS2(xG);
+                    lot.setZS2(zG);
+
+                    break;
+
+                case 3:
+                    lot.setXT(xL);
+                    lot.setZT(zL);
+
+                    lot.setXT2(xG);
+                    lot.setZT2(zG);
+
+                    break;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public Lot getLot(World world, int x, int z) {
+        return lotMap.get(new Location(world, x, 0, z));
+    }
+
+    @Override
+    public List<Location> getLotsLocations() {
+        //TODO: unique immutable locations
+
+        return new ArrayList<>(lotMap.keySet());
     }
 }

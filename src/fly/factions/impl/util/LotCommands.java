@@ -45,7 +45,7 @@ public class LotCommands {
         }
     }
 
-    public static boolean plotForSale(CommandSender sender, String a, Integer price) {
+    /*public static boolean plotForSale(CommandSender sender, String a, Integer price) {
         CommandRegister.requirePlayer(sender);
 
         User user = factionals.getRegistry(User.class, UUID.class).get(((Player) sender).getUniqueId());
@@ -309,5 +309,5 @@ public class LotCommands {
 
         sender.sendMessage("" + (factionRegion.getLots().size()-1));
         return true;
-    }
+    }*/
 }

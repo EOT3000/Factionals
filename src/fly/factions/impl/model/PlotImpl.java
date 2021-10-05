@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PlotImpl implements Plot {
@@ -68,35 +69,6 @@ public class PlotImpl implements Plot {
         this.admin = administrator;
 
         admin.addPlot(this);
-    }
-
-    @Override
-    public Lot getLot(Location location) {
-        Chunk c = location.getChunk();
-
-        if(admin instanceof Region) {
-            if (c.getZ() == z && c.getX() == x && c.getWorld().equals(w)) {
-                return ((Region) admin).getLots().get(areas.get(new Pair<>(location.getBlockX(), location.getBlockZ())));
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public void setLot(Location location, Lot lot) {
-        Chunk c = location.getChunk();
-
-        if(admin instanceof Region) {
-            if (c.getZ() == z && c.getX() == x && c.getWorld().equals(w) && lot.getWorld().equals(w)) {
-                areas.put(new Pair<>(location.getBlockX(), location.getBlockZ()), lot.getId());
-            }
-        }
-    }
-
-    @Override
-    public Map<Pair<Integer, Integer>, Integer> getLocations() {
-        return new HashMap<>(areas);
     }
 
     @Override

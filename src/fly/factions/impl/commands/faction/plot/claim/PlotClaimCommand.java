@@ -3,6 +3,7 @@ package fly.factions.impl.commands.faction.plot.claim;
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.model.Lot;
 import fly.factions.api.model.Plot;
+import fly.factions.api.model.Region;
 import fly.factions.api.model.User;
 import fly.factions.impl.util.Plots;
 import org.bukkit.ChatColor;
@@ -28,7 +29,7 @@ public class PlotClaimCommand extends CommandDivision {
             return false;
         }
 
-        Lot lot = plot.getLot(location);
+        Lot lot = ((Region) plot.getAdministrator()).getLot(location);
 
         if (lot == null) {
             sender.sendMessage(ChatColor.RED + "ERROR: you are not standing in a lot");

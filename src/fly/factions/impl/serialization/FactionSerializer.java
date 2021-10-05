@@ -9,6 +9,7 @@ import fly.factions.api.serialization.Serializer;
 import fly.factions.impl.model.*;
 import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
+import org.bukkit.Chunk;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -44,7 +45,7 @@ public class FactionSerializer extends Serializer<Faction> {
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
         if(!configuration.getBoolean("deleted")) {
-            Faction faction;
+            Faction faction = null;
 
             if(!plots) {
                 System.out.println(file.getPath());
@@ -143,7 +144,7 @@ public class FactionSerializer extends Serializer<Faction> {
                     ConfigurationSection plot = plots.getConfigurationSection(string);
                     Plot factionPlot = new PlotImpl(plot.getInt("x"), plot.getInt("z"), Plots.getWorld(plot.getInt("w")), faction);
 
-                    factionPlot.setAdministrator((LandAdministrator) getPlotOwner(plot.getString("administrator")));
+                    factionPlot.setAdministrator((LandAdministrator<Plot>) getPlotOwner(plot.getString("administrator")));
                     /*
                     factionPlot.setPrice(plot.getInt("price"));
                     factionPlot.setOwner(getPlotOwner(plot.getString("owner")));
@@ -162,60 +163,65 @@ public class FactionSerializer extends Serializer<Faction> {
 
                 //System.out.println("e");
             } else {
-                //System.out.println("f");
+                try {
+                    faction = factionals.getRegistry(Faction.class, String.class).get(configuration.getString("name"));
 
-                faction = factionals.getRegistry(Faction.class, String.class).get(configuration.getString("name"));
+                    for (Region region : faction.getRegions()) {
+                        ConfigurationSection regionConfig = configuration.getConfigurationSection("regions." + region.getName() + ".lots");
 
-                for(Region region : faction.getRegions()) {
-                    ConfigurationSection regionConfig = configuration.getConfigurationSection("regions." + region.getName() + ".lots");
+                        for (Lot lot : region.getLots().values()) {
+                            ConfigurationSection lotSection = regionConfig.getConfigurationSection("" + lot.getId());
 
-                    for(Lot lot : region.getLots().values()) {
-                        ConfigurationSection lotSection = regionConfig.getConfigurationSection("" + lot.getId());
+                            lot.setXP(lotSection.getInt("xp"));
+                            lot.setZP(lotSection.getInt("zp"));
 
-                        World world = Plots.getWorld(lotSection.getInt("world"));
+                            lot.setXS(lotSection.getInt("xs"));
+                            lot.setZS(lotSection.getInt("zs"));
 
-                        List<String> lotPlaces = lotSection.getStringList("areas");
+                            lot.setXT(lotSection.getInt("xt"));
+                            lot.setZT(lotSection.getInt("zt"));
 
-                        for(String place : lotPlaces) {
-                            String[] split = place.split(",");
 
-                            int x = Integer.parseInt(split[0]);
-                            int z = Integer.parseInt(split[1]);
+                            lot.setXP2(lotSection.getInt("xp2"));
+                            lot.setZP2(lotSection.getInt("zp2"));
 
-                            Location location = new Location(world, x, 0, z);
+                            lot.setXS2(lotSection.getInt("xs2"));
+                            lot.setZS2(lotSection.getInt("zs2"));
 
-                            Plot plot = factionals.getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(location));
+                            lot.setXT2(lotSection.getInt("xt2"));
+                            lot.setZT2(lotSection.getInt("zt2"));
 
-                            plot.setLot(location, lot);
-                        }
+                            lot.resetBorders();
 
-                        //System.out.println("f1a");
+                            lot.setPrice(lotSection.getInt("price"));
 
-                        lot.setPrice(lotSection.getInt("price"));
-
-                        if(!lotSection.getString("town").isEmpty()) {
-                            lot.setTown(region.getTown(lotSection.getString("town")));
-                        }
-
-                        if(!lotSection.getString("owner").isEmpty()) {
-                            lot.setOwner(getPlotOwner(lotSection.getString("owner")));
-                        } else {
-                            lot.setOwner(lot.getTown() == null ? lot.getRegion() : lot.getTown());
-                        }
-
-                        ConfigurationSection lotPermissions = lotSection.getConfigurationSection("permissions");
-
-                        for (String key : lotPermissions.getKeys(false)) {
-                            for (String permissible : lotPermissions.getStringList(key)) {
-                                Permissible plotPermissible = Permissibles.get(permissible).get(0);
-                                PlotPermission permission = PlotPermission.valueOf(key);
-
-                                lot.setPermission(plotPermissible, permission, true);
+                            if (!lotSection.getString("town").isEmpty()) {
+                                lot.setTown(region.getTown(lotSection.getString("town")));
                             }
-                        }
 
-                        //System.out.println("f1b");
+                            if (!lotSection.getString("owner").isEmpty()) {
+                                lot.setOwner(getPlotOwner(lotSection.getString("owner")));
+                            } else {
+                                lot.setOwner(lot.getTown() == null ? lot.getRegion() : lot.getTown());
+                            }
+
+                            ConfigurationSection lotPermissions = lotSection.getConfigurationSection("permissions");
+
+                            for (String key : lotPermissions.getKeys(false)) {
+                                for (String permissible : lotPermissions.getStringList(key)) {
+                                    Permissible plotPermissible = Permissibles.get(permissible).get(0);
+                                    PlotPermission permission = PlotPermission.valueOf(key);
+
+                                    lot.setPermission(plotPermissible, permission, true);
+                                }
+                            }
+
+                            //System.out.println("f1b");
+                        }
                     }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -279,21 +285,6 @@ public class FactionSerializer extends Serializer<Faction> {
             Map<String, Object> regionTowns = new HashMap<>();
             Map<String, Object> regionLots = new HashMap<>();
 
-            //TODO: fix
-            Map<Integer, List<Pair<Integer, Integer>>> lotsAreas = new HashMap<>();
-
-            for(Integer lot : region.getLots().keySet()) {
-                lotsAreas.put(lot, new ArrayList<>());
-            }
-
-            for(Plot plot : region.getPlots()) {
-                Map<Pair<Integer, Integer>, Integer> map = plot.getLocations();
-
-                for (Pair<Integer, Integer> area : map.keySet()) {
-                    lotsAreas.get(map.get(area)).add(area);
-                }
-            }
-
             for(User user : region.getMembers()) {
                 regionMembers.add(user.getUniqueId().toString());
             }
@@ -338,7 +329,6 @@ public class FactionSerializer extends Serializer<Faction> {
                 factionLot.put("world", Plots.getWorldId(lot.getWorld()));
 
                 Map<String, Object> permissions = new HashMap<>();
-                List<String> areas = new ArrayList<>();
 
                 for(PlotPermission permission : PlotPermission.values()) {
                     List<String> specPerm = new ArrayList<>();
@@ -350,13 +340,27 @@ public class FactionSerializer extends Serializer<Faction> {
                     permissions.put(permission.name(), specPerm);
                 }
 
-                for(Pair<Integer, Integer> area : lotsAreas.get(lot.getId())) {
-                    areas.add(area.getKey() + "," + area.getValue());
-                }
-
                 factionLot.put("permissions", permissions);
-                factionLot.put("areas", areas);
+
                 factionLot.put("town", lot.getTown() != null ? lot.getTown().getName() : "");
+
+                factionLot.put("xp", lot.getXP());
+                factionLot.put("zp", lot.getZP());
+
+                factionLot.put("xs", lot.getXS());
+                factionLot.put("zs", lot.getZS());
+
+                factionLot.put("xt", lot.getXT());
+                factionLot.put("zt", lot.getZT());
+
+                factionLot.put("xp2", lot.getXP2());
+                factionLot.put("zp2", lot.getZP2());
+
+                factionLot.put("xs2", lot.getXS2());
+                factionLot.put("zs2", lot.getZS2());
+
+                factionLot.put("xt2", lot.getXT2());
+                factionLot.put("zt2", lot.getZT2());
 
                 regionLots.put("" + lot.getId(), factionLot);
             }

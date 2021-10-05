@@ -1,7 +1,9 @@
 package fly.factions.impl.commands.faction.plot.map;
 
 import fly.factions.api.commands.CommandDivision;
+import fly.factions.api.model.Lot;
 import fly.factions.api.model.Plot;
+import fly.factions.api.model.Region;
 import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
 import net.kyori.adventure.text.*;
@@ -15,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -54,11 +57,11 @@ public class PlotMapCommand extends CommandDivision {
             }
         }
 
-        for(Pair<Integer, Integer> location : plot.getLocations().keySet()) {
-            int x = location.getKey() - chunk.getX()*16;
-            int z = location.getValue() - chunk.getZ()*16;
+        for(Pair<Integer, Integer> location : findLots(plot, chunk)) {
+            int x = location.getKey();
+            int z = location.getValue();
 
-            int lotId = plot.getLot(chunk.getBlock(x, 0, z).getLocation()).getId();
+            int lotId = ((Region) plot.getAdministrator()).getLot(chunk.getBlock(x, 0, z).getLocation()).getId();
 
             array[x][z] = "{'text':'#', 'hoverEvent':{'action':'show_text', 'value':'&4'}, 'color':'green'}".replaceFirst("&4", lotId + "");
 
@@ -81,5 +84,23 @@ public class PlotMapCommand extends CommandDivision {
         }
 
         return true;
+    }
+
+    private List<Pair<Integer, Integer>> findLots(Plot plot, Chunk chunk) {
+        Region region = (Region) plot.getAdministrator();
+
+        List<Pair<Integer, Integer>> ret = new ArrayList<>();
+
+        for(int x = 0; x < 16; x++) {
+            for(int z = 0; z < 16; z++) {
+                Lot lot = region.getLot(chunk.getWorld(), chunk.getX()*16+x, chunk.getZ()*16+z);
+
+                if(lot != null) {
+                   ret.add(new Pair<>(x, z));
+                }
+            }
+        }
+
+        return ret;
     }
 }

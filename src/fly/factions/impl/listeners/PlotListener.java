@@ -1,10 +1,7 @@
 package fly.factions.impl.listeners;
 
 import fly.factions.Factionals;
-import fly.factions.api.model.Faction;
-import fly.factions.api.model.Lot;
-import fly.factions.api.model.Plot;
-import fly.factions.api.model.User;
+import fly.factions.api.model.*;
 import fly.factions.api.permissions.PlotPermission;
 import fly.factions.api.registries.Registry;
 import fly.factions.impl.util.Plots;
@@ -66,7 +63,7 @@ public class PlotListener extends ListenerImpl {
             return;
         }
 
-        Lot lot = plot.getLot(event.getClickedBlock().getLocation());
+        Lot lot = ((Region) plot.getAdministrator()).getLot(event.getClickedBlock().getLocation());
 
         if (lot == null) {
             return;
@@ -118,7 +115,7 @@ public class PlotListener extends ListenerImpl {
             return;
         }
 
-        Lot lot = plot.getLot(event.getBlock().getLocation());
+        Lot lot = ((Region) plot.getAdministrator()).getLot(event.getBlock().getLocation());
 
         if (lot == null) {
             if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer((Player) event.getPlayer()), false, false)) {
@@ -147,7 +144,7 @@ public class PlotListener extends ListenerImpl {
             return;
         }
 
-        Lot lot = plot.getLot(event.getBlock().getLocation());
+        Lot lot = ((Region) plot.getAdministrator()).getLot(event.getBlock().getLocation());
 
         if (lot == null) {
             if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer((Player) event.getPlayer()), false, false)) {
@@ -174,13 +171,13 @@ public class PlotListener extends ListenerImpl {
         if(holder instanceof Entity && !(holder instanceof HumanEntity)) {
             plot = pr.get(Plots.getLocationId(((Entity) holder).getLocation()));
 
-            lot = plot.getLot(((Entity) holder).getLocation());
+            lot = ((Region) plot.getAdministrator()).getLot(((Entity) holder).getLocation());
         }
 
         if(holder instanceof BlockState) {
             plot = pr.get(Plots.getLocationId(((BlockState) holder).getLocation()));
 
-            lot = plot.getLot(((BlockState) holder).getLocation());
+            lot = ((Region) plot.getAdministrator()).getLot(((BlockState) holder).getLocation());
         }
 
         if(plot != null) {

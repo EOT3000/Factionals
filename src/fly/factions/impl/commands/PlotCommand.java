@@ -13,7 +13,7 @@ public class PlotCommand extends CommandRegister {
     private Factionals factionals;
 
     public PlotCommand(Factionals factionals) {
-        addSubCommand(new SubCommand.SubCommandBuilder(m(LotCommands.class, "plotForSale"))
+        /*addSubCommand(new SubCommand.SubCommandBuilder(m(LotCommands.class, "plotForSale"))
                 .parameter(Parameter.requireString("fs"))
                 .parameter(Parameter.INTEGER)
                 .build());
@@ -66,7 +66,7 @@ public class PlotCommand extends CommandRegister {
                 .parameter(Parameter.requireString("create"))
                 .parameter(Parameter.requireString("lot"))
                 .parameter(Parameter.STRING)
-                .build());
+                .build());*/
 
         this.factionals = factionals;
 

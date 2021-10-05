@@ -86,12 +86,8 @@ public class DynmapManager {
                         lotsAreas.put(lot, new ArrayList<>());
                     }
 
-                    for(Plot plot : region.getPlots()) {
-                        Map<Pair<Integer, Integer>, Integer> map = plot.getLocations();
-
-                        for (Pair<Integer, Integer> area : map.keySet()) {
-                            lotsAreas.get(map.get(area)).add(new Location(Plots.getWorld(Plots.getW(plot.getLocationId())), area.getKey(), 0, area.getValue()));
-                        }
+                    for (Location area : region.getLotsLocations()) {
+                        lotsAreas.get(region.getLot(area).getId()).add(new Location(world, area.getBlockX(), 0, area.getBlockZ()));
                     }
 
                     for(Lot lot : region.getLots().values()) {

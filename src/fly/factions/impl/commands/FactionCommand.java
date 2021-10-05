@@ -12,7 +12,7 @@ public class FactionCommand extends CommandRegister {
     private Factionals factionals;
 
     public FactionCommand(Factionals factionals) {
-        addSubCommand(new SubCommand.SubCommandBuilder(m(FactionImpl.class, "createFaction"))
+        /*addSubCommand(new SubCommand.SubCommandBuilder(m(FactionImpl.class, "createFaction"))
                 .parameter(Parameter.requireString("create"))
                 .parameter(Parameter.STRING)
                 .build());
@@ -142,7 +142,7 @@ public class FactionCommand extends CommandRegister {
                 .parameter(Parameter.requireString("create"))
                 .parameter(Parameter.STRING)
                 .parameter(Parameter.STRING)
-                .build());
+                .build());*/
 
         this.factionals = factionals;
 

@@ -2,6 +2,7 @@ package fly.factions.impl.model;
 
 import fly.factions.api.model.*;
 import fly.factions.api.permissions.PlotPermission;
+import fly.factions.impl.commands.faction.plot.set.lot.PlotSetLotCommand;
 import org.bukkit.World;
 
 import java.util.EnumMap;
@@ -20,6 +21,24 @@ public class LotImpl implements Lot {
     private boolean publicLot;
 
     private Town town;
+
+    private int xP;
+    private int zP;
+
+    private int xP2;
+    private int zP2;
+
+    private int xS;
+    private int zS;
+
+    private int xS2;
+    private int zS2;
+
+    private int zT;
+    private int xT;
+
+    private int zT2;
+    private int xT2;
 
     //private List<Pair<Integer, Integer>> blocks = new ArrayList<>();
 
@@ -127,5 +146,132 @@ public class LotImpl implements Lot {
     @Override
     public Region getRegion() {
         return region;
+    }
+
+    @Override
+    public int getXP() {
+        return xP;
+    }
+
+    @Override
+    public int getZP() {
+        return zP;
+    }
+
+    @Override
+    public int getXS() {
+        return xS;
+    }
+
+    @Override
+    public int getZS() {
+        return zS;
+    }
+
+    @Override
+    public int getXT() {
+        return xT;
+    }
+
+    @Override
+    public int getZT() {
+        return zT;
+    }
+
+    @Override
+    public void setXP(int x) {
+        this.xP = x;
+    }
+
+    @Override
+    public void setZP(int z) {
+        this.zP = z;
+    }
+
+    @Override
+    public void setXS(int x) {
+        this.xS = x;
+    }
+
+    @Override
+    public void setZS(int z) {
+        this.zS = z;
+    }
+
+    @Override
+    public void setXT(int x) {
+        this.xT = x;
+    }
+
+    @Override
+    public void setZT(int z) {
+        this.zT = z;
+    }
+
+    @Override
+    public int getXP2() {
+        return xP2;
+    }
+
+    @Override
+    public int getZP2() {
+        return zP2;
+    }
+
+    @Override
+    public int getXS2() {
+        return xS2;
+    }
+
+    @Override
+    public int getZS2() {
+        return zS2;
+    }
+
+    @Override
+    public int getXT2() {
+        return xT2;
+    }
+
+    @Override
+    public int getZT2() {
+        return zT2;
+    }
+
+    @Override
+    public void setXP2(int x) {
+        this.xP2 = x;
+    }
+
+    @Override
+    public void setZP2(int z) {
+        this.zP2 = z;
+    }
+
+    @Override
+    public void setXS2(int x) {
+        this.xS2 = x;
+    }
+
+    @Override
+    public void setZS2(int z) {
+        this.zS2 = z;
+    }
+
+    @Override
+    public void setXT2(int x) {
+        this.xT2 = x;
+    }
+
+    @Override
+    public void setZT2(int z) {
+        this.zT2 = z;
+    }
+
+    @Override
+    public void resetBorders() {
+        region.setLotsAndValidate(world, Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1, xP, zP, xP2, zP2, this, 1);
+        region.setLotsAndValidate(world, Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1, xS, zS, xS2, zS2, this, 2);
+        region.setLotsAndValidate(world, Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1, xT, zT, xT2, zT2, this, 3);
     }
 }
