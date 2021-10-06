@@ -131,7 +131,7 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     @Override
     public boolean userHasPlotPermissions(User user, boolean owner, boolean pub) {
-        return owner ? user.equals(leader) : members.contains(user);
+        return (owner ? user.equals(leader) : members.contains(user));
     }
 
     //REGIONS

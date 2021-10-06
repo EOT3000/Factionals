@@ -26,6 +26,8 @@ public class PlotSetLotCommand extends CommandDivision {
     }
 
     public static boolean doSet(CommandSender sender, String x1s, String z1s, String x2s, String z2s, String region, String ids, int requirement, int type) {
+
+
         int x1 = Integer.parseInt(x1s);
         int z1 = Integer.parseInt(z1s);
         int x2 = Integer.parseInt(x2s);
@@ -81,6 +83,14 @@ public class PlotSetLotCommand extends CommandDivision {
 
         Lot lotObject = faction.getRegion(region).getLots().get(id);
 
+        if(Math.abs(lotObject.getLevel()-type) > 1) {
+            sender.sendMessage(ChatColor.RED + "ERROR: please set a primary and/or secondary lot area first!");
+
+            return false;
+        }
+
+        lotObject.registerChange(type);
+
         int xO1;
         int zO1;
 
@@ -89,41 +99,48 @@ public class PlotSetLotCommand extends CommandDivision {
 
         switch (type) {
             case 1:
-                xO1 = lotObject.getXP();
-                zO1 = lotObject.getZP();
+                if(lotObject.getLevel() >= 1) {
+                    xO1 = lotObject.getXP();
+                    zO1 = lotObject.getZP();
 
-                xO2 = lotObject.getXP2();
-                zO2 = lotObject.getZP2();
+                    xO2 = lotObject.getXP2();
+                    zO2 = lotObject.getZP2();
 
-                break;
+                    break;
+                }
 
             case 2:
-                xO1 = lotObject.getXS();
-                zO1 = lotObject.getZS();
+                if(lotObject.getLevel() >= 2) {
+                    xO1 = lotObject.getXS();
+                    zO1 = lotObject.getZS();
 
-                xO2 = lotObject.getXS2();
-                zO2 = lotObject.getZS2();
-                break;
+                    xO2 = lotObject.getXS2();
+                    zO2 = lotObject.getZS2();
+
+                    break;
+                }
 
             case 3:
-                xO1 = lotObject.getXT();
-                zO1 = lotObject.getZT();
+                if(lotObject.getLevel() >= 1) {
+                    xO1 = lotObject.getXT();
+                    zO1 = lotObject.getZT();
 
-                xO2 = lotObject.getXT2();
-                zO2 = lotObject.getZT2();
-                break;
+                    xO2 = lotObject.getXT2();
+                    zO2 = lotObject.getZT2();
+
+                    break;
+                }
 
             default:
-                xO1 = Integer.MAX_VALUE;
-                zO1 = Integer.MAX_VALUE;
+                xO1 = Integer.MAX_VALUE-1;
+                zO1 = Integer.MAX_VALUE-1;
+
                 break;
         }
 
-        faction.getRegion(region).setLotsAndValidate(world, xL, zL, xG, zG, xO1, zO1, xO2, zO2, lotObject, type);
-
-
-
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully changed lot borders");
+        if(faction.getRegion(region).setLotsAndValidate(world, xL, zL, xG, zG, xO1, zO1, xO2, zO2, lotObject, type)) {
+            sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully changed lot borders");
+        }
 
         return true;
     }

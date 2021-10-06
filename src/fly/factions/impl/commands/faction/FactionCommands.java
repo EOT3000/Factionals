@@ -12,6 +12,7 @@ import fly.factions.impl.commands.faction.list.ListCommand;
 import fly.factions.impl.commands.faction.map.MapCommand;
 import fly.factions.impl.commands.faction.plot.PlotCommands;
 import fly.factions.impl.commands.faction.region.RegionCommand;
+import fly.factions.impl.commands.faction.town.TownCommand;
 
 public class FactionCommands extends CommandDivision {
     public FactionCommands() {
@@ -65,7 +66,9 @@ public class FactionCommands extends CommandDivision {
 
         addSubCommand("region", new RegionCommand());
 
-        //addSubCommand("department", new DepartmentCommand());
+        addSubCommand("town", new TownCommand());
+
+        addSubCommand("department", new DepartmentCommand());
 
         //Broken shit
         addSubCommand("plot", new PlotCommands());

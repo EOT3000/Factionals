@@ -172,24 +172,33 @@ public class FactionSerializer extends Serializer<Faction> {
                         for (Lot lot : region.getLots().values()) {
                             ConfigurationSection lotSection = regionConfig.getConfigurationSection("" + lot.getId());
 
-                            lot.setXP(lotSection.getInt("xp"));
-                            lot.setZP(lotSection.getInt("zp"));
+                            int level = lotSection.getInt("level");
 
-                            lot.setXS(lotSection.getInt("xs"));
-                            lot.setZS(lotSection.getInt("zs"));
+                            if(level >= 1) {
+                                lot.setXP(lotSection.getInt("xp"));
+                                lot.setZP(lotSection.getInt("zp"));
 
-                            lot.setXT(lotSection.getInt("xt"));
-                            lot.setZT(lotSection.getInt("zt"));
+                                lot.setXP2(lotSection.getInt("xp2"));
+                                lot.setZP2(lotSection.getInt("zp2"));
+                            }
 
+                            if(level >= 2) {
+                                lot.setXS(lotSection.getInt("xs"));
+                                lot.setZS(lotSection.getInt("zs"));
 
-                            lot.setXP2(lotSection.getInt("xp2"));
-                            lot.setZP2(lotSection.getInt("zp2"));
+                                lot.setXS2(lotSection.getInt("xs2"));
+                                lot.setZS2(lotSection.getInt("zs2"));
+                            }
 
-                            lot.setXS2(lotSection.getInt("xs2"));
-                            lot.setZS2(lotSection.getInt("zs2"));
+                            if(level >= 3) {
+                                lot.setXT(lotSection.getInt("xt"));
+                                lot.setZT(lotSection.getInt("zt"));
 
-                            lot.setXT2(lotSection.getInt("xt2"));
-                            lot.setZT2(lotSection.getInt("zt2"));
+                                lot.setXT(lotSection.getInt("xt"));
+                                lot.setZT(lotSection.getInt("zt"));
+                            }
+
+                            lot.registerChange(level);
 
                             lot.resetBorders();
 
@@ -344,23 +353,32 @@ public class FactionSerializer extends Serializer<Faction> {
 
                 factionLot.put("town", lot.getTown() != null ? lot.getTown().getName() : "");
 
-                factionLot.put("xp", lot.getXP());
-                factionLot.put("zp", lot.getZP());
+                if(lot.getLevel() >= 1) {
+                    factionLot.put("xp", lot.getXP());
+                    factionLot.put("zp", lot.getZP());
 
-                factionLot.put("xs", lot.getXS());
-                factionLot.put("zs", lot.getZS());
+                    factionLot.put("xp2", lot.getXP2());
+                    factionLot.put("zp2", lot.getZP2());
+                }
 
-                factionLot.put("xt", lot.getXT());
-                factionLot.put("zt", lot.getZT());
+                if(lot.getLevel() >= 2) {
+                    factionLot.put("xs", lot.getXS());
+                    factionLot.put("zs", lot.getZS());
 
-                factionLot.put("xp2", lot.getXP2());
-                factionLot.put("zp2", lot.getZP2());
+                    factionLot.put("xs2", lot.getXS2());
+                    factionLot.put("zs2", lot.getZS2());
+                }
 
-                factionLot.put("xs2", lot.getXS2());
-                factionLot.put("zs2", lot.getZS2());
 
-                factionLot.put("xt2", lot.getXT2());
-                factionLot.put("zt2", lot.getZT2());
+                if(lot.getLevel() >= 3) {
+                    factionLot.put("xt", lot.getXT());
+                    factionLot.put("zt", lot.getZT());
+
+                    factionLot.put("xt2", lot.getXT2());
+                    factionLot.put("zt2", lot.getZT2());
+                }
+
+                factionLot.put("level", lot.getLevel());
 
                 regionLots.put("" + lot.getId(), factionLot);
             }

@@ -67,5 +67,9 @@ public interface Lot extends LandDivision {
     void setXT2(int x);
     void setZT2(int z);
 
+    void registerChange(int level);
+
+    int getLevel();
+
     void resetBorders();
 }

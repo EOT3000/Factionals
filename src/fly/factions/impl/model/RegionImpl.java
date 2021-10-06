@@ -2,6 +2,7 @@ package fly.factions.impl.model;
 
 import fly.factions.api.model.*;
 import fly.factions.api.permissions.Permissibles;
+import fly.factions.impl.util.Plots;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -52,7 +53,7 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
     @Override
     public boolean userHasPlotPermissions(User user, boolean owner, boolean pub) {
-        return (!owner && members.contains(user)) || leader.equals(user);
+        return (!owner && members.contains(user)) || leader.equals(user) || faction.getLeader().equals(user);
     }
 
     @Override
@@ -118,15 +119,25 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
             int xOG = Math.max(xO1, xO2);
             int zOG = Math.max(zO1, zO2);
 
-            for (int x = xOL; x <= xOG; x++) {
-                for (int z = zOL; z <= zOG; z++) {
-                    lotMap.remove(new Location(world, x, 0, z));
+            if(xO1 != Integer.MAX_VALUE-1) {
+                for (int x = xOL; x <= xOG; x++) {
+                    for (int z = zOL; z <= zOG; z++) {
+                        lotMap.remove(new Location(world, x, 0, z));
+                    }
                 }
             }
 
             for (int x = xL; x <= xG; x++) {
                 for (int z = zL; z <= zG; z++) {
-                    lotMap.put(new Location(world, x, 0, z), lot);
+                    Location loc = new Location(world, x, 0, z);
+
+                    Plot plot = factionals.getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(loc));
+
+                    if(plot != null && plot.getAdministrator().equals(this)) {
+                        lotMap.put(loc, lot);
+
+                        break;
+                    }
                 }
             }
 
@@ -158,9 +169,11 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
                     break;
             }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @Override

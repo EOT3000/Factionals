@@ -6,6 +6,7 @@ import fly.factions.api.model.Plot;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.Permissibles;
+import fly.factions.api.permissions.PlotPermission;
 import fly.factions.api.registries.Registry;
 import fly.factions.impl.util.Pair;
 import org.bukkit.Bukkit;
@@ -311,7 +312,23 @@ public abstract class CommandDivision implements CommandExecutor {
             @Override
             public boolean check(String string) {
                 try {
-                    return FactionPermission.valueOf(string) != null;
+                    return FactionPermission.valueOf(string.toUpperCase()) != null;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+
+            @Override
+            public String format(String string) {
+                return ChatColor.RED + "ERROR: the permission " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
+            }
+        },
+        @SuppressWarnings("all")
+        PLOT_PERMISSION {
+            @Override
+            public boolean check(String string) {
+                try {
+                    return PlotPermission.valueOf(string.toUpperCase()) != null;
                 } catch (Exception e) {
                     return false;
                 }

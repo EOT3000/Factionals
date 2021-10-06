@@ -40,6 +40,8 @@ public class LotImpl implements Lot {
     private int zT2;
     private int xT2;
 
+    private int level = 0;
+
     //private List<Pair<Integer, Integer>> blocks = new ArrayList<>();
 
     public LotImpl(Region region, int id, World world) {
@@ -269,9 +271,25 @@ public class LotImpl implements Lot {
     }
 
     @Override
+    public void registerChange(int level) {
+        this.level = Math.max(this.level, level);
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
+    }
+
+    @Override
     public void resetBorders() {
-        region.setLotsAndValidate(world, Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1, xP, zP, xP2, zP2, this, 1);
-        region.setLotsAndValidate(world, Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1, xS, zS, xS2, zS2, this, 2);
-        region.setLotsAndValidate(world, Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1,Integer.MAX_VALUE-1, xT, zT, xT2, zT2, this, 3);
+        if (level >= 1) {
+            region.setLotsAndValidate(world, xP, zP, xP2, zP2, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, this, 1);
+        }
+        if (level >= 2) {
+            region.setLotsAndValidate(world, xS, zS, xS2, zS2, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, this, 2);
+        }
+        if (level >= 3) {
+            region.setLotsAndValidate(world, xT, zT, xT2, zT2, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, this, 3);
+        }
     }
 }

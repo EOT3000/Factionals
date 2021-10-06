@@ -35,7 +35,7 @@ public class PlotSetPermissionCommand extends CommandDivision {
 
         Plot plot = PLOTS.get(Plots.getLocationId(location));
 
-        if(plot == null || (plot.getAdministrator() instanceof Region)) {
+        if(plot == null || !(plot.getAdministrator() instanceof Region)) {
             sender.sendMessage(ChatColor.RED + "Error: not inside of a region");
 
             return false;
@@ -121,7 +121,7 @@ public class PlotSetPermissionCommand extends CommandDivision {
     public ArgumentType[] getRequiredTypes() {
         return new ArgumentType[] {
                 ArgumentType.INT,
-                ArgumentType.FACTION_PERMISSION,
+                ArgumentType.PLOT_PERMISSION,
                 ArgumentType.PERMISSIBLE,
                 ArgumentType.CHOICE
         };
