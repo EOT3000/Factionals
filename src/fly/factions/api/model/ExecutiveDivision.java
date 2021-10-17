@@ -2,6 +2,8 @@ package fly.factions.api.model;
 
 import fly.factions.api.permissions.FactionPermission;
 
+import java.util.List;
+
 /**
  * The {@code ExecutiveDivision} class represents faction departments
  */
@@ -35,4 +37,12 @@ public interface ExecutiveDivision extends FactionComponent {
      */
 
     boolean canDo(FactionPermission permission);
+
+    /**
+     * Gets all permissions that the department has
+     *
+     * @return the permissions
+     */
+
+    List<FactionPermission> getPermissions();
 }

@@ -29,13 +29,15 @@ public abstract class Serializer<T extends Savable> {
         serializer.dir().mkdirs();
 
         for(File file : serializer.dir().listFiles()) {
-            X x = serializer.load(file);
+            if(!file.isDirectory()) {
+                X x = serializer.load(file);
 
-            if(x == null) {
-                continue;
+                if (x == null) {
+                    continue;
+                }
+
+                list.add(x);
             }
-
-            list.add(x);
         }
 
         serializer.onLoad();

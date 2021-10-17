@@ -2,11 +2,14 @@ package fly.factions.impl.model;
 
 import fly.factions.api.model.*;
 import fly.factions.api.permissions.Permissibles;
+import fly.factions.api.registries.Registry;
+import fly.factions.impl.util.LocationStorage;
 import fly.factions.impl.util.Plots;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -17,7 +20,7 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
     private Set<Town> towns = new HashSet<>();
 
-    private Map<Location, Lot> lotMap = new HashMap<>();
+    private Map<LocationStorage, Lot> lotMap = new HashMap<>();
 
     public RegionImpl(String name, User leader, Faction faction) {
         super(name, leader);
@@ -112,6 +115,8 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
             return false;
         }
 
+        Registry<Plot, Integer> pr = factionals.getRegistry(Plot.class, Integer.class);
+
         if(xO1 != Integer.MAX_VALUE) {
             int xOL = Math.min(xO1, xO2);
             int zOL = Math.min(zO1, zO2);
@@ -129,9 +134,9 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
             for (int x = xL; x <= xG; x++) {
                 for (int z = zL; z <= zG; z++) {
-                    Location loc = new Location(world, x, 0, z);
+                    LocationStorage loc = new LocationStorage(x, z, world);
 
-                    Plot plot = factionals.getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(loc));
+                    Plot plot = pr.get(Plots.getLocationId(loc.toLocation()));
 
                     if(plot != null && plot.getAdministrator().equals(this)) {
                         lotMap.put(loc, lot);
@@ -178,11 +183,11 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
     @Override
     public Lot getLot(World world, int x, int z) {
-        return lotMap.get(new Location(world, x, 0, z));
+        return lotMap.get(new LocationStorage(x, z, world));
     }
 
     @Override
-    public List<Location> getLotsLocations() {
+    public List<LocationStorage> getLotsLocations() {
         //TODO: unique immutable locations
 
         return new ArrayList<>(lotMap.keySet());

@@ -1,5 +1,6 @@
 package fly.factions.api.model;
 
+import fly.factions.impl.util.LocationStorage;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -26,7 +27,11 @@ public interface Region extends LandAdministrator<Plot> {
         return getLot(location.getWorld(), location.getBlockX(), location.getBlockZ());
     }
 
+    default Lot getLot(LocationStorage location) {
+        return getLot(location.world, location.x, location.z);
+    }
+
     Lot getLot(World world, int x, int z);
 
-    List<Location> getLotsLocations();
+    List<LocationStorage> getLotsLocations();
 }

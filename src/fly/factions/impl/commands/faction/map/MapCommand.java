@@ -25,27 +25,25 @@ public class MapCommand extends CommandDivision {
 
         Faction userFaction = user.getFaction();
 
-        List<Character> characters = new ArrayList<>(Arrays.asList('#', '&', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'));
+        List<Character> characters = new ArrayList<>(Arrays.asList('#', '&', '%', '$', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L'));
         Map<Faction, Character> factionCharacters = new HashMap<>();
 
-        int height = 11;
-        int width = 25;
+        int height = 5;
+        int width = 10;
 
         int xb = ((Player) sender).getLocation().getChunk().getX();
         int zb = ((Player) sender).getLocation().getChunk().getZ();
         World w = ((Player) sender).getLocation().getWorld();
 
-        int xm = (int) Math.floor(height/2);
-        int zm = (int) Math.floor(width/2);
-
         List<String> ret = new ArrayList<>();
 
         factionCharacters.put(null, '-');
 
-        for(int z = 0; z < height; z++) {
+        for(int z = -height; z <= height; z++) {
             String line = "";
-            for(int x = 0; x < width; x++) {
-                int plotId = Plots.getLocationId((xb+x)-xm, (zb+z)-zm, w);
+            for(int x = -width; x <= width; x++) {
+                int plotId = Plots.getLocationId((xb+x), (zb+z), w);
+
                 Plot plot = Factionals.getFactionals().getRegistry(Plot.class, Integer.class).get(plotId);
                 Faction faction = plot != null ? plot.getFaction() : null;
                 String chunkAddition;
@@ -54,7 +52,7 @@ public class MapCommand extends CommandDivision {
                     faction = null;
                 }
 
-                if(xm == x && zm == z) {
+                if(x == 0 && z == 0) {
                     chunkAddition = ChatColor.BLACK + "";
                 } else if(faction == null) {
                     chunkAddition = ChatColor.GRAY + "";

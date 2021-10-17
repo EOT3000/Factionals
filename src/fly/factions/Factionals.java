@@ -1,5 +1,6 @@
 package fly.factions;
 
+import com.google.common.io.Files;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.PlayerGroup;
 import fly.factions.api.model.Plot;
@@ -27,7 +28,10 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dynmap.markers.MarkerSet;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
@@ -101,6 +105,31 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         
         Serializer.loadAll(Faction.class);
 
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            logger.info("Faction autosave start");
+
+            File dir2 = new File(FactionSerializer.dir.getAbsolutePath() + "/previous");
+
+            if(!dir2.exists()) {
+                dir2.mkdir();
+            }
+
+            for(File file : FactionSerializer.dir.listFiles()) {
+                try {
+                    if(!file.isDirectory()) {
+                        Files.copy(file, new File(FactionSerializer.dir.getAbsolutePath() + "/previous/" + file.getName()));
+                    }
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, file.getName() + " has errored on autosave");
+
+                    e.printStackTrace();
+                }
+            }
+
+            Serializer.saveAll(registries.get(Faction.class).list(), Faction.class);
+
+            logger.info("Autosaved factions");
+        }, 6000, 6000);
 
 
         /*int count = 0;

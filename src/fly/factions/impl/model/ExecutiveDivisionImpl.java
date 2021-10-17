@@ -8,7 +8,9 @@ import fly.factions.api.permissions.Permissibles;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 public class ExecutiveDivisionImpl extends AbstractFactionComponent implements ExecutiveDivision {
     private Faction faction;
@@ -62,5 +64,10 @@ public class ExecutiveDivisionImpl extends AbstractFactionComponent implements E
         if(user.equals(leader)) {
             this.leader = faction.getLeader();
         }
+    }
+
+    @Override
+    public List<FactionPermission> getPermissions() {
+        return new ArrayList<>(permissions);
     }
 }

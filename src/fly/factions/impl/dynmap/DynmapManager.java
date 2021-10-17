@@ -2,6 +2,7 @@ package fly.factions.impl.dynmap;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
+import fly.factions.impl.util.LocationStorage;
 import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
 import org.bukkit.Bukkit;
@@ -86,8 +87,8 @@ public class DynmapManager {
                         lotsAreas.put(lot, new ArrayList<>());
                     }
 
-                    for (Location area : region.getLotsLocations()) {
-                        lotsAreas.get(region.getLot(area).getId()).add(new Location(world, area.getBlockX(), 0, area.getBlockZ()));
+                    for (LocationStorage area : region.getLotsLocations()) {
+                        lotsAreas.get(region.getLot(area).getId()).add(new Location(world, area.x, 0, area.z));
                     }
 
                     for(Lot lot : region.getLots().values()) {

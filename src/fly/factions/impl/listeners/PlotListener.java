@@ -147,7 +147,7 @@ public class PlotListener extends ListenerImpl {
         Lot lot = ((Region) plot.getAdministrator()).getLot(event.getBlock().getLocation());
 
         if (lot == null) {
-            if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer((Player) event.getPlayer()), false, false)) {
+            if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer(event.getPlayer()), false, false)) {
                 event.setCancelled(true);
             }
 

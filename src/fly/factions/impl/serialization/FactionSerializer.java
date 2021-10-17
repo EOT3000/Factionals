@@ -2,6 +2,7 @@ package fly.factions.impl.serialization;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
+import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.Permissibles;
 import fly.factions.api.permissions.PlotPermission;
 import fly.factions.api.registries.Registry;
@@ -20,7 +21,7 @@ import java.io.File;
 import java.util.*;
 
 public class FactionSerializer extends Serializer<Faction> {
-    private File dir = new File("plugins\\Factionals\\factions");
+    public static final File dir = new File("plugins\\Factionals\\factions");
 
     private boolean plots = false;
 
@@ -48,7 +49,6 @@ public class FactionSerializer extends Serializer<Faction> {
             Faction faction = null;
 
             if(!plots) {
-                System.out.println(file.getPath());
 
                 faction = new FactionImpl(configuration.getString("name"), r.get(UUID.fromString(configuration.getString("leader"))), configuration.getLong("creationTime"));
 
@@ -56,8 +56,6 @@ public class FactionSerializer extends Serializer<Faction> {
                 faction.setFillColor(Color.fromRGB(configuration.getInt("fr"), configuration.getInt("fg"), configuration.getInt("fb")));
 
                 faction.setFillOpacity(configuration.getDouble("fo"));
-
-                //System.out.println("a");
 
                 //Departments
 
@@ -71,10 +69,12 @@ public class FactionSerializer extends Serializer<Faction> {
                         division.addMember(r.get(UUID.fromString(member)));
                     }
 
+                    for(String permission : department.getStringList("permissions")) {
+                        division.addPermission(FactionPermission.valueOf(permission.toUpperCase()));
+                    }
+
                     faction.addDepartment(division);
                 }
-
-                //System.out.println("b");
 
                 //Regions
 
@@ -103,8 +103,6 @@ public class FactionSerializer extends Serializer<Faction> {
                         factionRegion.setLot(factionLot.getId(), factionLot);
                     }
 
-                    //System.out.println("b2");
-
                     //Towns
 
                     ConfigurationSection towns = region.getConfigurationSection("towns");
@@ -128,15 +126,11 @@ public class FactionSerializer extends Serializer<Faction> {
 
                 //Members
 
-                //System.out.println("c");
-
                 for (String member : configuration.getStringList("members")) {
                     r.get(UUID.fromString(member)).setFaction(faction);
                 }
 
                 //Plots
-
-                //System.out.println("d");
 
                 ConfigurationSection plots = configuration.getConfigurationSection("plots");
 
@@ -161,7 +155,7 @@ public class FactionSerializer extends Serializer<Faction> {
                     }*/
                 }
 
-                //System.out.println("e");
+
             } else {
                 try {
                     faction = factionals.getRegistry(Faction.class, String.class).get(configuration.getString("name"));
@@ -198,9 +192,15 @@ public class FactionSerializer extends Serializer<Faction> {
                                 lot.setZT(lotSection.getInt("zt"));
                             }
 
+                            System.out.println("f2");
+
                             lot.registerChange(level);
 
+                            System.out.println("f3");
+
                             lot.resetBorders();
+
+                            System.out.println("f4");
 
                             lot.setPrice(lotSection.getInt("price"));
 
@@ -214,6 +214,8 @@ public class FactionSerializer extends Serializer<Faction> {
                                 lot.setOwner(lot.getTown() == null ? lot.getRegion() : lot.getTown());
                             }
 
+                            System.out.println("f5");
+
                             ConfigurationSection lotPermissions = lotSection.getConfigurationSection("permissions");
 
                             for (String key : lotPermissions.getKeys(false)) {
@@ -225,7 +227,8 @@ public class FactionSerializer extends Serializer<Faction> {
                                 }
                             }
 
-                            //System.out.println("f1b");
+                            System.out.println("f6");
+
                         }
                     }
 
@@ -278,9 +281,16 @@ public class FactionSerializer extends Serializer<Faction> {
                 departmentMembers.add(user.getUniqueId().toString());
             }
 
+            List<String> departmentPermissions = new ArrayList<>();
+
+            for(FactionPermission permission: division.getPermissions()) {
+                departmentPermissions.add(permission.name());
+            }
+
             department.put("members", departmentMembers);
             department.put("name", division.getName());
             department.put("leader", division.getLeader().getUniqueId().toString());
+            department.put("permissions", departmentPermissions);
 
             departments.put(division.getName(), department);
         }
