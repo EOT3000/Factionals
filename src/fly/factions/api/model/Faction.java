@@ -127,4 +127,19 @@ public interface Faction extends LandAdministrator<Plot> {
      */
 
     long getCreationTime();
+
+    /**
+     * @return the max power of the faction
+     */
+    int getMaxPower();
+
+    /**
+     * @return the amount of max power each user can have
+     */
+    int getPowerPerPlayer();
+
+    /**
+     * @return the current power of the faction
+     */
+    int getCurrentPower();
 }

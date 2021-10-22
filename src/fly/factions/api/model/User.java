@@ -21,4 +21,12 @@ public interface User extends PlotOwner {
     Collection<Faction> getInvites();
     void addInvite(Faction faction);
     void removeInvite(Faction faction);
+
+    boolean isAdminMode();
+
+    int getPower();
+
+    void setPower(int x);
+
+    void setAdminMode(boolean adminMode);
 }

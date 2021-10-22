@@ -40,6 +40,10 @@ public class PlotImpl implements Plot {
 
         this.faction = faction;
 
+        if(faction == null) {
+            return;
+        }
+
         this.faction.addPlot(this);
 
         this.setAdministrator(faction);

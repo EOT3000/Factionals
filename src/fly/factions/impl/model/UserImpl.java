@@ -3,6 +3,7 @@ package fly.factions.impl.model;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.Permissibles;
+import fly.factions.api.permissions.PermissionContext;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -16,6 +17,12 @@ public class UserImpl implements User {
     private UUID uuid;
     private String name;
     private Faction faction;
+
+    private int power;
+
+    private PermissionContext.PermissionContextType contextType;
+
+    private boolean adminMode;
 
     private int claimMode;
     //private OpenedMenu menu;
@@ -174,5 +181,25 @@ public class UserImpl implements User {
         return "UserImpl{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean isAdminMode() {
+        return adminMode;
+    }
+
+    @Override
+    public int getPower() {
+        return Math.min(faction.getPowerPerPlayer(), power);
+    }
+
+    @Override
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    @Override
+    public void setAdminMode(boolean adminMode) {
+        this.adminMode = adminMode;
     }
 }

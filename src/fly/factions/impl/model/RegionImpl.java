@@ -117,6 +117,8 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
         Registry<Plot, Integer> pr = factionals.getRegistry(Plot.class, Integer.class);
 
+        System.out.println("ga");
+
         if(xO1 != Integer.MAX_VALUE) {
             int xOL = Math.min(xO1, xO2);
             int zOL = Math.min(zO1, zO2);
@@ -127,10 +129,12 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
             if(xO1 != Integer.MAX_VALUE-1) {
                 for (int x = xOL; x <= xOG; x++) {
                     for (int z = zOL; z <= zOG; z++) {
-                        lotMap.remove(new Location(world, x, 0, z));
+                        lotMap.remove(new LocationStorage(x, z, world));
                     }
                 }
             }
+
+            System.out.println("gb");
 
             for (int x = xL; x <= xG; x++) {
                 for (int z = zL; z <= zG; z++) {
@@ -140,11 +144,11 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
                     if(plot != null && plot.getAdministrator().equals(this)) {
                         lotMap.put(loc, lot);
-
-                        break;
                     }
                 }
             }
+
+            System.out.println("gc");
 
             switch (type) {
                 case 1:
@@ -174,6 +178,9 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
                     break;
             }
+
+            System.out.println("gd");
+
 
             return true;
         }

@@ -2,6 +2,7 @@ package fly.factions.impl.listeners;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
+import fly.factions.api.permissions.PermissionContext;
 import fly.factions.api.permissions.PlotPermission;
 import fly.factions.api.registries.Registry;
 import fly.factions.impl.util.Plots;
@@ -63,16 +64,16 @@ public class PlotListener extends ListenerImpl {
             return;
         }
 
-        Lot lot = ((Region) plot.getAdministrator()).getLot(event.getClickedBlock().getLocation());
+        Lot lot = null;
 
-        if (lot == null) {
-            return;
+        if(plot.getAdministrator() instanceof Region) {
+            lot = ((Region) plot.getAdministrator()).getLot(event.getClickedBlock().getLocation());
         }
 
         if (event.getItem() != null) {
             Material t = event.getItem().getType();
 
-            if (!lot.hasPermission(getUserFromPlayer(event.getPlayer()), PlotPermission.VEHICLES)) {
+            if (!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.VEHICLES)) {
                 if (Tag.ITEMS_BOATS.isTagged(t)) {
                     event.setCancelled(true);
                 }
@@ -83,13 +84,13 @@ public class PlotListener extends ListenerImpl {
                 }
             }
 
-            if (!lot.hasPermission(getUserFromPlayer(event.getPlayer()), PlotPermission.DETAILS)) {
+            if (!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.DETAILS)) {
                 if (t.equals(Material.PAINTING) || t.equals(Material.ITEM_FRAME) || t.equals(Material.GLOW_ITEM_FRAME) || t.equals(Material.ARMOR_STAND)) {
                     event.setCancelled(true);
                 }
             }
 
-            if (!lot.hasPermission(getUserFromPlayer(event.getPlayer()), PlotPermission.BUILD)) {
+            if (!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.BUILD)) {
                 if (t.equals(Material.FLINT_AND_STEEL)) {
                     event.setCancelled(true);
                 }
@@ -115,21 +116,18 @@ public class PlotListener extends ListenerImpl {
             return;
         }
 
-        Lot lot = ((Region) plot.getAdministrator()).getLot(event.getBlock().getLocation());
+        Lot lot = null;
 
-        if (lot == null) {
-            if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer((Player) event.getPlayer()), false, false)) {
-                event.setCancelled(true);
-            }
-
-            return;
+        if(plot.getAdministrator() instanceof Region) {
+            lot = ((Region) plot.getAdministrator()).getLot(event.getBlock().getLocation());
         }
 
-        if(!lot.hasPermission(getUserFromPlayer(event.getPlayer()), PlotPermission.BUILD)) {
+
+        if(!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.BUILD)) {
             event.setCancelled(true);
         }
 
-        if(event.getBlock().getState() instanceof Container && !lot.hasPermission(getUserFromPlayer(event.getPlayer()), PlotPermission.CONTAINER)) {
+        if(event.getBlock().getState() instanceof Container && !PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.CONTAINER)) {
             event.setCancelled(true);
         }
     }
@@ -144,17 +142,13 @@ public class PlotListener extends ListenerImpl {
             return;
         }
 
-        Lot lot = ((Region) plot.getAdministrator()).getLot(event.getBlock().getLocation());
+        Lot lot = null;
 
-        if (lot == null) {
-            if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer(event.getPlayer()), false, false)) {
-                event.setCancelled(true);
-            }
-
-            return;
+        if(plot.getAdministrator() instanceof Region) {
+            lot = ((Region) plot.getAdministrator()).getLot(event.getBlock().getLocation());
         }
 
-        if(!lot.hasPermission(getUserFromPlayer(event.getPlayer()), PlotPermission.BUILD)) {
+        if(!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.BUILD)) {
             event.setCancelled(true);
         }
     }
@@ -168,28 +162,25 @@ public class PlotListener extends ListenerImpl {
         Plot plot = null;
         Lot lot = null;
 
+
         if(holder instanceof Entity && !(holder instanceof HumanEntity)) {
             plot = pr.get(Plots.getLocationId(((Entity) holder).getLocation()));
 
-            lot = ((Region) plot.getAdministrator()).getLot(((Entity) holder).getLocation());
+            if(plot != null && plot.getAdministrator() instanceof Region) {
+                lot = ((Region) plot.getAdministrator()).getLot(((Entity) holder).getLocation());
+            }
         }
 
         if(holder instanceof BlockState) {
             plot = pr.get(Plots.getLocationId(((BlockState) holder).getLocation()));
 
-            lot = ((Region) plot.getAdministrator()).getLot(((BlockState) holder).getLocation());
+            if(plot != null && plot.getAdministrator() instanceof Region) {
+                lot = ((Region) plot.getAdministrator()).getLot(((BlockState) holder).getLocation());
+            }
         }
 
         if(plot != null) {
-            if (lot == null) {
-                if(!plot.getAdministrator().userHasPlotPermissions(getUserFromPlayer((Player) event.getPlayer()), false, false)) {
-                    event.setCancelled(true);
-                }
-
-                return;
-            }
-
-            if(!lot.hasPermission(getUserFromPlayer((Player) event.getPlayer()), PlotPermission.CONTAINER)) {
+            if(!PermissionContext.canDoPlots(getUserFromPlayer((Player) event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.CONTAINER)) {
                 event.setCancelled(true);
             }
         }

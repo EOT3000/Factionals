@@ -13,6 +13,7 @@ import fly.factions.impl.commands.faction.map.MapCommand;
 import fly.factions.impl.commands.faction.plot.PlotCommands;
 import fly.factions.impl.commands.faction.region.RegionCommand;
 import fly.factions.impl.commands.faction.town.TownCommand;
+import fly.factions.impl.commands.faction.unclaim.UnclaimCommand;
 
 public class FactionCommands extends CommandDivision {
     public FactionCommands() {
@@ -28,7 +29,9 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f claim", "Claim one chunk at your location for your faction");
 
-        addHelpEntry("/f claim fill", "Fills in a hollow-ly filled area with chunks");
+        addHelpEntry("/f unclaim", "Unclaim one chunk at your location for your faction");
+
+        //addHelpEntry("/f claim fill", "Fills in a hollow-ly filled area with chunks");
 
         addHelpEntry("/f info <faction name>", "View information about a faction");
 
@@ -54,14 +57,13 @@ public class FactionCommands extends CommandDivision {
         addSubCommand("join", new FactionJoinCommand());
 
         
-        
         addSubCommand("claim", new ClaimCommand());
+        addSubCommand("unclaim", new UnclaimCommand());
 
 
         addSubCommand("list", new ListCommand());
         addSubCommand("map", new MapCommand());
         addSubCommand("info", new InfoCommand());
-
 
 
         addSubCommand("region", new RegionCommand());

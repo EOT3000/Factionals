@@ -25,7 +25,11 @@ public class UserSerializer extends Serializer<User> {
     @Override
     public User load(File file) {
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-        return new UserImpl(UUID.fromString(configuration.getString("uuid")));
+        User user = new UserImpl(UUID.fromString(configuration.getString("uuid")));
+
+        user.setPower(configuration.getInt("power"));
+
+        return user;
     }
 
     @Override
@@ -33,6 +37,7 @@ public class UserSerializer extends Serializer<User> {
         YamlConfiguration config = new YamlConfiguration();
 
         config.set("uuid", savable.getUniqueId().toString());
+        config.set("power", savable.getPower());
 
         try {
             config.save(new File(dir.getPath() + "\\" + savable.getUniqueId().toString()));

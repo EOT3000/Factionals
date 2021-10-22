@@ -205,7 +205,35 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
                 '}';
     }
 
+    @Override
+    public int getMaxPower() {
+        int maxPower = 0;
+
+        for(int x = 1; x <= members.size(); x++) {
+            maxPower+=factionals.getConfiguration().getPowerForPlayer(x);
+        }
+
+        return maxPower;
+    }
+
+    @Override
+    public int getPowerPerPlayer() {
+        return getMaxPower()/members.size();
+    }
+
+    @Override
+    public int getCurrentPower() {
+        int power = 0;
+
+        for(User user : members) {
+            power+=user.getPower();
+        }
+
+        return power;
+    }
+
     //TODO: Move commands into separate class
+    //TODO: remove this
 
     private static void requireFactionNotExist(CommandSender sender, String name) {
         Faction faction = factionals.getRegistry(Faction.class, String.class).get(name);

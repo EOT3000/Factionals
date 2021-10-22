@@ -10,6 +10,7 @@ import fly.factions.api.serialization.Serializer;
 import fly.factions.impl.commands.FactionCommand;
 import fly.factions.impl.commands.PlotCommand;
 import fly.factions.impl.commands.faction.FactionCommands;
+import fly.factions.impl.configuration.Configuration;
 import fly.factions.impl.dynmap.DynmapManager;
 import fly.factions.impl.listeners.JoinLeaveListener;
 import fly.factions.impl.listeners.PlotListener;
@@ -41,6 +42,7 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
     private PlotCommand plotCommand;
 
     private Economy economy;
+    private Configuration configuration;
 
     private static Factionals FACTIONALS;
     private Logger logger = Bukkit.getLogger();
@@ -83,6 +85,8 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
 
         economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
+
+        configuration = new Configuration();
 
 
         factionCommand = new FactionCommand(this);
@@ -186,6 +190,10 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
     @SuppressWarnings("unchecked")
     public <V, K> Registry<V, K> getRegistry(Class<V> clazz, Class<K> clazz2) {
         return (Registry<V, K>) registries.get(clazz);
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
     @Override

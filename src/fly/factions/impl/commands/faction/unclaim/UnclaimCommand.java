@@ -1,10 +1,9 @@
-package fly.factions.impl.commands.faction.claim;
+package fly.factions.impl.commands.faction.unclaim;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;
-import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.impl.model.PlotImpl;
 import fly.factions.impl.util.Pair;
@@ -15,8 +14,8 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ClaimCommand extends CommandDivision {
-    public ClaimCommand() {
+public class UnclaimCommand extends CommandDivision {
+    public UnclaimCommand() {
         addSubCommand("*", this);
         addSubCommand("", this);
     }
@@ -24,40 +23,33 @@ public class ClaimCommand extends CommandDivision {
     public boolean run(CommandSender sender) {
         Player player = (Player) sender;
         Chunk chunk = player.getLocation().getChunk();
-        User user = USERS.get(player.getUniqueId());
 
-        if(user.getFaction().getPlots().size() >= user.getFaction().getCurrentPower()) {
-            sender.sendMessage(ChatColor.RED + "ERROR: not enough power");
-
-            return false;
-        }
-
-        if (!claim0(chunk.getX(), chunk.getZ(), chunk.getWorld(), user.getFaction())) {
-            player.sendMessage(ChatColor.RED + "ERROR: This chunk already claimed");
+        if (!unclaim0(chunk.getX(), chunk.getZ(), chunk.getWorld(), USERS.get(player.getUniqueId()).getFaction())) {
+            player.sendMessage(ChatColor.RED + "ERROR: This chunk already unclaimed");
             return false;
         } else {
-            player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully claimed 1 chunk (" + chunk.getX() + "," + chunk.getZ() + "," + chunk.getWorld().getName() + ")");
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully unclaimed 1 chunk (" + chunk.getX() + "," + chunk.getZ() + "," + chunk.getWorld().getName() + ")");
             return true;
         }
     }
 
-    private static boolean claim0(int x, int z, World world, Faction faction) {
+    private static boolean unclaim0(int x, int z, World world, Faction faction) {
         Plot old = API.getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(x, z, world));
 
-        if(old != null) {
+        if(old == null) {
             return false;
         }
 
         Plot plot = new PlotImpl(x, z, world, faction);
 
-        plot.setFaction(faction);
+        plot.setFaction(null);
 
         return true;
     }
 
     @Override
-    public ArgumentType[] getRequiredTypes() {
-        return new ArgumentType[] {
+    public CommandDivision.ArgumentType[] getRequiredTypes() {
+        return new CommandDivision.ArgumentType[] {
         };
     }
 

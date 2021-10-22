@@ -4,6 +4,7 @@ import fly.factions.Factionals;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
+import fly.factions.api.permissions.PermissionContext;
 import fly.factions.api.registries.Registry;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,7 @@ import java.util.UUID;
 public enum CommandRequirement {
     REQUIRE_PLAYER {
         @Override
-        public boolean has(CommandSender sender, Object info) {
+        public boolean has0(CommandSender sender, Object info) {
             return sender instanceof Player;
         }
 
@@ -25,7 +26,7 @@ public enum CommandRequirement {
     },
     REQUIRE_MEMBER_FACTION {
         @Override
-        public boolean has(CommandSender sender, Object info) {
+        public boolean has0(CommandSender sender, Object info) {
             return USERS.get(((Player) sender).getUniqueId()).getFaction() != null;
         }
 
@@ -36,8 +37,8 @@ public enum CommandRequirement {
     },
     REQUIRE_USER_PERMISSION {
         @Override
-        public boolean has(CommandSender sender, Object info) {
-            return getUser(sender).getFaction().hasPermission(getUser(sender), (FactionPermission) info);
+        public boolean has(CommandSender sender, Object... info) {
+            return getUser(sender).getFaction().hasPermission(getUser(sender), (FactionPermission) info[0]) || getUser(sender).isAdminMode();
         }
 
         @Override
@@ -47,7 +48,7 @@ public enum CommandRequirement {
     },
     REQUIRE_REGION_LEADER {
         @Override
-        public boolean has(CommandSender sender, Object info) {
+        public boolean has0(CommandSender sender, Object info) {
             return getUser(sender).getFaction().getRegion((String) info).getLeader().equals(getUser(sender)) || getUser(sender).getFaction().hasPermission(getUser(sender), FactionPermission.OWNER);
         }
 
@@ -58,7 +59,7 @@ public enum CommandRequirement {
     }, 
     REQUIRE_DEPARTMENT_LEADER {
         @Override
-        public boolean has(CommandSender sender, Object info) {
+        public boolean has0(CommandSender sender, Object info) {
             return getUser(sender).getFaction().getDepartment((String) info).getLeader().equals(getUser(sender)) || getUser(sender).getFaction().hasPermission(getUser(sender), FactionPermission.OWNER);
         }
 
@@ -76,7 +77,13 @@ public enum CommandRequirement {
         return USERS.get(((Player) sender).getUniqueId());
     }
 
-    public abstract boolean has(CommandSender sender, Object info);
+    public boolean has0(CommandSender sender, Object info) {
+        return true;
+    }
+
+    public boolean has(CommandSender sender, Object... info) {
+        return has0(sender, info[0]);
+    }
 
     public abstract String format(CommandSender sender);
 
