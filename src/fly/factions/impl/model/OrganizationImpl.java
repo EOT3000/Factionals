@@ -1,6 +1,7 @@
 package fly.factions.impl.model;
 
 import fly.factions.api.exceptions.NotAMemberException;
+import fly.factions.api.model.Faction;
 import fly.factions.api.model.Organization;
 import fly.factions.api.model.User;
 import org.bukkit.Material;
@@ -43,5 +44,10 @@ public class OrganizationImpl extends AbstractFactionComponent implements Organi
     @Override
     public ItemStack getItem() {
         return new ItemStack(Material.AIR);
+    }
+
+    @Override
+    public Faction getFaction() {
+        return null;
     }
 }
