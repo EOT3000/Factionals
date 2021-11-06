@@ -18,6 +18,7 @@ import fly.factions.impl.registries.RegistryImpl;
 import fly.factions.impl.registries.StringRegistryImpl;
 import fly.factions.impl.serialization.FactionSerializer;
 import fly.factions.impl.serialization.UserSerializer;
+import fly.factions.impl.util.Ticker;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -134,6 +135,8 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
             logger.info("Autosaved factions");
         }, 6000, 6000);
+
+        Bukkit.getScheduler().runTaskTimer(this, Ticker::tick, 20, 120);
 
 
         /*int count = 0;

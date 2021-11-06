@@ -462,7 +462,7 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         User user = factionals.getRegistry(User.class, UUID.class).get(((Player) sender).getUniqueId());
 
         requireNotNull(user.getFaction(), ChatColor.RED + "You are not in a faction!", sender);
-        requirePermission(user, FactionPermission.USERS, user.getFaction());
+        requirePermission(user, FactionPermission.USER_ADD, user.getFaction());
 
         victim.addInvite(user.getFaction());
 

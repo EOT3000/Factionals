@@ -3,7 +3,6 @@ package fly.factions.impl.model;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.Permissibles;
-import fly.factions.api.permissions.PermissionContext;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -14,20 +13,18 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.*;
 
 public class UserImpl implements User {
-    private UUID uuid;
-    private String name;
+    private final UUID uuid;
+    private final String name;
     private Faction faction;
 
     private int power;
 
-    private PermissionContext.PermissionContextType contextType;
-
     private boolean adminMode;
 
-    private int claimMode;
+    private boolean autoClaiming;
     //private OpenedMenu menu;
 
-    private Set<Faction> invites = new HashSet<>();
+    private final Set<Faction> invites = new HashSet<>();
 
     public UserImpl(UUID uuid) {
         this(uuid, Bukkit.getOfflinePlayer(uuid).getName());
@@ -141,9 +138,16 @@ public class UserImpl implements User {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setFaction(Faction faction) {
         if(this.faction != null && this.faction != faction) {
             this.faction.removeMember(this);
+        }
+
+        if(faction == null) {
+            this.faction = null;
+
+            return;
         }
 
         this.faction = faction;
@@ -172,6 +176,16 @@ public class UserImpl implements User {
     }*/
 
     @Override
+    public boolean isAutoClaiming() {
+        return autoClaiming;
+    }
+
+    @Override
+    public void setAutoClaiming(boolean autoClaiming) {
+        this.autoClaiming = autoClaiming;
+    }
+
+    @Override
     public boolean userHasPlotPermissions(User user, boolean owner, boolean pub) {
         return user.equals(this);
     }
@@ -190,7 +204,7 @@ public class UserImpl implements User {
 
     @Override
     public int getPower() {
-        return Math.min(faction.getPowerPerPlayer(), power);
+        return Math.min(faction != null ? faction.getPowerPerPlayer() : 6000, power);
     }
 
     @Override

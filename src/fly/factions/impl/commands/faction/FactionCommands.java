@@ -8,6 +8,7 @@ import fly.factions.impl.commands.faction.department.DepartmentCommand;
 import fly.factions.impl.commands.faction.info.InfoCommand;
 import fly.factions.impl.commands.faction.invite.InviteCommand;
 import fly.factions.impl.commands.faction.join.FactionJoinCommand;
+import fly.factions.impl.commands.faction.kick.KickCommand;
 import fly.factions.impl.commands.faction.list.ListCommand;
 import fly.factions.impl.commands.faction.map.MapCommand;
 import fly.factions.impl.commands.faction.plot.PlotCommands;
@@ -24,6 +25,8 @@ public class FactionCommands extends CommandDivision {
         addHelpEntry("/f create <name>", "Create a faction with the given name");
 
         addHelpEntry("/f invite", "View member invite commands");
+
+        addHelpEntry("/f kick <user>", "Kicks a user from the faction");
 
         addHelpEntry("/f join <faction>", "Attempt to join the given faction");
 
@@ -53,6 +56,7 @@ public class FactionCommands extends CommandDivision {
         addSubCommand("create", new CreateCommand());
 
         addSubCommand("invite", new InviteCommand());
+        addSubCommand("kick", new KickCommand());
 
         addSubCommand("join", new FactionJoinCommand());
 

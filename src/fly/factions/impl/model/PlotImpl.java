@@ -41,6 +41,7 @@ public class PlotImpl implements Plot {
         this.faction = faction;
 
         if(faction == null) {
+            Factionals.getFactionals().getRegistry(Plot.class, Integer.class).set(getLocationId(), null);
             return;
         }
 

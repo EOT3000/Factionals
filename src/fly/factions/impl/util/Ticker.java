@@ -4,6 +4,7 @@ import fly.factions.Factionals;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.User;
 import fly.factions.api.registries.Registry;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
@@ -17,15 +18,9 @@ public class Ticker {
     }
 
     public static void tick() {
-        for(Faction faction : factionRegistry.list()) {
-            if(!faction.isDeleted()) {
-                //for()
-            }
-        }
-
         for(User user : userRegistry.list()) {
-            if(!user.getFaction().getMembers().contains(user) || user.getFaction().isDeleted()) {
-                user.setFaction(null);
+            if(Bukkit.getOfflinePlayer(user.getUniqueId()).isOnline()) {
+                user.setPower(user.getPower() + 1);
             }
         }
     }

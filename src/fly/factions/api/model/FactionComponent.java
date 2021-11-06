@@ -19,4 +19,6 @@ public interface FactionComponent extends PlotOwner, PlayerGroup {
      */
 
     void removeMember(User user);
+
+    Faction getFaction();
 }

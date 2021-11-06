@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * A wrapper to allow for a case insensitive registry
+ * A wrapper to allow for a case insensitive string registry
  *
  * @param <V> the value type
  */

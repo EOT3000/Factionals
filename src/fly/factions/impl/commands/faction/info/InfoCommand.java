@@ -36,10 +36,10 @@ public class InfoCommand extends CommandDivision {
 
         regions = regions.replaceFirst(", ", "");
 
-        //I game up here lmfao
+        //I gave up here lmfao
         sender.sendMessage(translate("&3Members &b[&3" + factionObject.getMembers().size() + "&b]&3: &r" + members));
         sender.sendMessage(translate("&3Regions &b[&3" + factionObject.getRegions().size() + "&b]&3: &r" + regions));
-        sender.sendMessage(translate("&3Chunks&r: " + factionObject.getPlots().size()));
+        sender.sendMessage(translate("&3Chunks&r/&3Power&r/&3Max Power&r: " + factionObject.getPlots().size() + "&7/&f" + factionObject.getCurrentPower() + "&7/&f" + factionObject.getMaxPower()));
 
         return true;
     }

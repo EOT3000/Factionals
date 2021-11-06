@@ -13,6 +13,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class DepartmentMemberRemoveCommand extends CommandDivision {
+    public DepartmentMemberRemoveCommand() {
+        addHelpEntry("/f department member remove <user> <department>", "Removes a user from the department");
+
+        addSubCommand("*", this);
+    }
+
     public boolean run(CommandSender sender, String victim, String department) {
         Faction faction = USERS.get(((Player) sender).getUniqueId()).getFaction();
 
@@ -41,8 +47,7 @@ public class DepartmentMemberRemoveCommand extends CommandDivision {
     public Pair<CommandRequirement, Object>[] getUserRequirements() {
         return new Pair[] {
                 new Pair<>(CommandRequirement.REQUIRE_PLAYER, null),
-                new Pair<>(CommandRequirement.REQUIRE_MEMBER_FACTION, null),
-                new Pair<>(CommandRequirement.REQUIRE_USER_PERMISSION, FactionPermission.INTERNAL_MANAGEMENT)
+                new Pair<>(CommandRequirement.REQUIRE_MEMBER_FACTION, null)
         };
     }
 }

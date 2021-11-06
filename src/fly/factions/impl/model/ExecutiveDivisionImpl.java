@@ -70,4 +70,9 @@ public class ExecutiveDivisionImpl extends AbstractFactionComponent implements E
     public List<FactionPermission> getPermissions() {
         return new ArrayList<>(permissions);
     }
+
+    @Override
+    public Faction getFaction() {
+        return faction;
+    }
 }

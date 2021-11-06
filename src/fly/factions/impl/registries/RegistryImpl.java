@@ -26,7 +26,7 @@ public class RegistryImpl<V, K> implements Registry<V, K> {
         if(value != null) {
             map.put(key, value);
         } else {
-            V v = map.remove(key);
+            map.remove(key);
         }
     }
 

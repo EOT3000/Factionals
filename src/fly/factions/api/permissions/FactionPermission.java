@@ -14,6 +14,9 @@ public enum FactionPermission {
     //Declare allies, enemies, etc
     RELATIONS,
 
-    //Invite and kick players
-    USERS,
+    //Invite players
+    USER_ADD,
+
+    //Kick players
+    USER_KICK,
 }

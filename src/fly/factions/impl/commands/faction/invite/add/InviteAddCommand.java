@@ -49,7 +49,7 @@ public class InviteAddCommand extends CommandDivision {
         return new Pair[] {
                 new Pair<>(CommandRequirement.REQUIRE_PLAYER, null),
                 new Pair<>(CommandRequirement.REQUIRE_MEMBER_FACTION, null),
-                new Pair<>(CommandRequirement.REQUIRE_USER_PERMISSION, FactionPermission.USERS)
+                new Pair<>(CommandRequirement.REQUIRE_USER_PERMISSION, FactionPermission.USER_ADD)
         };
     }
 }
