@@ -1,6 +1,7 @@
 package fly.factions.impl.commands.faction.plot.map;
 
 import fly.factions.api.commands.CommandDivision;
+import fly.factions.api.model.Faction;
 import fly.factions.api.model.Lot;
 import fly.factions.api.model.Plot;
 import fly.factions.api.model.Region;
@@ -17,8 +18,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class PlotMapCommand extends CommandDivision {
@@ -57,16 +57,27 @@ public class PlotMapCommand extends CommandDivision {
             }
         }
 
+        Map<Integer, Character> map = new HashMap<>();
+
+        List<Character> characters = new ArrayList<>(Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K',
+                'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                'V', 'W', 'X', 'Y', 'Z', '#', '$', '%', '&', '=',
+                '+', '?', '/', '\\'));
+
         for(Pair<Integer, Integer> location : findLots(plot, chunk)) {
             int x = location.getKey();
             int z = location.getValue();
 
             int lotId = ((Region) plot.getAdministrator()).getLot(chunk.getBlock(x, 0, z).getLocation()).getId();
 
-            array[x][z] = "{'text':'#', 'hoverEvent':{'action':'show_text', 'value':'&4'}, 'color':'green'}".replaceFirst("&4", lotId + "");
+            if(map.get(lotId) == null) {
+                map.put(lotId, characters.remove(0));
+            }
+
+            array[x][z] = "{'text':'" + map.get(lotId) + "', 'hoverEvent':{'action':'show_text', 'value':'&4'}, 'color':'green'}".replaceFirst("&4", lotId + "");
 
             if(location.getKey() == player.getLocation().getBlockX() && location.getValue() == player.getLocation().getBlockZ()) {
-                array[x][z] = "{'text':'#', 'hoverEvent':{'action':'show_text', 'value':'&4'}, 'color':'gold'}".replaceFirst("&4", lotId + "");
+                array[x][z] = "{'text':'" + map.get(lotId) + "', 'hoverEvent':{'action':'show_text', 'value':'&4'}, 'color':'gold'}".replaceFirst("&4", lotId + "");
             }
         }
 
@@ -87,6 +98,10 @@ public class PlotMapCommand extends CommandDivision {
     }
 
     private List<Pair<Integer, Integer>> findLots(Plot plot, Chunk chunk) {
+        if(plot.getAdministrator() instanceof Faction) {
+            return new ArrayList<>();
+        }
+
         Region region = (Region) plot.getAdministrator();
 
         List<Pair<Integer, Integer>> ret = new ArrayList<>();

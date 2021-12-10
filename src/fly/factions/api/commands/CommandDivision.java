@@ -14,11 +14,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public abstract class CommandDivision implements CommandExecutor {
+public abstract class CommandDivision implements CommandExecutor, TabExecutor {
     protected static Factionals API = Factionals.getFactionals();
     protected static Registry<User, UUID> USERS = API.getRegistry(User.class, UUID.class);
     protected static Registry<Plot, Integer> PLOTS = API.getRegistry(Plot.class, Integer.class);
@@ -69,8 +73,6 @@ public abstract class CommandDivision implements CommandExecutor {
             for(Method method : methods) {
                 if(method.getName().equalsIgnoreCase("run")) {
                     try {
-                        System.out.println("command check start");
-                        
                         for(Pair<CommandRequirement, Object> pair : division.getUserRequirements()) {
                             if(!pair.getKey().has(commandSender, parse(pair.getValue(), strings))) {
                                 commandSender.sendMessage(pair.getKey().format(commandSender));
@@ -91,10 +93,26 @@ public abstract class CommandDivision implements CommandExecutor {
                             count++;
                         }
 
-                        System.out.println("command invoked");
-
                         return (boolean) method.invoke(division, pushIntoStart(strings, commandSender));
-                    } catch (Exception e) {
+                    } catch (ArrayIndexOutOfBoundsException | InvocationTargetException e) {
+                        if(e instanceof InvocationTargetException && !(e.getCause() instanceof ArrayIndexOutOfBoundsException)) {
+                            e.printStackTrace();
+
+                            int num = new Random().nextInt(2000);
+
+                            commandSender.sendMessage(ChatColor.DARK_RED + "Fatal error at line " + num);
+                            commandSender.sendMessage(ChatColor.DARK_RED + e.getClass().getName() + "@" + e.hashCode());
+                            commandSender.sendMessage(ChatColor.DARK_RED + "Please contact the head of servers or administrators, Fly");
+
+                            System.out.println("crashed server at time " + num);
+
+                            return false;
+                        }
+
+                        commandSender.sendMessage(ChatColor.RED + "ERROR: too many or not enough arguments");
+
+                        return false;
+                    } catch(Exception e) {
                         e.printStackTrace();
 
                         int num = new Random().nextInt(2000);
@@ -116,6 +134,38 @@ public abstract class CommandDivision implements CommandExecutor {
         division.onCommand(commandSender, command, s, clean(strings));
 
         return false;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+        CommandDivision division = this;
+        CommandDivision divisionOld;
+
+        for(int i = 0; i < strings.length; i++) {
+            String string = strings[i];
+
+            divisionOld = division;
+
+            division = division.getNext(string);
+
+            if(division == null) {
+                if(i != strings.length-1) {
+                    return new ArrayList<>();
+                } else {
+                    List<String> list = new ArrayList<>();
+
+                    for(String possible : divisionOld.subCommands.keySet()) {
+                        if(possible.startsWith(string) && !(possible.isEmpty()) && !possible.equalsIgnoreCase("*")) {
+                            list.add(possible);
+                        }
+                    }
+
+                    return list;
+                }
+            }
+        }
+
+        return new ArrayList<>();
     }
 
     private Object parse(Object obj, String[] args) {

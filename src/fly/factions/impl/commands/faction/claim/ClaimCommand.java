@@ -9,22 +9,46 @@ import fly.factions.api.permissions.FactionPermission;
 import fly.factions.impl.model.PlotImpl;
 import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
+import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClaimCommand extends CommandDivision {
     public ClaimCommand() {
+        addHelpEntry("/f claim <fill | one>", "Claims either one chunk or fills in a hollow spot");
+
         addSubCommand("*", this);
         addSubCommand("", this);
     }
 
-    public boolean run(CommandSender sender) {
+    public boolean run(CommandSender sender, String type) {
         Player player = (Player) sender;
         Chunk chunk = player.getLocation().getChunk();
         User user = USERS.get(player.getUniqueId());
+
+        if(type.equalsIgnoreCase("fill")) {
+            List<Pair<Integer, Integer>> list = fillNode(chunk.getX(), chunk.getZ(), chunk.getWorld(), new MutableInt(1000), new ArrayList<>());
+
+            if(list == null) {
+                sender.sendMessage(ChatColor.RED  + "ERROR: space too large (more than 1000 chunks)");
+
+                return false;
+            }
+
+            for(Pair<Integer, Integer> claim : list) {
+                claim0(claim.getKey(), claim.getValue(), chunk.getWorld(), user.getFaction());
+            }
+
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully filled area");
+
+            return true;
+        }
 
         if(user.getFaction().getPlots().size() >= user.getFaction().getCurrentPower()) {
             sender.sendMessage(ChatColor.RED + "ERROR: not enough power");
@@ -41,10 +65,55 @@ public class ClaimCommand extends CommandDivision {
         }
     }
 
-    private static boolean claim0(int x, int z, World world, Faction faction) {
+    private static List<Pair<Integer, Integer>> fillNode(int x, int z, World w, MutableInt left, List<Pair<Integer, Integer>> permList) {
+        List<Pair<Integer, Integer>> list = new ArrayList<>();
+
+        if(((int)left.getValue()) <= 0) {
+            return null;
+        }
+
+        if(check(x+1, z, w) && !permList.contains(new Pair<>(x+1, z))) {
+            list.add(new Pair<>(x+1, z));
+            permList.add(new Pair<>(x+1, z));
+            left.setValue(((int) left.getValue())-1);
+        }
+        if(check(x, z+1, w) && !permList.contains(new Pair<>(x, z+1))) {
+            list.add(new Pair<>(x, z+1));
+            permList.add(new Pair<>(x, z+1));
+            left.setValue(((int) left.getValue())-1);
+        }
+        if(check(x-1, z, w) && !permList.contains(new Pair<>(x-1, z))) {
+            list.add(new Pair<>(x-1, z));
+            permList.add(new Pair<>(x-1, z));
+            left.setValue(((int) left.getValue())-1);
+        }
+        if(check(x, z-1, w) && !permList.contains(new Pair<>(x, z-1))) {
+            list.add(new Pair<>(x, z-1));
+            permList.add(new Pair<>(x, z-1));
+            left.setValue(((int) left.getValue())-1);
+        }
+
+        for(Pair<Integer, Integer> pair : list) {
+            if(fillNode(pair.getKey(), pair.getValue(), w, left, permList) == null) {
+                return null;
+            }
+        }
+
+        return permList;
+    }
+
+    private static boolean check(int x, int z, World world) {
         Plot old = API.getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(x, z, world));
 
         if(old != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean claim0(int x, int z, World world, Faction faction) {
+        if(!check(x, z, world)) {
             return false;
         }
 
@@ -58,6 +127,7 @@ public class ClaimCommand extends CommandDivision {
     @Override
     public ArgumentType[] getRequiredTypes() {
         return new ArgumentType[] {
+                ArgumentType.STRING
         };
     }
 

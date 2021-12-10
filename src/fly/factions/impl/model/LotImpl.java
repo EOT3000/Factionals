@@ -12,7 +12,6 @@ import java.util.Set;
 public class LotImpl implements Lot {
     private PlotOwner owner;
     private int price;
-    private Faction faction;
     private Region region;
     private int id;
     private World world;
@@ -45,7 +44,6 @@ public class LotImpl implements Lot {
     //private List<Pair<Integer, Integer>> blocks = new ArrayList<>();
 
     public LotImpl(Region region, int id, World world) {
-        this.faction = region.getFaction();
         this.region = region;
 
         this.owner = region;
@@ -291,5 +289,10 @@ public class LotImpl implements Lot {
         if (level >= 3) {
             region.setLotsAndValidate(world, xT, zT, xT2, zT2, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 1, this, 3);
         }
+    }
+
+    @Override
+    public Faction getFaction() {
+        return region.getFaction();
     }
 }

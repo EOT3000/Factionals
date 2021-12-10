@@ -2,9 +2,11 @@ package fly.factions.impl.commands.faction;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.impl.commands.PlotCommand;
+import fly.factions.impl.commands.faction.autoClaim.AutoClaimCommand;
 import fly.factions.impl.commands.faction.claim.ClaimCommand;
 import fly.factions.impl.commands.faction.create.CreateCommand;
 import fly.factions.impl.commands.faction.department.DepartmentCommand;
+import fly.factions.impl.commands.faction.faction.FactionCommand;
 import fly.factions.impl.commands.faction.info.InfoCommand;
 import fly.factions.impl.commands.faction.invite.InviteCommand;
 import fly.factions.impl.commands.faction.join.FactionJoinCommand;
@@ -13,6 +15,7 @@ import fly.factions.impl.commands.faction.list.ListCommand;
 import fly.factions.impl.commands.faction.map.MapCommand;
 import fly.factions.impl.commands.faction.plot.PlotCommands;
 import fly.factions.impl.commands.faction.region.RegionCommand;
+import fly.factions.impl.commands.faction.set.SetCommand;
 import fly.factions.impl.commands.faction.town.TownCommand;
 import fly.factions.impl.commands.faction.unclaim.UnclaimCommand;
 
@@ -30,9 +33,11 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f join <faction>", "Attempt to join the given faction");
 
-        addHelpEntry("/f claim", "Claim one chunk at your location for your faction");
+        addHelpEntry("/f claim <fill | one>", "Claims either one chunk or fills in a hollow spot");
 
-        addHelpEntry("/f unclaim", "Unclaim one chunk at your location for your faction");
+        addHelpEntry("/f unclaim <one | all>", "Unclaim either one chunk or unclaim all land");
+
+        addHelpEntry("/f autoClaim", "Toggle whether you are auto claiming");
 
         //addHelpEntry("/f claim fill", "Fills in a hollow-ly filled area with chunks");
 
@@ -42,7 +47,7 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f list", "Get a list of all factions");
 
-        //addHelpEntry("/f set", "View faction settings commands");
+        addHelpEntry("/f set", "View faction settings commands");
 
         addHelpEntry("/f region", "View region commands");
 
@@ -51,6 +56,8 @@ public class FactionCommands extends CommandDivision {
         addHelpEntry("/f department", "Not Yet Implemented (WIP)");
 
         addHelpEntry("/f plot", "View plot commands");
+
+        addHelpEntry("/f faction", "View faction merger commands");
 
 
         addSubCommand("create", new CreateCommand());
@@ -63,6 +70,7 @@ public class FactionCommands extends CommandDivision {
         
         addSubCommand("claim", new ClaimCommand());
         addSubCommand("unclaim", new UnclaimCommand());
+        addSubCommand("autoClaim", new AutoClaimCommand());
 
 
         addSubCommand("list", new ListCommand());
@@ -76,7 +84,11 @@ public class FactionCommands extends CommandDivision {
 
         addSubCommand("department", new DepartmentCommand());
 
+        addSubCommand("set", new SetCommand());
+
         //Broken shit
         addSubCommand("plot", new PlotCommands());
+
+        addSubCommand("faction", new FactionCommand());
     }
 }

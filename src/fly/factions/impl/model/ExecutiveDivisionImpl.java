@@ -75,4 +75,9 @@ public class ExecutiveDivisionImpl extends AbstractFactionComponent implements E
     public Faction getFaction() {
         return faction;
     }
+
+    @Override
+    public String getFormattedName() {
+        return name + " Department of " + faction.getName();
+    }
 }

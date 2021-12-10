@@ -2,11 +2,14 @@ package fly.factions.impl.listeners;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
+import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.PermissionContext;
 import fly.factions.api.permissions.PlotPermission;
 import fly.factions.api.registries.Registry;
+import fly.factions.impl.model.PlotImpl;
 import fly.factions.impl.util.Plots;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockState;
@@ -17,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -32,6 +36,20 @@ public class PlotListener extends ListenerImpl {
 
         Plot to = pr.get(Plots.getLocationId(e.getTo()));
         Plot from = pr.get(Plots.getLocationId(e.getFrom()));
+
+        if(to != from) {
+            User user = Factionals.getFactionals().getRegistry(User.class, UUID.class).get(e.getPlayer().getUniqueId());
+
+            if (user.getFaction() != null && user.getFaction().hasPermission(user, FactionPermission.TERRITORY) && user.isAutoClaiming()) {
+                if (to == null) {
+                    Chunk chunk = e.getTo().getChunk();
+
+                    Plot plot = new PlotImpl(chunk.getX(), chunk.getZ(), chunk.getWorld(), user.getFaction());
+
+                    plot.setFaction(user.getFaction());
+                }
+            }
+        }
 
         if (f(to) == f(from)) {
             return;
@@ -183,6 +201,13 @@ public class PlotListener extends ListenerImpl {
             if(!PermissionContext.canDoPlots(getUserFromPlayer((Player) event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.CONTAINER)) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onMobSpawn(EntitySpawnEvent event) {
+        if(event.getEntityType().isSpawnable()) {
+
         }
     }
 }

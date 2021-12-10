@@ -11,7 +11,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class PlotSellCommand extends CommandDivision {
+public class
+PlotSellCommand extends CommandDivision {
     public PlotSellCommand() {
         addHelpEntry("/f plot sell <lot id> <price | nfs | notforsale>", "Set the plot's price");
 
@@ -37,7 +38,7 @@ public class PlotSellCommand extends CommandDivision {
                 return false;
             }
 
-            if(USERS.get(((Player) sender).getUniqueId()).equals(lotObject.getOwner())) {
+            if(lotObject.getOwner().userHasPlotPermissions(USERS.get(((Player) sender).getUniqueId()), true, false)) {
                 try {
                     if (price.equalsIgnoreCase("nfs") || price.equalsIgnoreCase("notforsale")) {
                         lotObject.setPrice(-1);

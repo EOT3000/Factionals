@@ -33,4 +33,6 @@ public interface User extends PlotOwner {
     void setPower(int x);
 
     void setAdminMode(boolean adminMode);
+
+    void updateName();
 }

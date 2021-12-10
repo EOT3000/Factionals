@@ -46,6 +46,8 @@ public interface Faction extends LandAdministrator<Plot> {
 
     void removeRegion(Region region);
 
+    void joinRegion(Faction faction, Region region);
+
     /**
      * @return a collection of all the faction's executive divisions
      */
@@ -142,4 +144,11 @@ public interface Faction extends LandAdministrator<Plot> {
      * @return the current power of the faction
      */
     int getCurrentPower();
+
+    /**
+     * Adds an invite from one faction to another
+     */
+    void addInvite(Faction faction);
+
+    boolean hasInviteFrom(Faction faction);
 }

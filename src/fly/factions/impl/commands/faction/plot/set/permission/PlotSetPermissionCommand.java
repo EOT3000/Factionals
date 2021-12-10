@@ -105,7 +105,7 @@ public class PlotSetPermissionCommand extends CommandDivision {
         }
 
         try {
-            PlotPermission plotPermission = PlotPermission.valueOf(permission);
+            PlotPermission plotPermission = PlotPermission.valueOf(permission.toUpperCase());
 
             lot.setPermission(result.get(0), plotPermission, p(type));
 
@@ -113,6 +113,8 @@ public class PlotSetPermissionCommand extends CommandDivision {
 
             return true;
         } catch (IllegalArgumentException e) {
+            sender.sendMessage(ChatColor.RED + "ERROR: no such permission");
+
             return false;
         }
     }

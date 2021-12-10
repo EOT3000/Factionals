@@ -14,7 +14,7 @@ import java.util.*;
 
 public class UserImpl implements User {
     private final UUID uuid;
-    private final String name;
+    private String name;
     private Faction faction;
 
     private int power;
@@ -215,5 +215,20 @@ public class UserImpl implements User {
     @Override
     public void setAdminMode(boolean adminMode) {
         this.adminMode = adminMode;
+    }
+
+    @Override
+    public String getFormattedName() {
+        return "Player " + name;
+    }
+
+    @Override
+    public void updateName() {
+        name = Bukkit.getOfflinePlayer(uuid).getName();
+
+        Permissibles.remove(this);
+
+        Permissibles.add(name, this);
+        Permissibles.add(uuid.toString(), this);
     }
 }

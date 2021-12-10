@@ -1,8 +1,8 @@
 package fly.factions.impl.commands.faction.region.set.format;
 
 import fly.factions.api.commands.CommandDivision;
-import fly.factions.impl.commands.faction.region.set.format.border.SetRegionBorderFormatCommand;
-import fly.factions.impl.commands.faction.region.set.format.fill.SetRegionFillFormatCommand;
+import fly.factions.impl.commands.faction.region.set.format.border.SetRegionFormatBorderCommand;
+import fly.factions.impl.commands.faction.region.set.format.fill.SetRegionFormatFillCommand;
 
 public class RegionSetFormatCommand extends CommandDivision {
     public RegionSetFormatCommand() {
@@ -11,8 +11,8 @@ public class RegionSetFormatCommand extends CommandDivision {
         addHelpEntry("/f region set format border <region name> <borderRed> <borderGreen> <borderBlue>", "Set the region dynmap border color");
 
 
-        addSubCommand("fill", new SetRegionFillFormatCommand());
+        addSubCommand("fill", new SetRegionFormatFillCommand());
 
-        addSubCommand("border", new SetRegionBorderFormatCommand());
+        addSubCommand("border", new SetRegionFormatBorderCommand());
     }
 }

@@ -6,4 +6,6 @@ public interface Permissible extends MenuListable, Savable {
     String getName();
 
     boolean userHasPlotPermissions(User user, boolean owner, boolean pub);
+
+    String getFormattedName();
 }

@@ -190,4 +190,9 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
         return new ArrayList<>(lotMap.keySet());
     }
+
+    @Override
+    public String getFormattedName() {
+        return name + " Region of " + faction.getName();
+    }
 }

@@ -2,6 +2,7 @@ package fly.factions.impl.model;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
+import fly.factions.api.permissions.PlotPermission;
 import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
 import org.bukkit.Chunk;
@@ -83,5 +84,10 @@ public class PlotImpl implements Plot {
                 ", z=" + z +
                 ", w=" + w +
                 '}';
+    }
+
+    @Override
+    public boolean hasPermission(User user, PlotPermission permission) {
+        return false;
     }
 }

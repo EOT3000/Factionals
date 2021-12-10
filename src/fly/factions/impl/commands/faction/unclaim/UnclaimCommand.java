@@ -17,20 +17,31 @@ import org.bukkit.entity.Player;
 public class UnclaimCommand extends CommandDivision {
     public UnclaimCommand() {
         addSubCommand("*", this);
-        addSubCommand("", this);
     }
 
-    public boolean run(CommandSender sender) {
+    public boolean run(CommandSender sender, String type) {
         Player player = (Player) sender;
         Chunk chunk = player.getLocation().getChunk();
 
-        if (!unclaim0(chunk.getX(), chunk.getZ(), chunk.getWorld(), USERS.get(player.getUniqueId()).getFaction())) {
-            player.sendMessage(ChatColor.RED + "ERROR: This chunk already unclaimed");
-            return false;
-        } else {
-            player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully unclaimed 1 chunk (" + chunk.getX() + "," + chunk.getZ() + "," + chunk.getWorld().getName() + ")");
+        if(type.equalsIgnoreCase("all")) {
+            for(Plot plot : USERS.get(player.getUniqueId()).getFaction().getPlots()) {
+                plot.setFaction(null);
+            }
+
             return true;
+        } else if(type.equalsIgnoreCase("one")) {
+            if (!unclaim0(chunk.getX(), chunk.getZ(), chunk.getWorld(), USERS.get(player.getUniqueId()).getFaction())) {
+                player.sendMessage(ChatColor.RED + "ERROR: This chunk already unclaimed");
+                return false;
+            } else {
+                player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully unclaimed 1 chunk (" + chunk.getX() + "," + chunk.getZ() + "," + chunk.getWorld().getName() + ")");
+                return true;
+            }
+        } else {
+            player.sendMessage("I'm too lazy to make it properly formatted but you can't use that claim type so yeah this is an error kind of");
         }
+
+        return false;
     }
 
     private static boolean unclaim0(int x, int z, World world, Faction faction) {
@@ -40,9 +51,7 @@ public class UnclaimCommand extends CommandDivision {
             return false;
         }
 
-        Plot plot = new PlotImpl(x, z, world, faction);
-
-        plot.setFaction(null);
+        old.setFaction(null);
 
         return true;
     }

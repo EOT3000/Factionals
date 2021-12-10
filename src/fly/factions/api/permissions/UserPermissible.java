@@ -26,6 +26,11 @@ public enum UserPermissible implements Permissible {
         public ItemStack getItem() {
             return new ItemStack(Material.AIR);
         }
+
+        @Override
+        public String getFormattedName() {
+            return "Everyone";
+        }
     },
 
     ALLY {
@@ -47,6 +52,11 @@ public enum UserPermissible implements Permissible {
         @Override
         public ItemStack getItem() {
             return new ItemStack(Material.AIR);
+        }
+
+        @Override
+        public String getFormattedName() {
+            return "Members of allied factions";
         }
     };
 

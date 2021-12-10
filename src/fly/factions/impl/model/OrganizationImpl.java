@@ -24,7 +24,6 @@ public class OrganizationImpl extends AbstractFactionComponent implements Organi
     @Override
     public void removeMember(User user) {
         if(user.equals(leader)) {
-
             return;
         }
 
@@ -48,6 +47,11 @@ public class OrganizationImpl extends AbstractFactionComponent implements Organi
 
     @Override
     public Faction getFaction() {
-        return null;
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getFormattedName() {
+        return "Organization " + name;
     }
 }

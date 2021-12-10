@@ -1,4 +1,4 @@
-package fly.factions.impl.commands.faction.invite.add;
+package fly.factions.impl.commands.faction.invite.faction;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
@@ -11,8 +11,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class InviteAddCommand extends CommandDivision {
-    public InviteAddCommand() {
+public class InviteFactionCommand extends CommandDivision {
+    public InviteFactionCommand() {
         addHelpEntry("/f invite add <user>", "Invite a user to the faction");
 
         addSubCommand("*", this);
@@ -21,26 +21,26 @@ public class InviteAddCommand extends CommandDivision {
     @SuppressWarnings({"unused", "deprecation"})
     public boolean run(CommandSender sender, String name) {
         Faction faction = USERS.get(((Player) sender).getUniqueId()).getFaction();
-        User user = USERS.get(Bukkit.getOfflinePlayer(name).getUniqueId());
+        Faction invite = FACTIONS.get(name);
 
-        if (user.getFaction() != faction) {
-            user.addInvite(faction);
+        if (invite != faction) {
+            invite.addInvite(faction);
 
-            user.sendMessage(ChatColor.LIGHT_PURPLE + "You have been invited to the faction " + ChatColor.YELLOW + faction.getName() + ChatColor.LIGHT_PURPLE + ". Join using " + ChatColor.YELLOW + "/f join " + faction.getName());
+            invite.broadcast(ChatColor.LIGHT_PURPLE + "You have been invited to the faction " + ChatColor.YELLOW + faction.getName() + ChatColor.LIGHT_PURPLE + ". Join using " + ChatColor.YELLOW + "/f faction join " + faction.getName());
 
-            faction.broadcast(ChatColor.YELLOW + user.getName() + ChatColor.LIGHT_PURPLE + " has been invited to the faction by " + ChatColor.YELLOW + sender.getName());
+            faction.broadcast(ChatColor.YELLOW + invite.getName() + ChatColor.LIGHT_PURPLE + " (faction) has been invited to the faction by " + ChatColor.YELLOW + sender.getName());
             return true;
         }
 
-        sender.sendMessage(ChatColor.RED + "ERROR: user is already in your faction");
+        sender.sendMessage(ChatColor.RED + "ERROR: you cannot select your own faction");
 
         return false;
     }
 
     @Override
-    public ArgumentType[] getRequiredTypes() {
-        return new ArgumentType[] {
-                ArgumentType.USER
+    public CommandDivision.ArgumentType[] getRequiredTypes() {
+        return new CommandDivision.ArgumentType[] {
+                CommandDivision.ArgumentType.USER
         };
     }
 
@@ -53,4 +53,3 @@ public class InviteAddCommand extends CommandDivision {
         };
     }
 }
-

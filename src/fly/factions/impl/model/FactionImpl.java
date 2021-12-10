@@ -27,6 +27,8 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
     private List<ExecutiveDivision> departments = new ArrayList<>();
     private List<Region> regions = new ArrayList<>();
 
+    private List<Faction> invites;
+
     public FactionImpl(String name, User leader, long time) {
         super(name, leader);
 
@@ -162,6 +164,11 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         regions.remove(region);
     }
 
+    @Override
+    public void joinRegion(Faction faction, Region region) {
+        //if(faction.getRegion(region))
+    }
+
     //DEPARTMENTS
 
     @Override
@@ -230,6 +237,21 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         }
 
         return power;
+    }
+
+    @Override
+    public String getFormattedName() {
+        return "Faction " + name;
+    }
+
+    @Override
+    public void addInvite(Faction faction) {
+        invites.add(faction);
+    }
+
+    @Override
+    public boolean hasInviteFrom(Faction faction) {
+        return invites.contains(faction);
     }
 
     //TODO: Move commands into separate class

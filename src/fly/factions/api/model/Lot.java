@@ -9,8 +9,6 @@ import java.util.Set;
 public interface Lot extends LandDivision {
     World getWorld();
 
-    boolean hasPermission(User user, PlotPermission permission);
-
     void setPermission(Permissible permissible, PlotPermission permission, boolean allowed);
 
     EnumMap<PlotPermission, Set<Permissible>> getPermissions();

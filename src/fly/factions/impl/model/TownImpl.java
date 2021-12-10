@@ -51,4 +51,9 @@ public class TownImpl extends AbstractLandAdministrator<Lot> implements Town {
     public Faction getFaction() {
         return region.getFaction();
     }
+
+    @Override
+    public String getFormattedName() {
+        return "Town of " + name + ", " + region.getName() + ", " + region.getFaction().getName();
+    }
 }
