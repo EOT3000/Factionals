@@ -16,7 +16,7 @@ public class PlotInfoCommand extends CommandDivision {
         addSubCommand("*", this);
         addSubCommand("", this);
 
-        addHelpEntry("/f plot info", "See plot information");
+        addHelpEntry("/f plot info", "See plot and lot information");
     }
 
     public boolean run(CommandSender sender) {
@@ -30,8 +30,17 @@ public class PlotInfoCommand extends CommandDivision {
             return false;
         }
 
+        sender.sendMessage("Faction: " + plot.getFaction());
+        sender.sendMessage("Administrator: " + plot.getAdministrator());
+
+        sender.sendMessage("");
+
         if(plot.getAdministrator() instanceof Region) {
             Lot lot = ((Region) plot.getAdministrator()).getLot(player.getLocation());
+
+            if(lot == null) {
+                return false;
+            }
 
             sender.sendMessage("Lot ID: " + lot.getId());
             sender.sendMessage("Lot owner: " + lot.getOwner().getFormattedName());

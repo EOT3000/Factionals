@@ -1,5 +1,6 @@
 package fly.factions.api.commands;
 
+import com.google.common.collect.Lists;
 import fly.factions.Factionals;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;
@@ -15,6 +16,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -141,6 +143,8 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
         CommandDivision division = this;
         CommandDivision divisionOld;
 
+        int x = -1;
+
         for(int i = 0; i < strings.length; i++) {
             String string = strings[i];
 
@@ -157,6 +161,18 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
                     for(String possible : divisionOld.subCommands.keySet()) {
                         if(possible.startsWith(string) && !(possible.isEmpty()) && !possible.equalsIgnoreCase("*")) {
                             list.add(possible);
+                        }
+
+                        if(possible.equalsIgnoreCase("*")) {
+                            try {
+                                for (String possible2 : divisionOld.getRequiredTypes()[string.length()-(i+1)].list()) {
+                                    if(possible2.startsWith(string)) {
+                                        list.add(possible2);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                //
+                            }
                         }
                     }
 
@@ -255,6 +271,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             public String format(String string) {
                 return ChatColor.RED + "ERROR: " + ChatColor.YELLOW + string + ChatColor.RED + " needs to be an integer";
             }
+
+            @Override
+            public List<String> list() {
+                return new ArrayList<>();
+            }
         },
         LONG {
             @Override
@@ -270,6 +291,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             @Override
             public String format(String string) {
                 return ChatColor.RED + "ERROR: " + ChatColor.YELLOW + string + ChatColor.RED + " needs to be a long";
+            }
+
+            @Override
+            public List<String> list() {
+                return new ArrayList<>();
             }
         },
         DOUBLE {
@@ -287,6 +313,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             public String format(String string) {
                 return ChatColor.RED + "ERROR: " + ChatColor.YELLOW + string + ChatColor.RED + " needs to be a double";
             }
+
+            @Override
+            public List<String> list() {
+                return new ArrayList<>();
+            }
         },
 
         CHOICE {
@@ -298,6 +329,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             @Override
             public String format(String string) {
                 return ChatColor.RED + "ERROR: " + ChatColor.YELLOW + string + ChatColor.RED + " needs to be a 'on', 'off', 'true' or 'false'";
+            }
+
+            @Override
+            public List<String> list() {
+                return Lists.asList("true", new String[] {"false", "on", "off"});
             }
         },
 
@@ -311,6 +347,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             public String format(String string) {
                 return "";
             }
+
+            @Override
+            public List<String> list() {
+                return new ArrayList<>();
+            }
         },
 
         FACTION {
@@ -323,6 +364,17 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             public String format(String string) {
                 return ChatColor.RED + "ERROR: the faction " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
             }
+
+            @Override
+            public List<String> list() {
+                List<String> list = new ArrayList<>();
+
+                for(Faction faction : FACTIONS.list()) {
+                    list.add(faction.getName());
+                }
+
+                return list;
+            }
         },
         NOT_FACTION {
             @Override
@@ -334,6 +386,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             public String format(String string) {
                 return ChatColor.RED + "ERROR: the faction " + ChatColor.YELLOW + string + ChatColor.RED + " already exists";
             }
+
+            @Override
+            public List<String> list() {
+                return new ArrayList<>();
+            }
         },
         USER {
             @Override
@@ -343,7 +400,18 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
 
             @Override
             public String format(String string) {
-                return ChatColor.RED + "ERROR: the user " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
+                return ChatColor.RED + "ERROR: the user " + ChatColor.YELLOW + string + ChatColor.RED + " is not online";
+            }
+
+            @Override
+            public List<String> list() {
+                List<String> list = new ArrayList<>();
+
+                for(Player player : Bukkit.getOnlinePlayers()) {
+                    list.add(player.getName());
+                }
+
+                return list;
             }
         },
         PERMISSIBLE {
@@ -355,6 +423,16 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             @Override
             public String format(String string) {
                 return ChatColor.RED + "ERROR: the string " + ChatColor.YELLOW + string + ChatColor.RED + " does not represent a permissible entity";
+            }
+
+            @Override
+            public List<String> list() {
+                List<String> list = new ArrayList<>();
+
+                list.addAll(USER.list());
+                list.addAll(FACTION.list());
+
+                return list;
             }
         },
         @SuppressWarnings("all")
@@ -372,6 +450,17 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             public String format(String string) {
                 return ChatColor.RED + "ERROR: the permission " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
             }
+
+            @Override
+            public List<String> list() {
+                List<String> list = new ArrayList<>();
+
+                for(FactionPermission permission : FactionPermission.values()) {
+                    list.add(permission.name());
+                }
+
+                return list;
+            }
         },
         @SuppressWarnings("all")
         PLOT_PERMISSION {
@@ -387,6 +476,17 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
             @Override
             public String format(String string) {
                 return ChatColor.RED + "ERROR: the permission " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
+            }
+
+            @Override
+            public List<String> list() {
+                List<String> list = new ArrayList<>();
+
+                for(PlotPermission permission : PlotPermission.values()) {
+                    list.add(permission.name());
+                }
+
+                return list;
             }
         };
 
@@ -409,5 +509,7 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
         public abstract boolean check(String string);
 
         public abstract String format(String string);
+
+        public abstract List<String> list();
     }
 }

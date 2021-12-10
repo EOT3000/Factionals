@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Entity;
@@ -19,6 +20,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -26,6 +28,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.InventoryHolder;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class PlotListener extends ListenerImpl {
@@ -207,7 +210,25 @@ public class PlotListener extends ListenerImpl {
     @EventHandler
     public void onMobSpawn(EntitySpawnEvent event) {
         if(event.getEntityType().isSpawnable()) {
+            Plot plot = Factionals.getFactionals().getRegistry(Plot.class, Integer.class).get(Plots.getLocationId((event.getEntity()).getLocation()));
 
+            if(plot != null) {
+                event.setCancelled(true);
+            }
         }
+    }
+
+    @EventHandler
+    public void onExplosion(BlockExplodeEvent event) {
+        Registry<Plot, Integer> pr = Factionals.getFactionals().getRegistry(Plot.class, Integer.class);
+
+        for(Block block : new ArrayList<>(event.blockList())) {
+            Plot plot = pr.get(Plots.getLocationId((block.getLocation())));
+
+            if(plot != null) {
+                event.blockList().remove(block);
+            }
+        }
+
     }
 }
