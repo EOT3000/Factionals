@@ -24,6 +24,8 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     private boolean isDeleted;
 
+    private String description = "";
+
     private List<ExecutiveDivision> departments = new ArrayList<>();
     private List<Region> regions = new ArrayList<>();
 
@@ -76,6 +78,8 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     @Override
     public void delete() {
+        Factionals.getFactionals().broadcast(ChatColor.LIGHT_PURPLE + "Faction " + ChatColor.YELLOW + name + ChatColor.LIGHT_PURPLE + " has disbanded");
+
         this.isDeleted = true;
 
         factionals.getRegistry(Faction.class, String.class).set(name, null);
@@ -252,6 +256,26 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
     @Override
     public boolean hasInviteFrom(Faction faction) {
         return invites.contains(faction);
+    }
+
+    @Override
+    public void setName(String name) {
+        Permissibles.remove(this);
+
+        Permissibles.add(name, this);
+        Permissibles.add(getId(), this);
+
+        super.setName(name);
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String string) {
+        this.description = description;
     }
 
     //TODO: Move commands into separate class

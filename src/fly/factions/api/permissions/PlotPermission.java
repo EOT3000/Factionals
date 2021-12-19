@@ -107,21 +107,6 @@ public enum PlotPermission {
         }
     },
 
-    //Item frames, armor stands, paintings, jukeboxes, note blocks, flower pots and lecterns
-    DETAILS {
-        @Override
-        public boolean required(Block block, Action action, boolean shift) {
-            BlockData data = block.getState().getBlockData();
-
-            return data instanceof Jukebox || Tag.FLOWER_POTS.isTagged(block.getType()) || data instanceof NoteBlock;
-        }
-
-        @Override
-        public boolean required(Entity entity) {
-            return entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Painting;
-        }
-    },
-
     //Pressure plates, trip wires, and crop trampling
     PRESSURE_PLATE {
         @Override

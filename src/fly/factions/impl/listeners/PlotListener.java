@@ -15,8 +15,10 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -63,7 +65,7 @@ public class PlotListener extends ListenerImpl {
         } else {
             Faction f = to.getFaction();
 
-            e.getPlayer().sendTitle(ChatColor.GOLD + "Entering " + ChatColor.YELLOW + f.getName(), ChatColor.YELLOW + "Placeholder for description", 5, 25, 5);
+            e.getPlayer().sendTitle(ChatColor.GOLD + "Entering " + ChatColor.YELLOW + f.getName(), ChatColor.YELLOW + f.getDescription(), 5, 25, 5);
         }
     }
 
@@ -105,12 +107,6 @@ public class PlotListener extends ListenerImpl {
                 }
             }
 
-            if (!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.DETAILS)) {
-                if (t.equals(Material.PAINTING) || t.equals(Material.ITEM_FRAME) || t.equals(Material.GLOW_ITEM_FRAME) || t.equals(Material.ARMOR_STAND)) {
-                    event.setCancelled(true);
-                }
-            }
-
             if (!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.BUILD)) {
                 if (t.equals(Material.FLINT_AND_STEEL)) {
                     event.setCancelled(true);
@@ -118,13 +114,11 @@ public class PlotListener extends ListenerImpl {
             }
         }
 
-        /*for (PlotPermission permission : PlotPermission.values()) {
-            System.out.println(event.getPlayer().getName() + " " + permission + " " + permission.required(event.getClickedBlock(), event.getAction(), event.getPlayer().isSneaking()) + " " + lot.hasPermission(getUserFromPlayer(event.getPlayer()), permission));
-
-            if (permission.required(event.getClickedBlock(), event.getAction(), event.getPlayer().isSneaking()) && !lot.hasPermission(getUserFromPlayer(event.getPlayer()), permission)) {
+        for (PlotPermission permission : PlotPermission.values()) {
+            if (permission.required(event.getClickedBlock(), event.getAction(), event.getPlayer().isSneaking()) && !PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, permission)) {
                 event.setCancelled(true);
             }
-        }*/
+        }
     }
 
     @EventHandler
@@ -200,6 +194,14 @@ public class PlotListener extends ListenerImpl {
             }
         }
 
+        if(holder instanceof DoubleChest) {
+            plot = pr.get(Plots.getLocationId(((DoubleChest) holder).getLocation()));
+
+            if(plot != null && plot.getAdministrator() instanceof Region) {
+                lot = ((Region) plot.getAdministrator()).getLot(((BlockState) holder).getLocation());
+            }
+        }
+
         if(plot != null) {
             if(!PermissionContext.canDoPlots(getUserFromPlayer((Player) event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.CONTAINER)) {
                 event.setCancelled(true);
@@ -209,7 +211,7 @@ public class PlotListener extends ListenerImpl {
 
     @EventHandler
     public void onMobSpawn(EntitySpawnEvent event) {
-        if(event.getEntityType().isSpawnable()) {
+        if(event.getEntity() instanceof Monster) {
             Plot plot = Factionals.getFactionals().getRegistry(Plot.class, Integer.class).get(Plots.getLocationId((event.getEntity()).getLocation()));
 
             if(plot != null) {
@@ -223,12 +225,11 @@ public class PlotListener extends ListenerImpl {
         Registry<Plot, Integer> pr = Factionals.getFactionals().getRegistry(Plot.class, Integer.class);
 
         for(Block block : new ArrayList<>(event.blockList())) {
-            Plot plot = pr.get(Plots.getLocationId((block.getLocation())));
+            Plot plot = pr.get(Plots.getLocationId(block.getLocation()));
 
             if(plot != null) {
                 event.blockList().remove(block);
             }
         }
-
     }
 }

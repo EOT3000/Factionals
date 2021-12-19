@@ -73,4 +73,9 @@ public abstract class AbstractFactionComponent implements FactionComponent {
     public String getName() {
         return name;
     }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 }

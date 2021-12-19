@@ -19,7 +19,7 @@ public class UserImpl implements User {
 
     private int power;
 
-    private boolean adminMode;
+    private boolean adminMode = false;
 
     private boolean autoClaiming;
     //private OpenedMenu menu;

@@ -56,6 +56,7 @@ public class FactionSerializer extends Serializer<Faction> {
                 faction.setFillColor(Color.fromRGB(configuration.getInt("fr"), configuration.getInt("fg"), configuration.getInt("fb")));
 
                 faction.setFillOpacity(configuration.getDouble("fo"));
+                faction.setDescription(configuration.getString("description", "No description"));
 
                 //Departments
 
@@ -445,6 +446,7 @@ public class FactionSerializer extends Serializer<Faction> {
         configuration.set("leader", faction.getLeader().getUniqueId().toString());
         configuration.set("name", faction.getName());
         configuration.set("deleted", faction.isDeleted());
+        configuration.set("description", faction.getDescription());
 
         configuration.set("br", faction.getBorderColor().getRed());
         configuration.set("bg", faction.getBorderColor().getGreen());

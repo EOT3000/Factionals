@@ -151,4 +151,8 @@ public interface Faction extends LandAdministrator<Plot> {
     void addInvite(Faction faction);
 
     boolean hasInviteFrom(Faction faction);
+
+    void setDescription(String string);
+
+    String getDescription();
 }

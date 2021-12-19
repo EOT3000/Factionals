@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ClaimCommand extends CommandDivision {
     public ClaimCommand() {
-        addHelpEntry("/f claim <fill | one>", "Claims either one chunk or fills in a hollow spot");
+        addHelpEntry("/f claim <fill | one | auto>", "Claims either one chunk or fills in a hollow spot, or enabled autoclaim");
 
         addSubCommand("*", this);
         addSubCommand("", this);
@@ -46,6 +46,12 @@ public class ClaimCommand extends CommandDivision {
             }
 
             player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully filled area");
+
+            return true;
+        } else if (type.equalsIgnoreCase("auto")) {
+            user.setAutoClaiming(!user.isAutoClaiming());
+
+            user.sendMessage(user.isAutoClaiming() ? ChatColor.LIGHT_PURPLE + "Now AutoClaiming" : ChatColor.LIGHT_PURPLE + "No longer AutoClaiming");
 
             return true;
         }

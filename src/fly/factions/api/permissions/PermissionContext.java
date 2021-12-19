@@ -9,7 +9,7 @@ public class PermissionContext {
         }
 
         if(lot == null) {
-            return admin.userHasPlotPermissions(user, false, true);
+            return admin.userHasPlotPermissions(user, false, false);
         } else {
             return lot.hasPermission(user, permission);
         }

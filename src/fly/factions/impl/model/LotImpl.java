@@ -69,6 +69,7 @@ public class LotImpl implements Lot {
     @Override
     public boolean hasPermission(User user, PlotPermission permission) {
         for(Permissible permissible : permissionMap.get(permission)) {
+
             if(permissible.userHasPlotPermissions(user, false, publicLot)) {
                 return true;
             }

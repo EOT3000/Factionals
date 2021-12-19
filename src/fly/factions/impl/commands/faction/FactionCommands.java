@@ -6,15 +6,18 @@ import fly.factions.impl.commands.faction.autoClaim.AutoClaimCommand;
 import fly.factions.impl.commands.faction.claim.ClaimCommand;
 import fly.factions.impl.commands.faction.create.CreateCommand;
 import fly.factions.impl.commands.faction.department.DepartmentCommand;
+import fly.factions.impl.commands.faction.disband.DisbandCommand;
 import fly.factions.impl.commands.faction.faction.FactionCommand;
 import fly.factions.impl.commands.faction.info.InfoCommand;
 import fly.factions.impl.commands.faction.invite.InviteCommand;
 import fly.factions.impl.commands.faction.join.FactionJoinCommand;
 import fly.factions.impl.commands.faction.kick.KickCommand;
+import fly.factions.impl.commands.faction.leave.LeaveCommand;
 import fly.factions.impl.commands.faction.list.ListCommand;
 import fly.factions.impl.commands.faction.map.MapCommand;
 import fly.factions.impl.commands.faction.plot.PlotCommands;
 import fly.factions.impl.commands.faction.region.RegionCommand;
+import fly.factions.impl.commands.faction.rename.RenameCommand;
 import fly.factions.impl.commands.faction.set.SetCommand;
 import fly.factions.impl.commands.faction.town.TownCommand;
 import fly.factions.impl.commands.faction.unclaim.UnclaimCommand;
@@ -33,9 +36,7 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f join <faction>", "Attempt to join the given faction");
 
-        addHelpEntry("/f claim <fill | one>", "Claims either one chunk or fills in a hollow spot");
-
-        addHelpEntry("/f unclaim <one | all>", "Unclaim either one chunk or unclaim all land");
+        addHelpEntry("/f claim <fill | one | auto>", "Claims either one chunk or fills in a hollow spot, or enabled autoclaim");
 
         addHelpEntry("/f autoClaim", "Toggle whether you are auto claiming");
 
@@ -58,6 +59,12 @@ public class FactionCommands extends CommandDivision {
         addHelpEntry("/f plot", "View plot commands");
 
         addHelpEntry("/f faction", "View faction merger commands");
+
+        addHelpEntry("/f rename <name>", "Rename your faction");
+
+        addHelpEntry("/f leave", "Leave your faction");
+
+        addHelpEntry("/f disband", "Disband your faction");
 
 
         addSubCommand("create", new CreateCommand());
@@ -90,5 +97,11 @@ public class FactionCommands extends CommandDivision {
         addSubCommand("plot", new PlotCommands());
 
         addSubCommand("faction", new FactionCommand());
+
+        addSubCommand("rename", new RenameCommand());
+
+        addSubCommand("leave", new LeaveCommand());
+
+        addSubCommand("disband", new DisbandCommand());
     }
 }
