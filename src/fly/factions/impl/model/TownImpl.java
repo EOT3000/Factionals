@@ -1,6 +1,7 @@
 package fly.factions.impl.model;
 
 import fly.factions.api.model.*;
+import fly.factions.api.permissions.Permissibles;
 import org.bukkit.inventory.ItemStack;
 
 public class TownImpl extends AbstractLandAdministrator<Lot> implements Town {
@@ -10,6 +11,9 @@ public class TownImpl extends AbstractLandAdministrator<Lot> implements Town {
         super(name, leader);
 
         this.region = region;
+
+        Permissibles.add(region.getName() + ":" + name, this);
+        Permissibles.add(getId(), this);
     }
 
     @Override
@@ -55,5 +59,15 @@ public class TownImpl extends AbstractLandAdministrator<Lot> implements Town {
     @Override
     public String getFormattedName() {
         return "Town of " + name + ", " + region.getName() + ", " + region.getFaction().getName();
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+
+        Permissibles.remove(this);
+
+        Permissibles.add(region.getName() + ":" + name, this);
+        Permissibles.add(getId(), this);
     }
 }

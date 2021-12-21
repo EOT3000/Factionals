@@ -45,7 +45,7 @@ public abstract class Serializer<T extends Savable> {
         return list;
     }
 
-    private static <X extends Savable>void save0(X savable, Class clazz) {
+    private static <X extends Savable> void save0(X savable, Class clazz) {
         Serializer<X> serializer = Factionals.getFactionals().getRegistry(Serializer.class, Class.class).get(clazz);
 
         serializer.save(savable);

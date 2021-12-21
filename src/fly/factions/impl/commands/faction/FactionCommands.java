@@ -66,6 +66,8 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f disband", "Disband your faction");
 
+        addHelpEntry("/f unclaim <one | all>", "Unclaims one chunk or all your faction's land");
+
 
         addSubCommand("create", new CreateCommand());
 

@@ -50,7 +50,7 @@ public class FactionSerializer extends Serializer<Faction> {
 
             if(!plots) {
 
-                faction = new FactionImpl(configuration.getString("name"), r.get(UUID.fromString(configuration.getString("leader"))), configuration.getLong("creationTime"));
+                faction = new FactionImpl(configuration.getString("name"), r.get(UUID.fromString(configuration.getString("leader"))), configuration.getLong("creationTime"), file);
 
                 faction.setBorderColor(Color.fromRGB(configuration.getInt("br"), configuration.getInt("bg"), configuration.getInt("bb")));
                 faction.setFillColor(Color.fromRGB(configuration.getInt("fr"), configuration.getInt("fg"), configuration.getInt("fb")));
@@ -262,7 +262,9 @@ public class FactionSerializer extends Serializer<Faction> {
 
     @Override
     public void save(Faction faction) {
-        File file = new File("plugins\\Factionals\\factions\\" + faction.getCreationTime() + "-" + faction.getName());
+        File o = ((HasFile) faction).getFile();
+
+        File file = o == null ? new File("plugins\\Factionals\\factions\\" + faction.getCreationTime() + "-" + faction.getName()) : o;
 
         YamlConfiguration configuration = new YamlConfiguration();
 

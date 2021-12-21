@@ -271,6 +271,8 @@ public class DynmapManager {
 
                 AreaMarker m = set.createAreaMarker(polyid, admin.getDesc(), false, world.getName(), x, z, false);
 
+                m.setDescription(admin.getDesc());
+
                 if(outline) {
                     m.setFillStyle(0, 0);
                     m.setLineStyle(3, 1, admin.getBorderColor().asRGB());

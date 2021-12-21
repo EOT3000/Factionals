@@ -10,7 +10,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.regex.Pattern;
+
 public class CreateCommand extends CommandDivision {
+    private final Pattern pattern = Pattern.compile("^((?!([a-z]|[A-Z]|[0-9]|_)).)*$");
+
     public CreateCommand() {
         addHelpEntry("/f create <name>", "Create a faction with the given name");
 
@@ -27,6 +31,12 @@ public class CreateCommand extends CommandDivision {
             return false;
         }
 
+        if(!nameGood(name)) {
+            user.sendMessage(ChatColor.RED + "ERROR: invalid characters. Use numbers, english letters, or underscores in your name (3-24 characters)");
+
+            return false;
+        }
+
         Faction faction = new FactionImpl(user, name);
 
         FACTIONS.set(name, faction);
@@ -34,6 +44,14 @@ public class CreateCommand extends CommandDivision {
         API.broadcast(ChatColor.LIGHT_PURPLE + "New faction created: " + ChatColor.YELLOW + name);
 
         return true;
+    }
+
+    private boolean nameGood(String name) {
+        if(pattern.matcher(name).matches()) {
+            return false;
+        }
+
+        return name.length() <= 24 && name.length() >= 3;
     }
 
     @Override

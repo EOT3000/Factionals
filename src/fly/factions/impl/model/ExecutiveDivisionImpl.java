@@ -80,4 +80,14 @@ public class ExecutiveDivisionImpl extends AbstractFactionComponent implements E
     public String getFormattedName() {
         return name + " Department of " + faction.getName();
     }
+
+    @Override
+    public void setName(String name) {
+        Permissibles.remove(this);
+
+        Permissibles.add(faction.getName() + ":" + name, this);
+        Permissibles.add(getId(), this);
+
+        this.name = name;
+    }
 }

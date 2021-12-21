@@ -159,19 +159,19 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
                     List<String> list = new ArrayList<>();
 
                     for(String possible : divisionOld.subCommands.keySet()) {
-                        if(possible.startsWith(string) && !(possible.isEmpty()) && !possible.equalsIgnoreCase("*")) {
-                            list.add(possible);
-                        }
+                        if(possible.isEmpty() || possible.equals("*")) {
+                            int a = strings.length-i;
 
-                        if(possible.equalsIgnoreCase("*")) {
-                            try {
-                                for (String possible2 : divisionOld.getRequiredTypes()[string.length()-(i+1)].list()) {
-                                    if(possible2.startsWith(string)) {
-                                        list.add(possible2);
+                            if(divisionOld.getRequiredTypes().length > a) {
+                                for(String p : divisionOld.getRequiredTypes()[a].list()) {
+                                    if(p.startsWith(strings[strings.length-1])) {
+                                        list.add(p);
                                     }
                                 }
-                            } catch (Exception e) {
-                                //
+                            }
+                        } else {
+                            if (possible.startsWith(string)) {
+                                list.add(possible);
                             }
                         }
                     }

@@ -54,4 +54,9 @@ public class OrganizationImpl extends AbstractFactionComponent implements Organi
     public String getFormattedName() {
         return "Organization " + name;
     }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 }

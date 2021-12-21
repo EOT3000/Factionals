@@ -33,10 +33,10 @@ public class ClaimCommand extends CommandDivision {
         User user = USERS.get(player.getUniqueId());
 
         if(type.equalsIgnoreCase("fill")) {
-            List<Pair<Integer, Integer>> list = fillNode(chunk.getX(), chunk.getZ(), chunk.getWorld(), new MutableInt(1000), new ArrayList<>());
+            List<Pair<Integer, Integer>> list = fillNode(chunk.getX(), chunk.getZ(), chunk.getWorld(), new MutableInt(2500), new ArrayList<>());
 
             if(list == null) {
-                sender.sendMessage(ChatColor.RED  + "ERROR: space too large (more than 1000 chunks)");
+                sender.sendMessage(ChatColor.RED  + "ERROR: space too large (more than 2500 chunks)");
 
                 return false;
             }

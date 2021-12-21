@@ -5,6 +5,7 @@ import fly.factions.api.commands.CommandRequirement;
 import fly.factions.api.model.Faction;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.impl.util.Pair;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,6 +20,8 @@ public class SetDescriptionCommand extends CommandDivision {
         Faction faction = USERS.get(((Player) sender).getUniqueId()).getFaction();
 
         faction.setDescription(desc);
+
+        sender.sendMessage(ChatColor.GREEN + "Success!");
 
         return true;
     }

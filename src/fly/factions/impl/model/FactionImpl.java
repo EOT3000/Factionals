@@ -15,9 +15,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.*;
 
-public class FactionImpl extends AbstractLandAdministrator<Plot> implements Faction {
+public class FactionImpl extends AbstractLandAdministrator<Plot> implements Faction, HasFile {
     private ItemStack banner = new ItemStack(Material.AIR);
 
     private long creationTime;
@@ -29,9 +30,11 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
     private List<ExecutiveDivision> departments = new ArrayList<>();
     private List<Region> regions = new ArrayList<>();
 
-    private List<Faction> invites;
+    private List<Faction> invites = new ArrayList<>();
 
-    public FactionImpl(String name, User leader, long time) {
+    private File file;
+
+    public FactionImpl(String name, User leader, long time, File file) {
         super(name, leader);
 
         leader.setFaction(this);
@@ -40,10 +43,12 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         Permissibles.add(getId(), this);
 
         this.creationTime = time;
+
+        this.file = file;
     }
 
     public FactionImpl(User leader, String name) {
-        this(name, leader, System.currentTimeMillis());
+        this(name, leader, System.currentTimeMillis(), null);
     }
 
     //DYNMAP
@@ -55,8 +60,9 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     @Override
     public String getDesc() {
-        return "<div class=\"regioninfo\"><div class=\"infowindow\"><span style=\"font-size:120%;\">" + name + "</span><br />" +
-                "<span style=\"font-weight:bold;\">Leader:" + getLeader().getName() + "</span></div></div>";
+        return "<div class=\"regioninfo\"><div class=\"infowindow\"><span style=\"font-size:120%;\">%regionname%</span><br />Leader<br /><span style=\"font-weight:bold;\">%leader%</span></div></div>"
+                .replace("%regionname%", name)
+                .replace("%leader%", leader.getName());
     }
 
     //META
@@ -260,12 +266,23 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     @Override
     public void setName(String name) {
+        factionals.getRegistry(Faction.class, String.class).set(this.name, null);
+        factionals.getRegistry(Faction.class, String.class).set(name, this);
+
         Permissibles.remove(this);
 
         Permissibles.add(name, this);
         Permissibles.add(getId(), this);
 
-        super.setName(name);
+        for(Region region : regions) {
+            region.setName(region.getName());
+        }
+
+        for(ExecutiveDivision division : departments) {
+            division.setName(division.getName());
+        }
+
+        this.name = name;
     }
 
     @Override
@@ -275,7 +292,20 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     @Override
     public void setDescription(String string) {
-        this.description = description;
+        this.description = string;
+    }
+
+    @Override
+    public void removePlot(Plot plot) {
+        for(Region region : regions) {
+            region.removePlot(plot);
+        }
+
+        super.removePlot(plot);
+    }
+
+    public File getFile() {
+        return file;
     }
 
     //TODO: Move commands into separate class

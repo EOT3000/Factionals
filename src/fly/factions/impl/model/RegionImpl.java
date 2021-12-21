@@ -195,4 +195,18 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
     public String getFormattedName() {
         return name + " Region of " + faction.getName();
     }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+
+        Permissibles.remove(this);
+
+        Permissibles.add(faction.getName() + ":" + name, this);
+        Permissibles.add(getId(), this);
+
+        for(Town town : towns) {
+            town.setName(town.getName());
+        }
+    }
 }

@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 public class DisbandCommand extends CommandDivision {
     public DisbandCommand() {
         addSubCommand("*", this);
+        addSubCommand("", this);
     }
 
     public boolean run(CommandSender sender) {

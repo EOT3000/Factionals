@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 public class LeaveCommand extends CommandDivision {
     public LeaveCommand() {
         addSubCommand("*", this);
+        addSubCommand("", this);
     }
 
     public boolean run(CommandSender sender) {
