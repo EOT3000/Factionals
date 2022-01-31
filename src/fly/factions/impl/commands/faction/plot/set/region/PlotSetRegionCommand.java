@@ -47,24 +47,46 @@ public class PlotSetRegionCommand extends CommandDivision {
         }
 
         if(type.equalsIgnoreCase("fill")) {
-            List<Pair<Integer, Integer>> list = fillNode(((Player) sender).getChunk().getX(), ((Player) sender).getChunk().getZ(), ((Player) sender).getWorld(), new MutableInt(200), new ArrayList<>(), plot.getAdministrator());
+            List<Pair<Integer, Integer>> list = fillNode(((Player) sender).getChunk().getX(), ((Player) sender).getChunk().getZ(), ((Player) sender).getWorld(), new MutableInt(2000), new ArrayList<>(), plot.getAdministrator());
 
             if(list == null) {
-                sender.sendMessage(ChatColor.RED + "ERROR: area to fill more than 200");
+                sender.sendMessage(ChatColor.RED + "ERROR: area to fill more than 2000");
             } else {
                 for(Pair<Integer, Integer> pair : list) {
                     Plot p = API.getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(pair.getKey(), pair.getValue(), ((Player) sender).getWorld()));
 
-                    p.setAdministrator(factionRegion);
+                    if(factionRegion.getFaction().equals(p.getFaction())) {
+                        p.setAdministrator(factionRegion);
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "ERROR: No. Just no");
+
+                        if(sender.getName().equalsIgnoreCase("Thicc_Nicc07")) {
+                            sender.sendMessage(ChatColor.DARK_RED + "STOP SLICK OMG JUST STOP");
+                        }
+
+                        return false;
+                    }
                 }
 
                 return true;
             }
 
             return false;
+        } else if(type.equalsIgnoreCase("auto")) {
+            user.setAutoClaiming(factionRegion);
         }
 
-        plot.setAdministrator(factionRegion);
+        if(factionRegion.getFaction().equals(plot.getFaction())) {
+            plot.setAdministrator(factionRegion);
+        } else {
+            sender.sendMessage(ChatColor.RED + "ERROR: No. Just no");
+
+            if(sender.getName().equalsIgnoreCase("Thicc_Nicc07")) {
+                sender.sendMessage(ChatColor.DARK_RED + "STOP SLICK OMG JUST STOP");
+            }
+
+            return false;
+        }
 
         sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully set plot region");
 

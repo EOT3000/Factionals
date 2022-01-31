@@ -21,7 +21,7 @@ public class SetFormatBorderCommand extends CommandDivision {
     }
 
     @SuppressWarnings({"Pain please tell me what the NPE supression is", "unused"})
-    public boolean run(CommandSender sender, String region, String r, String g, String b) {
+    public boolean run(CommandSender sender, String r, String g, String b) {
         User user = USERS.get(Bukkit.getPlayer(sender.getName()).getUniqueId());
         Faction faction = user.getFaction();
 
@@ -39,7 +39,6 @@ public class SetFormatBorderCommand extends CommandDivision {
     @Override
     public ArgumentType[] getRequiredTypes() {
         return new ArgumentType[] {
-                ArgumentType.STRING,
                 ArgumentType.INT,
                 ArgumentType.INT,
                 ArgumentType.INT

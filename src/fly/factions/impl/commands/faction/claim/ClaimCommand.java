@@ -41,17 +41,25 @@ public class ClaimCommand extends CommandDivision {
                 return false;
             }
 
+            if(user.getFaction().getPlots().size() + list.size() >= user.getFaction().getCurrentPower()) {
+                sender.sendMessage(ChatColor.RED + "ERROR: not enough power");
+
+                return false;
+            }
+
             for(Pair<Integer, Integer> claim : list) {
                 claim0(claim.getKey(), claim.getValue(), chunk.getWorld(), user.getFaction());
             }
+
+            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Claim for " + user.getFaction(), "Fill", user.getName());
 
             player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully filled area");
 
             return true;
         } else if (type.equalsIgnoreCase("auto")) {
-            user.setAutoClaiming(!user.isAutoClaiming());
+            user.setAutoClaiming(!Boolean.parseBoolean(String.valueOf(user.getAutoClaiming())));
 
-            user.sendMessage(user.isAutoClaiming() ? ChatColor.LIGHT_PURPLE + "Now AutoClaiming" : ChatColor.LIGHT_PURPLE + "No longer AutoClaiming");
+            user.sendMessage((boolean) user.getAutoClaiming() ? ChatColor.LIGHT_PURPLE + "Now AutoClaiming" : ChatColor.LIGHT_PURPLE + "No longer AutoClaiming");
 
             return true;
         }
@@ -67,6 +75,9 @@ public class ClaimCommand extends CommandDivision {
             return false;
         } else {
             player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully claimed 1 chunk (" + chunk.getX() + "," + chunk.getZ() + "," + chunk.getWorld().getName() + ")");
+
+            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Claim for " + user.getFaction(), "One", user.getName());
+
             return true;
         }
     }

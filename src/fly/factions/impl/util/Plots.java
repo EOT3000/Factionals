@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class Plots {
     static {
@@ -106,6 +107,28 @@ public class Plots {
                 System.out.println(worldId);
                 return null;
         }
+    }
+
+    public static void printChange(Plot plot, String context, String type, String doer) {
+        int id = plot.getLocationId();
+
+        Factionals.getFactionals().getLogger().log(Level.ALL, "{doer}: {context}({type}) {world},{x},{z}"
+                .replace("{doer}", doer)
+                .replace("{context}", context)
+                .replace("{type}", type).replace("{world}", getWorld(getW(id)).getName())
+                .replace("{x}", "" + getX(id))
+                .replace("{z}", "" + getZ(id)));
+
+        printChange(getWorld(getW(id)), getX(id), getZ(id), context, type, doer);
+    }
+
+    public static void printChange(World world, int x, int z, String context, String type, String doer) {
+        Factionals.getFactionals().getLogger().log(Level.ALL, "{doer}: {context}({type}) {world},{x},{z}"
+                .replace("{doer}", doer)
+                .replace("{context}", context)
+                .replace("{type}", type).replace("{world}", world.getName())
+                .replace("{x}", "" + x)
+                .replace("{z}", "" + z));
     }
 
     //TODO: Move commands into separate class

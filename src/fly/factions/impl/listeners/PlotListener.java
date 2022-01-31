@@ -45,13 +45,43 @@ public class PlotListener extends ListenerImpl {
         if(to != from) {
             User user = Factionals.getFactionals().getRegistry(User.class, UUID.class).get(e.getPlayer().getUniqueId());
 
-            if (user.getFaction() != null && user.getFaction().hasPermission(user, FactionPermission.TERRITORY) && user.isAutoClaiming()) {
-                if (to == null) {
-                    Chunk chunk = e.getTo().getChunk();
+            if (user.getFaction() != null && user.getFaction().hasPermission(user, FactionPermission.TERRITORY)) {
+                if(Boolean.parseBoolean(String.valueOf(user.getAutoClaiming()))) {
+                    if (to == null) {
+                        Chunk chunk = e.getTo().getChunk();
 
-                    Plot plot = new PlotImpl(chunk.getX(), chunk.getZ(), chunk.getWorld(), user.getFaction());
+                        if(user.getFaction().getPlots().size() + 1 >= user.getFaction().getCurrentPower()) {
+                            user.sendMessage(ChatColor.RED + "ERROR: not enough power");
 
-                    plot.setFaction(user.getFaction());
+                            return;
+                        }
+
+                        Plot plot = new PlotImpl(chunk.getX(), chunk.getZ(), chunk.getWorld(), user.getFaction());
+
+                        plot.setFaction(user.getFaction());
+
+                        Plots.printChange(plot, "Claim for " + user.getFaction(), "Auto", user.getName());
+                    }
+                } else if(user.getAutoClaiming() == null) {
+                    if (to != null) {
+                        Chunk chunk = e.getTo().getChunk();
+
+                        Plot plot = Factionals.getFactionals().getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(chunk));
+
+                        plot.setFaction(null);
+
+                        Plots.printChange(plot, "Unclaim for " + user.getFaction(), "Auto", user.getName());
+                    }
+                } else if(user.getAutoClaiming() instanceof Region) {
+                    if (to != null && to.getFaction().equals(user.getFaction())) {
+                        Chunk chunk = e.getTo().getChunk();
+
+                        Plot plot = Factionals.getFactionals().getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(chunk));
+
+                        plot.setAdministrator((Region) user.getAutoClaiming());
+
+                        Plots.printChange(plot, "Region change for " + user.getFaction().getName() + " from " + plot.getAdministrator().getName() + " to " + ((Region) user.getAutoClaiming()).getName(), "Auto", user.getName());
+                    }
                 }
             }
         }
@@ -198,7 +228,7 @@ public class PlotListener extends ListenerImpl {
             plot = pr.get(Plots.getLocationId(((DoubleChest) holder).getLocation()));
 
             if(plot != null && plot.getAdministrator() instanceof Region) {
-                lot = ((Region) plot.getAdministrator()).getLot(((BlockState) holder).getLocation());
+                lot = ((Region) plot.getAdministrator()).getLot(((DoubleChest) holder).getLocation());
             }
         }
 

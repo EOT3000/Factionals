@@ -24,9 +24,9 @@ public interface User extends PlotOwner {
 
     boolean isAdminMode();
 
-    boolean isAutoClaiming();
+    Object getAutoClaiming();
 
-    void setAutoClaiming(boolean autoClaiming);
+    void setAutoClaiming(Object autoClaiming);
 
     int getPower();
 

@@ -4,6 +4,7 @@ import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;
+import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.impl.model.PlotImpl;
 import fly.factions.impl.util.Pair;
@@ -23,20 +24,30 @@ public class UnclaimCommand extends CommandDivision {
         Player player = (Player) sender;
         Chunk chunk = player.getLocation().getChunk();
 
+        User user = USERS.get(player.getUniqueId());
+
         if(type.equalsIgnoreCase("all")) {
             for(Plot plot : USERS.get(player.getUniqueId()).getFaction().getPlots()) {
                 plot.setFaction(null);
             }
 
+            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Unclaim for " + user.getFaction(), "All", user.getName());
+
             return true;
         } else if(type.equalsIgnoreCase("one")) {
             if (!unclaim0(chunk.getX(), chunk.getZ(), chunk.getWorld(), USERS.get(player.getUniqueId()).getFaction())) {
-                player.sendMessage(ChatColor.RED + "ERROR: This chunk already unclaimed");
+                player.sendMessage(ChatColor.RED + "ERROR: This chunk already unclaimed, or claimed by another faction");
                 return false;
             } else {
+                Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Unclaim for " + user.getFaction(), "One", user.getName());
+
                 player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully unclaimed 1 chunk (" + chunk.getX() + "," + chunk.getZ() + "," + chunk.getWorld().getName() + ")");
                 return true;
             }
+        }  else if(type.equalsIgnoreCase("auto")) {
+            user.setAutoClaiming(null);
+
+            return true;
         } else {
             player.sendMessage("I'm too lazy to make it properly formatted but you can't use that claim type so yeah this is an error kind of");
         }
@@ -47,7 +58,7 @@ public class UnclaimCommand extends CommandDivision {
     private static boolean unclaim0(int x, int z, World world, Faction faction) {
         Plot old = API.getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(x, z, world));
 
-        if(old == null) {
+        if(old == null || old.getFaction() != faction) {
             return false;
         }
 

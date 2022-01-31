@@ -95,7 +95,7 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
                             count++;
                         }
 
-                        return (boolean) method.invoke(division, pushIntoStart(strings, commandSender));
+                        return (boolean) method.invoke(division, (Object) pushIntoStart(strings, commandSender));
                     } catch (ArrayIndexOutOfBoundsException | InvocationTargetException e) {
                         if(e instanceof InvocationTargetException && !(e.getCause() instanceof ArrayIndexOutOfBoundsException)) {
                             e.printStackTrace();
@@ -338,6 +338,23 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
         },
 
         STRING {
+            @Override
+            public boolean check(String string) {
+                return true;
+            }
+
+            @Override
+            public String format(String string) {
+                return "";
+            }
+
+            @Override
+            public List<String> list() {
+                return new ArrayList<>();
+            }
+        },
+
+        STRINGS {
             @Override
             public boolean check(String string) {
                 return true;

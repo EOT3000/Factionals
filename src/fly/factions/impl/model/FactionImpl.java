@@ -88,6 +88,10 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
         this.isDeleted = true;
 
+        for(Plot plot : new ArrayList<>(plots)) {
+            plot.setFaction(null);
+        }
+
         factionals.getRegistry(Faction.class, String.class).set(name, null);
         Serializer.saveAll(Collections.singletonList(this), Faction.class);
 

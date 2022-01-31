@@ -16,10 +16,16 @@ public class SetDescriptionCommand extends CommandDivision {
         addSubCommand("*", this);
     }
 
-    public boolean run(CommandSender sender, String desc) {
+    public boolean run(CommandSender sender, String... desc) {
         Faction faction = USERS.get(((Player) sender).getUniqueId()).getFaction();
 
-        faction.setDescription(desc);
+        String d = "";
+
+        for(String s : desc) {
+            d+=s + " ";
+        }
+
+        faction.setDescription(d);
 
         sender.sendMessage(ChatColor.GREEN + "Success!");
 
@@ -29,7 +35,7 @@ public class SetDescriptionCommand extends CommandDivision {
     @Override
     public ArgumentType[] getRequiredTypes() {
         return new ArgumentType[] {
-                ArgumentType.STRING
+                ArgumentType.STRINGS
         };
     }
 

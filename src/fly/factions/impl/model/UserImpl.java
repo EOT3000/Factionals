@@ -21,7 +21,7 @@ public class UserImpl implements User {
 
     private boolean adminMode = false;
 
-    private boolean autoClaiming;
+    private Object autoClaiming;
     //private OpenedMenu menu;
 
     private final Set<Faction> invites = new HashSet<>();
@@ -176,12 +176,12 @@ public class UserImpl implements User {
     }*/
 
     @Override
-    public boolean isAutoClaiming() {
+    public Object getAutoClaiming() {
         return autoClaiming;
     }
 
     @Override
-    public void setAutoClaiming(boolean autoClaiming) {
+    public void setAutoClaiming(Object autoClaiming) {
         this.autoClaiming = autoClaiming;
     }
 

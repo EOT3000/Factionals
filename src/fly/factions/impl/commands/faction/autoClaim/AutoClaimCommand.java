@@ -17,9 +17,11 @@ public class AutoClaimCommand extends CommandDivision {
     public boolean run(CommandSender sender) {
         User user = USERS.get(((Player) sender).getUniqueId());
 
-        user.setAutoClaiming(!user.isAutoClaiming());
+        user.sendMessage(ChatColor.RED + "DEPRECATED. USE /f claim auto");
 
-        user.sendMessage(user.isAutoClaiming() ? ChatColor.LIGHT_PURPLE + "Now AutoClaiming" : ChatColor.LIGHT_PURPLE + "No longer AutoClaiming");
+        //user.setAutoClaiming(!user.getAutoClaiming());
+
+        //user.sendMessage(user.getAutoClaiming() ? ChatColor.LIGHT_PURPLE + "Now AutoClaiming" : ChatColor.LIGHT_PURPLE + "No longer AutoClaiming");
 
         return true;
     }
