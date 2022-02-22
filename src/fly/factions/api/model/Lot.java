@@ -70,4 +70,10 @@ public interface Lot extends LandDivision {
     int getLevel();
 
     void resetBorders();
+
+    PlotType getType();
+
+    void setType(PlotType type);
+
+    void delete();
 }

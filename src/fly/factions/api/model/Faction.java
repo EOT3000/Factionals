@@ -155,4 +155,8 @@ public interface Faction extends LandAdministrator<Plot> {
     void setDescription(String string);
 
     String getDescription();
+
+    void setOpen(boolean w);
+
+    boolean isOpen();
 }

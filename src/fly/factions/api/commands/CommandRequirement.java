@@ -2,6 +2,7 @@ package fly.factions.api.commands;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.Faction;
+import fly.factions.api.model.Region;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.PermissionContext;
@@ -49,12 +50,19 @@ public enum CommandRequirement {
     REQUIRE_REGION_LEADER {
         @Override
         public boolean has0(CommandSender sender, Object info) {
-            return getUser(sender).getFaction().getRegion((String) info).getLeader().equals(getUser(sender)) || getUser(sender).getFaction().hasPermission(getUser(sender), FactionPermission.OWNER);
+            User user = getUser(sender);
+            Region region = user.getFaction().getRegion((String) info);
+
+            if(region == null) {
+                return false;
+            }
+
+            return region.getLeader().equals(user) || user.getFaction().hasPermission(user, FactionPermission.OWNER);
         }
 
         @Override
         public String format(CommandSender sender) {
-            return ChatColor.RED + "ERROR: no permission";
+            return ChatColor.RED + "ERROR: no permission or this region does not exist";
         }
     }, 
     REQUIRE_DEPARTMENT_LEADER {

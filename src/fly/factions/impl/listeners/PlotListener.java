@@ -62,8 +62,8 @@ public class PlotListener extends ListenerImpl {
 
                         Plots.printChange(plot, "Claim for " + user.getFaction(), "Auto", user.getName());
                     }
-                } else if(user.getAutoClaiming() == null) {
-                    if (to != null) {
+                } else if(user.getAutoClaiming() instanceof String && ((String) user.getAutoClaiming()).equalsIgnoreCase("unclaim")) {
+                    if (to != null && to.getFaction().equals(user.getFaction())) {
                         Chunk chunk = e.getTo().getChunk();
 
                         Plot plot = Factionals.getFactionals().getRegistry(Plot.class, Integer.class).get(Plots.getLocationId(chunk));
@@ -244,7 +244,13 @@ public class PlotListener extends ListenerImpl {
         if(event.getEntity() instanceof Monster) {
             Plot plot = Factionals.getFactionals().getRegistry(Plot.class, Integer.class).get(Plots.getLocationId((event.getEntity()).getLocation()));
 
-            if(plot != null) {
+            if(plot == null) {
+                return;
+            }
+
+            Region region = plot.getAdministrator() instanceof Region ? (Region) plot.getAdministrator() : null;
+
+            if (region == null || region.getLot(event.getLocation()) == null || region.getLot(event.getLocation()).getType().equals(PlotType.DEFAULT)) {
                 event.setCancelled(true);
             }
         }

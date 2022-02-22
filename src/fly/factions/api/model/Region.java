@@ -13,6 +13,8 @@ public interface Region extends LandAdministrator<Plot> {
 
     void setLot(int lotNumber, Lot lot);
 
+    void removeLot(Lot lot);
+
     Collection<Town> getTowns();
 
     Town getTown(String name);

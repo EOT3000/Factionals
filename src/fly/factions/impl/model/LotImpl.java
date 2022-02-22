@@ -41,6 +41,8 @@ public class LotImpl implements Lot {
 
     private int level = 0;
 
+    private PlotType type = PlotType.DEFAULT;
+
     //private List<Pair<Integer, Integer>> blocks = new ArrayList<>();
 
     public LotImpl(Region region, int id, World world) {
@@ -295,5 +297,20 @@ public class LotImpl implements Lot {
     @Override
     public Faction getFaction() {
         return region.getFaction();
+    }
+
+    @Override
+    public PlotType getType() {
+        return type;
+    }
+
+    @Override
+    public void setType(PlotType type) {
+        this.type = type;
+    }
+
+    @Override
+    public void delete() {
+        region.removeLot(this);
     }
 }

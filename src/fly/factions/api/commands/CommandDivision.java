@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import fly.factions.Factionals;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;
+import fly.factions.api.model.PlotType;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.Permissibles;
 import fly.factions.api.permissions.PlotPermission;
 import fly.factions.api.registries.Registry;
+import fly.factions.impl.commands.faction.FactionCommands;
 import fly.factions.impl.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -95,7 +97,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
                             count++;
                         }
 
-                        return (boolean) method.invoke(division, (Object) pushIntoStart(strings, commandSender));
+                        if(division.getRequiredTypes().length >= 1 && division.getRequiredTypes()[0].equals(ArgumentType.STRINGS)) {
+                            return (boolean) method.invoke(division, commandSender, (Object) strings);
+                        } else {
+                            return (boolean) method.invoke(division, pushIntoStart(strings, commandSender));
+                        }
                     } catch (ArrayIndexOutOfBoundsException | InvocationTargetException e) {
                         if(e instanceof InvocationTargetException && !(e.getCause() instanceof ArrayIndexOutOfBoundsException)) {
                             e.printStackTrace();
@@ -138,19 +144,23 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
         return false;
     }
 
+    public static void main(String[] args) {
+        CommandDivision division = new FactionCommands();
+
+        System.out.println(division.onTabComplete(null, null, null, new String[] {"c"}));
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         CommandDivision division = this;
         CommandDivision divisionOld;
-
-        int x = -1;
 
         for(int i = 0; i < strings.length; i++) {
             String string = strings[i];
 
             divisionOld = division;
 
-            division = division.getNext(string);
+            division = division.getNext(string.isEmpty() ? "&&&&" : string);
 
             if(division == null) {
                 if(i != strings.length-1) {
@@ -158,26 +168,28 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
                 } else {
                     List<String> list = new ArrayList<>();
 
-                    for(String possible : divisionOld.subCommands.keySet()) {
-                        if(possible.isEmpty() || possible.equals("*")) {
-                            int a = strings.length-i;
-
-                            if(divisionOld.getRequiredTypes().length > a) {
-                                for(String p : divisionOld.getRequiredTypes()[a].list()) {
-                                    if(p.startsWith(strings[strings.length-1])) {
-                                        list.add(p);
-                                    }
-                                }
-                            }
-                        } else {
-                            if (possible.startsWith(string)) {
-                                list.add(possible);
-                            }
+                    for (String possible : divisionOld.subCommands.keySet()) {
+                        if (possible.toLowerCase().startsWith(string.toLowerCase())) {
+                            list.add(possible);
                         }
                     }
 
                     return list;
                 }
+            } else if(division.equals(divisionOld)) {
+                List<String> list = new ArrayList<>();
+
+                int a = strings.length-i-1;
+
+                if(divisionOld.getRequiredTypes().length > a) {
+                    for(String p : divisionOld.getRequiredTypes()[a].list()) {
+                        if(p.toLowerCase().startsWith(strings[strings.length-1].toLowerCase())) {
+                            list.add(p);
+                        }
+                    }
+                }
+
+                return list;
             }
         }
 
@@ -412,7 +424,7 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
         USER {
             @Override
             public boolean check(String string) {
-                return Bukkit.getPlayer(string) != null;
+                return Bukkit.getOfflinePlayer(string) != null;
             }
 
             @Override
@@ -500,6 +512,33 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
                 List<String> list = new ArrayList<>();
 
                 for(PlotPermission permission : PlotPermission.values()) {
+                    list.add(permission.name());
+                }
+
+                return list;
+            }
+        },
+        @SuppressWarnings("all")
+        PLOT_TYPE {
+            @Override
+            public boolean check(String string) {
+                try {
+                    return PlotType.valueOf(string.toUpperCase()) != null;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+
+            @Override
+            public String format(String string) {
+                return ChatColor.RED + "ERROR: the plot type " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
+            }
+
+            @Override
+            public List<String> list() {
+                List<String> list = new ArrayList<>();
+
+                for(PlotType permission : PlotType.values()) {
                     list.add(permission.name());
                 }
 

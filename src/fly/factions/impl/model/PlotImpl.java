@@ -41,14 +41,14 @@ public class PlotImpl implements Plot {
 
         this.faction = faction;
 
+        this.setAdministrator(faction);
+
         if(faction == null) {
             Factionals.getFactionals().getRegistry(Plot.class, Integer.class).set(getLocationId(), null);
             return;
         }
 
         this.faction.addPlot(this);
-
-        this.setAdministrator(faction);
     }
 
     @Override
@@ -68,13 +68,30 @@ public class PlotImpl implements Plot {
 
     @Override
     public void setAdministrator(LandAdministrator administrator) {
+        if(administrator != this.admin && this.admin instanceof Region) {
+            int xc = x*16;
+            int zc = z*16;
+
+            for(int xa = 0; xa < 16; xa++) {
+                for(int za = 0; za < 16; za++) {
+                    Location loc = new Location(w, xc+xa, 0, zc+za);
+
+                    if(((Region) this.admin).getLot(loc) != null) {
+                        ((Region) this.admin).getLot(loc).delete();
+                    }
+                }
+            }
+        }
+
         if(admin != null && !(admin instanceof Faction)) {
             admin.removePlot(this);
         }
 
         this.admin = administrator;
 
-        admin.addPlot(this);
+        if(admin != null) {
+            admin.addPlot(this);
+        }
     }
 
     @Override

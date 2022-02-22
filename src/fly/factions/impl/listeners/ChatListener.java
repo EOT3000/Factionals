@@ -1,5 +1,31 @@
 package fly.factions.impl.listeners;
 
+import fly.factions.Factionals;
+import fly.factions.api.model.User;
+import org.bukkit.ChatColor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import java.util.logging.Level;
+
+public class ChatListener extends ListenerImpl {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onChat(AsyncPlayerChatEvent event) {
+        User user = getUserFromPlayer(event.getPlayer());
+
+        if(user.getFactionChat()) {
+            if(user.getFaction() != null) {
+                user.getFaction().broadcast(ChatColor.translateAlternateColorCodes('&', "&6[Faction Chat] &e<" + event.getPlayer().getName() + "> &8") + event.getMessage());
+
+                Factionals.getFactionals().getLogger().info("[Faction] " + event.getPlayer() + ": " + event.getMessage());
+
+                event.setCancelled(true);
+            }
+        }
+    }
+}
+
 /*import fly.factions.Factionals;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;

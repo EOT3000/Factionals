@@ -138,6 +138,6 @@ public class PlotSetPermissionCommand extends CommandDivision {
     }
 
     public boolean p(String s) {
-        return Boolean.parseBoolean(s) || (s.equalsIgnoreCase("yes") || (!s.equalsIgnoreCase("false") && s.equalsIgnoreCase("no")));
+        return Boolean.parseBoolean(s) || (s.equalsIgnoreCase("yes"));
     }
 }

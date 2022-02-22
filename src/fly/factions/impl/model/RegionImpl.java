@@ -79,6 +79,17 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
     }
 
     @Override
+    public void removeLot(Lot lot) {
+        lots.remove(lot.getId());
+
+        for(LocationStorage storage : lotMap.keySet()) {
+            if(lotMap.get(storage).equals(lot)) {
+                lotMap.remove(storage);
+            }
+        }
+    }
+
+    @Override
     public Faction getFaction() {
         return faction;
     }

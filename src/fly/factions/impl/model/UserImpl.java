@@ -3,6 +3,7 @@ package fly.factions.impl.model;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.Permissibles;
+import fly.factions.impl.configuration.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -25,6 +26,8 @@ public class UserImpl implements User {
     //private OpenedMenu menu;
 
     private final Set<Faction> invites = new HashSet<>();
+
+    private boolean factionChat = false;
 
     public UserImpl(UUID uuid) {
         this(uuid, Bukkit.getOfflinePlayer(uuid).getName());
@@ -204,7 +207,7 @@ public class UserImpl implements User {
 
     @Override
     public int getPower() {
-        return Math.min(faction != null ? faction.getPowerPerPlayer() : 6000, power);
+        return Math.min(faction != null ? faction.getPowerPerPlayer() : factionals.getConfiguration().getPowerForPlayer(1), power);
     }
 
     @Override
@@ -230,5 +233,15 @@ public class UserImpl implements User {
 
         Permissibles.add(name, this);
         Permissibles.add(uuid.toString(), this);
+    }
+
+    @Override
+    public void setFactionChat(boolean b) {
+        this.factionChat = b;
+    }
+
+    @Override
+    public boolean getFactionChat() {
+        return factionChat;
     }
 }

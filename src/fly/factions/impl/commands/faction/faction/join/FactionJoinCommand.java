@@ -15,6 +15,8 @@ public class FactionJoinCommand extends CommandDivision {
     private Random random = new Random();
 
     public FactionJoinCommand() {
+        addHelpEntry("/f faction join <faction>", "Merge your faction into another one");
+
         addSubCommand("*", this);
     }
 
@@ -34,6 +36,8 @@ public class FactionJoinCommand extends CommandDivision {
             for(User user : new ArrayList<>(want.getMembers())) {
                 user.setFaction(join);
             }
+
+            sender.sendMessage("done");
 
             return true;
         }

@@ -82,6 +82,9 @@ public class Plots {
             case "world_the_end":
                 return 2;
 
+            case "earth2":
+                return 3;
+
             default:
                 System.out.println(world.getName());
                 return 100;
@@ -103,6 +106,9 @@ public class Plots {
             case 2:
                 return Bukkit.getWorld("world_the_end");
 
+            case 3:
+                return Bukkit.getWorld("earth2");
+
             default:
                 System.out.println(worldId);
                 return null;
@@ -112,7 +118,7 @@ public class Plots {
     public static void printChange(Plot plot, String context, String type, String doer) {
         int id = plot.getLocationId();
 
-        Factionals.getFactionals().getLogger().log(Level.ALL, "{doer}: {context}({type}) {world},{x},{z}"
+        Factionals.getFactionals().getLogger().info("{doer}: {context}({type}) {world},{x},{z}"
                 .replace("{doer}", doer)
                 .replace("{context}", context)
                 .replace("{type}", type).replace("{world}", getWorld(getW(id)).getName())
@@ -123,7 +129,7 @@ public class Plots {
     }
 
     public static void printChange(World world, int x, int z, String context, String type, String doer) {
-        Factionals.getFactionals().getLogger().log(Level.ALL, "{doer}: {context}({type}) {world},{x},{z}"
+        Factionals.getFactionals().getLogger().info("{doer}: {context}({type}) {world},{x},{z}"
                 .replace("{doer}", doer)
                 .replace("{context}", context)
                 .replace("{type}", type).replace("{world}", world.getName())

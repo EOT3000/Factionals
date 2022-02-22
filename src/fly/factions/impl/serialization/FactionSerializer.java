@@ -193,15 +193,9 @@ public class FactionSerializer extends Serializer<Faction> {
                                 lot.setZT(lotSection.getInt("zt"));
                             }
 
-                            System.out.println("f2");
-
                             lot.registerChange(level);
 
-                            System.out.println("f3");
-
                             lot.resetBorders();
-
-                            System.out.println("f4");
 
                             lot.setPrice(lotSection.getInt("price"));
 
@@ -215,8 +209,6 @@ public class FactionSerializer extends Serializer<Faction> {
                                 lot.setOwner(lot.getTown() == null ? lot.getRegion() : lot.getTown());
                             }
 
-                            System.out.println("f5");
-
                             ConfigurationSection lotPermissions = lotSection.getConfigurationSection("permissions");
 
                             for (String key : lotPermissions.getKeys(false)) {
@@ -228,8 +220,7 @@ public class FactionSerializer extends Serializer<Faction> {
                                 }
                             }
 
-                            System.out.println("f6");
-
+                            lot.setType(PlotType.valueOf(lotSection.getString("type", "DEFAULT")));
                         }
                     }
 
@@ -392,6 +383,8 @@ public class FactionSerializer extends Serializer<Faction> {
                 }
 
                 factionLot.put("level", lot.getLevel());
+
+                factionLot.put("type", lot.getType().name());
 
                 regionLots.put("" + lot.getId(), factionLot);
             }

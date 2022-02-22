@@ -74,6 +74,8 @@ public class MapCommand extends CommandDivision {
             ret.add(line);
         }
 
+        sender.sendMessage("MAP");
+
         for(String string : ret) {
             sender.sendMessage(string);
         }

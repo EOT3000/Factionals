@@ -34,6 +34,8 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     private File file;
 
+    private boolean open;
+
     public FactionImpl(String name, User leader, long time, File file) {
         super(name, leader);
 
@@ -92,8 +94,12 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
             plot.setFaction(null);
         }
 
-        factionals.getRegistry(Faction.class, String.class).set(name, null);
+        for(User user : members) {
+            user.setFaction(null);
+        }
+
         Serializer.saveAll(Collections.singletonList(this), Faction.class);
+        factionals.getRegistry(Faction.class, String.class).set(name, null);
 
         Permissibles.remove(this);
     }
@@ -116,7 +122,7 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     @Override
     public void removeMember(User user) {
-        if(user.equals(leader)) {
+        if(user.equals(leader) && !isDeleted) {
             delete();
             return;
         }
@@ -310,6 +316,16 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     public File getFile() {
         return file;
+    }
+
+    @Override
+    public void setOpen(boolean w) {
+        this.open = w;
+    }
+
+    @Override
+    public boolean isOpen() {
+        return open;
     }
 
     //TODO: Move commands into separate class

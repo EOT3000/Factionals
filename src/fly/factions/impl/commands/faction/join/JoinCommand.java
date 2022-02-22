@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class FactionJoinCommand extends CommandDivision {
-    public FactionJoinCommand() {
+public class JoinCommand extends CommandDivision {
+    public JoinCommand() {
         addHelpEntry("/f join <faction>", "Attempt to join the given faction");
 
         addSubCommand("*", this);
@@ -23,14 +23,14 @@ public class FactionJoinCommand extends CommandDivision {
 
         Faction factionObject = FACTIONS.get(faction);
 
-        if(user.getInvites().contains(factionObject)) {
+        if(user.getInvites().contains(factionObject) || factionObject.isOpen()) {
             user.setFaction(factionObject);
 
             user.getFaction().broadcast(ChatColor.YELLOW + user.getName() + ChatColor.LIGHT_PURPLE + " has joined the faction");
 
             return true;
         } else {
-            sender.sendMessage(ChatColor.RED + "ERROR: you do not have an invite to this faction");
+            sender.sendMessage(ChatColor.RED + "ERROR: you do not have an invite to this faction, and it is not open");
         }
 
         return false;

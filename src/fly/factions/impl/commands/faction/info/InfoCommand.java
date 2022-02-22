@@ -41,6 +41,8 @@ public class InfoCommand extends CommandDivision {
         sender.sendMessage(translate("&3Regions &b[&3" + factionObject.getRegions().size() + "&b]&3: &r" + regions));
         sender.sendMessage(translate("&3Chunks&r/&3Power&r/&3Max Power&r: " + factionObject.getPlots().size() + "&7/&f" + factionObject.getCurrentPower() + "&7/&f" + factionObject.getMaxPower()));
 
+        sender.sendMessage(translate("&3Description&r: " + factionObject.getDescription()));
+
         return true;
     }
 

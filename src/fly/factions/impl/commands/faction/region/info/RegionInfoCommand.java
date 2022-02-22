@@ -31,7 +31,7 @@ public class RegionInfoCommand extends CommandDivision {
 
         String members = "";
 
-        for(User user : factionObject.getMembers()) {
+        for(User user : region.getMembers()) {
             members += (", " + user.getName());
         }
 
@@ -50,7 +50,7 @@ public class RegionInfoCommand extends CommandDivision {
         sender.sendMessage(translate("&3Towns &b[&3" + region.getTowns().size() + "&b]&3: &r" + towns));
         sender.sendMessage(translate("&3Chunks&r: " + region.getPlots().size()));
 
-        sender.sendMessage(translate("&3Lots&r:" + (region.getLots().size()-1)));
+        sender.sendMessage(translate("&3Lots&r:" + (region.getLots().size())));
 
         return true;
     }

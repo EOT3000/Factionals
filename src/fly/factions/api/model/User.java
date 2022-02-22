@@ -35,4 +35,8 @@ public interface User extends PlotOwner {
     void setAdminMode(boolean adminMode);
 
     void updateName();
+
+    void setFactionChat(boolean b);
+
+    boolean getFactionChat();
 }

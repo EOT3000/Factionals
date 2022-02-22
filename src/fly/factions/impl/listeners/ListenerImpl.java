@@ -18,7 +18,9 @@ public class ListenerImpl implements Listener {
         return ((Registry<User, UUID>) Factionals.getFactionals().getRegistry(User.class)).get(player.getUniqueId());
     }
 
-    protected void addUser(User user) {
+    protected User addUser(User user) {
         ((Registry<User, UUID>) Factionals.getFactionals().getRegistry(User.class)).set(user.getUniqueId(), user);
+
+        return user;
     }
 }
