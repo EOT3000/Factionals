@@ -1,10 +1,18 @@
 package fly.factions.impl.configuration;
 
+import fly.factions.impl.util.Plots;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Configuration {
     public static void main(String[] args) {
+        System.out.println(Integer.toBinaryString(132997137));
+
+        System.out.println(Plots.getX(132997137));
+        System.out.println(Plots.getZ(132997137));
+        System.out.println(Plots.getW(132997137));
+
         Configuration configuration = new Configuration();
 
         int total = 0;
@@ -47,6 +55,6 @@ public class Configuration {
     }
 
     public int getPowerForPlayer(int number) {
-        return powerPerPlayer.getOrDefault(number, powerPerPlayer.get(0));
+        return powerPerPlayer.getOrDefault(number, powerPerPlayer.get(0))*17;
     }
 }

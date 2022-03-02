@@ -17,9 +17,9 @@ import java.util.logging.Level;
 public class Plots {
     static {
         try {
-            getXMask = binaryToInteger("00000000000000000000111111111111");
-            getZMask = binaryToInteger("00000000111111111111000000000000");
-            getWMask = binaryToInteger("11111111000000000000000000000000");
+            getXMask = binaryToInteger("00000000000000000011111111111111");
+            getZMask = binaryToInteger("00001111111111111100000000000000");
+            getWMask = binaryToInteger("11110000000000000000000000000000");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,19 +51,19 @@ public class Plots {
     }
 
     public static Integer getLocationId(int x, int z, int world) {
-        return ((x+2048) | ((z+2048) << 12)) | (world << 24);
+        return ((x+8192) | ((z+8192) << 14)) | (world << 28);
     }
 
     public static int getX(int location) {
-        return (location & getXMask)-2048;
+        return (location & getXMask)-8192;
     }
 
     public static int getZ(int location) {
-        return ((location & getZMask) >> 12)-2048;
+        return ((location & getZMask) >> 14)-8192;
     }
 
     public static int getW(int location) {
-        return (location & getWMask) >> 24;
+        return (location & getWMask) >> 28;
     }
 
     public static int getWorldId(World world) {
@@ -139,7 +139,7 @@ public class Plots {
 
     //TODO: Move commands into separate class
 
-    private static Factionals factionals = Factionals.getFactionals();
+    //private static Factionals factionals = Factionals.getFactionals();
 
     private static void requireNotNull(Object o, String message, CommandSender sender) {
         if(o == null) {
@@ -155,7 +155,7 @@ public class Plots {
         }
     }
 
-    public static boolean setRegion(CommandSender sender, String a, String region) {
+    /*public static boolean setRegion(CommandSender sender, String a, String region) {
         CommandRegister.requirePlayer(sender);
 
         User user = factionals.getRegistry(User.class, UUID.class).get(((Player) sender).getUniqueId());
@@ -171,5 +171,5 @@ public class Plots {
         plot.setAdministrator(factionRegion);
 
         return true;
-    }
+    }*/
 }

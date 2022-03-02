@@ -123,7 +123,7 @@ public interface Faction extends LandAdministrator<Plot> {
     /**
      * Returns the time at which the faction was created.
      *
-     * @return a {@code long}, a number which is the result of System's currentTimeMillis function
+     * @return a {@code long}, a number which is the result of System's currentTimeMillis function at the time of faction creation
      *
      * @see System#currentTimeMillis()
      */

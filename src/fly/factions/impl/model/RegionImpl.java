@@ -27,6 +27,8 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
         this.faction = faction;
 
+        Permissibles.add(name, this);
+        Permissibles.add("r:" + name, this);
         Permissibles.add(faction.getName() + ":" + name, this);
         Permissibles.add(getId(), this);
     }
@@ -82,7 +84,7 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
     public void removeLot(Lot lot) {
         lots.remove(lot.getId());
 
-        for(LocationStorage storage : lotMap.keySet()) {
+        for(LocationStorage storage : new ArrayList<>(lotMap.keySet())) {
             if(lotMap.get(storage).equals(lot)) {
                 lotMap.remove(storage);
             }
@@ -213,6 +215,8 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
 
         Permissibles.remove(this);
 
+        Permissibles.add(name, this);
+        Permissibles.add("r:" + name, this);
         Permissibles.add(faction.getName() + ":" + name, this);
         Permissibles.add(getId(), this);
 

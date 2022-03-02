@@ -42,6 +42,7 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         leader.setFaction(this);
 
         Permissibles.add(name, this);
+        Permissibles.add("f:" + name, this);
         Permissibles.add(getId(), this);
 
         this.creationTime = time;
@@ -282,6 +283,7 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         Permissibles.remove(this);
 
         Permissibles.add(name, this);
+        Permissibles.add("f:" + name, this);
         Permissibles.add(getId(), this);
 
         for(Region region : regions) {

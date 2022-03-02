@@ -9,6 +9,6 @@ public class DeathListener extends ListenerImpl {
     public void onPlayerDie(PlayerDeathEvent event) {
         User user = getUserFromPlayer(event.getPlayer());
 
-        user.setPower(user.getPower()-50);
+        user.setPower(user.getPower()-1000);
     }
 }

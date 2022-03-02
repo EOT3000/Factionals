@@ -21,6 +21,12 @@ public class RegionCreateCommand extends CommandDivision {
     public boolean run(CommandSender sender, String name) {
         User user = USERS.get(Bukkit.getPlayer(sender.getName()).getUniqueId());
 
+        if(!nameGood(name)) {
+            user.sendMessage(ChatColor.RED + "ERROR: invalid characters. Use numbers, english letters, or underscores in your region name (3-24 characters)");
+
+            return false;
+        }
+
         if (user.getFaction().getRegion(name) != null) {
             user.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + name + ChatColor.RED + " already exists");
             return false;

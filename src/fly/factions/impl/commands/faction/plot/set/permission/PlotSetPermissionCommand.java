@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class PlotSetPermissionCommand extends CommandDivision {
-    private static final Pattern permType = Pattern.compile("[adfpr]");
-
     //TODO: plot owner requirement
 
     public PlotSetPermissionCommand() {
@@ -43,51 +41,12 @@ public class PlotSetPermissionCommand extends CommandDivision {
 
         Lot lot = ((Region) plot.getAdministrator()).getLots().get(Integer.parseInt(lotId));
 
-        String permissibleType = "a";
-        String permissible2 = permissible;
-
-
-        if(permissible.charAt(1) == ':') {
-            permissibleType = permissible.split(":")[0];
-            permissible = permissible.split(":")[1];
-        }
-
-        if(!permType.matcher(permissibleType).matches()) {
-            sender.sendMessage(ChatColor.RED + "ERROR: the class selector " + ChatColor.YELLOW + permissibleType + ":" + ChatColor.RED + " is invalid! Please use a a valid selector");
-            return false;
-        }
-
         List<Permissible> result = Permissibles.get(permissible);
-
-        for(Permissible r : new ArrayList<>(result)) {
-            if(permissibleType.equalsIgnoreCase("a")) {
-                break;
-            }
-
-            if(permissibleType.equalsIgnoreCase("f") && !(r instanceof Faction)) {
-                result.remove(r);
-                continue;
-            }
-
-            if(permissibleType.equalsIgnoreCase("p") && !(r instanceof User)) {
-                result.remove(r);
-                continue;
-            }
-
-            if(permissibleType.equalsIgnoreCase("r") && !(r instanceof Region)) {
-                result.remove(r);
-                continue;
-            }
-
-            if(permissibleType.equalsIgnoreCase("d") && !(r instanceof ExecutiveDivision)) {
-                result.remove(r);
-            }
-        }
 
         try {
             new CommandRegister.NumberPotential(1)
                     .less((x) -> {
-                        sender.sendMessage(ChatColor.RED + "ERROR: no valid object is called " + ChatColor.YELLOW + permissible2);
+                        sender.sendMessage(ChatColor.RED + "ERROR: no valid object is called " + ChatColor.YELLOW + permissible);
                         throw new CommandRegister.ReturnNowException();
                     })
                     .equal((x) -> {
@@ -97,7 +56,7 @@ public class PlotSetPermissionCommand extends CommandDivision {
                         }
                     })
                     .more((x) -> {
-                        sender.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + permissible2 + ChatColor.RED + " is ambiguous! Please specify the permissible type using '<object type>:<object name>' instead");
+                        sender.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + permissible + ChatColor.RED + " is ambiguous! Please specify the permissible type using '<object type>:<object name>' instead");
                         throw new CommandRegister.ReturnNowException();
                     }).run(result.size());
         } catch (CommandRegister.ReturnNowException e) {

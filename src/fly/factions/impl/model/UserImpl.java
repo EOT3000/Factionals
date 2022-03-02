@@ -37,6 +37,7 @@ public class UserImpl implements User {
         this.uuid = uuid;
         this.name = name;
 
+        Permissibles.add("u:" + name, this);
         Permissibles.add(name, this);
         Permissibles.add(uuid.toString(), this);
     }
@@ -231,6 +232,7 @@ public class UserImpl implements User {
 
         Permissibles.remove(this);
 
+        Permissibles.add("u:" + name, this);
         Permissibles.add(name, this);
         Permissibles.add(uuid.toString(), this);
     }

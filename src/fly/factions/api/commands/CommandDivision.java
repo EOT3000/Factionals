@@ -25,12 +25,15 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public abstract class CommandDivision implements CommandExecutor, TabExecutor {
-    protected static Factionals API = Factionals.getFactionals();
-    protected static Registry<User, UUID> USERS = API.getRegistry(User.class, UUID.class);
-    protected static Registry<Plot, Integer> PLOTS = API.getRegistry(Plot.class, Integer.class);
-    protected static Registry<Faction, String> FACTIONS = API.getRegistry(Faction.class, String.class);
+    protected static final Factionals API = Factionals.getFactionals();
+    protected static final Registry<User, UUID> USERS = API.getRegistry(User.class, UUID.class);
+    protected static final Registry<Plot, Integer> PLOTS = API.getRegistry(Plot.class, Integer.class);
+    protected static final Registry<Faction, String> FACTIONS = API.getRegistry(Faction.class, String.class);
+
+    protected static final Pattern pattern = Pattern.compile("^((?!([a-z]|[A-Z]|[0-9]|_)).)*$");
 
     private Map<String, CommandDivision> subCommands = new HashMap<>();
     private List<Pair<String, String>> helpEntries = new ArrayList<>();
@@ -144,11 +147,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
         return false;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         CommandDivision division = new FactionCommands();
 
         System.out.println(division.onTabComplete(null, null, null, new String[] {"c"}));
-    }
+    }*/
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -265,6 +268,14 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
 
     protected static String translate(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
+    }
+
+    protected static boolean nameGood(String name) {
+        if(pattern.matcher(name).matches()) {
+            return false;
+        }
+
+        return name.length() <= 24 && name.length() >= 3;
     }
 
     public enum ArgumentType {

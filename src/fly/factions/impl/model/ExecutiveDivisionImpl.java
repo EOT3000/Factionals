@@ -22,6 +22,8 @@ public class ExecutiveDivisionImpl extends AbstractFactionComponent implements E
 
         this.faction = faction;
 
+        Permissibles.add(name, this);
+        Permissibles.add("d:" + name, this);
         Permissibles.add(faction.getName() + ":" + name, this);
         Permissibles.add(getId(), this);
     }
@@ -85,6 +87,8 @@ public class ExecutiveDivisionImpl extends AbstractFactionComponent implements E
     public void setName(String name) {
         Permissibles.remove(this);
 
+        Permissibles.add(name, this);
+        Permissibles.add("d:" + name, this);
         Permissibles.add(faction.getName() + ":" + name, this);
         Permissibles.add(getId(), this);
 

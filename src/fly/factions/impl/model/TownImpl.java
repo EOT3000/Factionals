@@ -12,7 +12,10 @@ public class TownImpl extends AbstractLandAdministrator<Lot> implements Town {
 
         this.region = region;
 
+        Permissibles.add(name, this);
+        Permissibles.add("t:" + name, this);
         Permissibles.add(region.getName() + ":" + name, this);
+        Permissibles.add(region.getFaction().getName() + ":" + region.getName() + ":" + name, this);
         Permissibles.add(getId(), this);
     }
 
@@ -67,7 +70,10 @@ public class TownImpl extends AbstractLandAdministrator<Lot> implements Town {
 
         Permissibles.remove(this);
 
+        Permissibles.add(name, this);
+        Permissibles.add("t:" + name, this);
         Permissibles.add(region.getName() + ":" + name, this);
+        Permissibles.add(region.getFaction().getName() + ":" + region.getName() + ":" + name, this);
         Permissibles.add(getId(), this);
     }
 }

@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
 import java.util.regex.Pattern;
 
 public class RenameCommand extends CommandDivision {
-    private final Pattern pattern = Pattern.compile("^((?!([a-z]|[A-Z]|[0-9]|_)).)*$");
-
     public RenameCommand() {
         addHelpEntry("/f rename <name>", "Rename your faction");
 
@@ -24,7 +22,7 @@ public class RenameCommand extends CommandDivision {
         Faction faction = USERS.get(((Player) sender).getUniqueId()).getFaction();
 
         if(!nameGood(name)) {
-            sender.sendMessage(ChatColor.RED + "ERROR: invalid characters. Use numbers, english letters, or underscores in your name (3-24 characters)");
+            sender.sendMessage(ChatColor.RED + "ERROR: invalid characters. Use numbers, english letters, or underscores in your new faction name (3-24 characters)");
 
             return false;
         }
@@ -34,14 +32,6 @@ public class RenameCommand extends CommandDivision {
         sender.sendMessage(ChatColor.GREEN + "Success!");
 
         return true;
-    }
-
-    private boolean nameGood(String name) {
-        if(pattern.matcher(name).matches()) {
-            return false;
-        }
-
-        return name.length() <= 24 && name.length() >= 3;
     }
 
     @Override

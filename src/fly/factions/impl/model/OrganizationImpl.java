@@ -2,7 +2,7 @@ package fly.factions.impl.model;
 
 import fly.factions.api.exceptions.NotAMemberException;
 import fly.factions.api.model.Faction;
-import fly.factions.api.model.Organization;
+import fly.factions.api.model.organizations.Organization;
 import fly.factions.api.model.User;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
