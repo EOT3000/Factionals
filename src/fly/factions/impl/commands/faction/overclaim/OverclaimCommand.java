@@ -38,7 +38,7 @@ public class OverclaimCommand extends CommandDivision {
                         replace("z", "" + location.getBlockZ()).
                         replace("w", location.getWorld().getName()));
 
-                Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Overclaim of " + plot.getFaction().getName() + " for " + user.getFaction(), "One", user.getName());
+                Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Overclaim of " + plot.getFaction().getId() + " for " + user.getFaction().getId(), "One", user.getName());
 
                 plot.setFaction(user.getFaction());
 

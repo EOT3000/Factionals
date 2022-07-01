@@ -91,12 +91,16 @@ public class Plots {
         }
     }
 
+    // I have no idea why I made there be 2 methods. I'll keep it...
+
     public static World getWorld(int worldId) {
         return getWorld0(worldId);
     }
 
     public static World getWorld0(int worldId) {
         switch (worldId) {
+            // Haha I love hard coding things
+
             case 0:
                 return Bukkit.getWorld("world");
 

@@ -208,12 +208,14 @@ public class UserImpl implements User {
 
     @Override
     public int getPower() {
-        return Math.min(faction != null ? faction.getPowerPerPlayer() : factionals.getConfiguration().getPowerForPlayer(1), power);
+        return power = Math.max(-200, Math.min(faction != null ? faction.getPowerPerPlayer() : factionals.getConfiguration().getPowerForPlayer(1), power));
     }
 
     @Override
     public void setPower(int power) {
         this.power = power;
+
+        getPower();
     }
 
     @Override

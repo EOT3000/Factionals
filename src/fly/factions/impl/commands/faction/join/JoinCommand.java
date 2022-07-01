@@ -26,6 +26,8 @@ public class JoinCommand extends CommandDivision {
         if(user.getInvites().contains(factionObject) || factionObject.isOpen()) {
             user.setFaction(factionObject);
 
+            user.removeInvite(factionObject);
+
             user.getFaction().broadcast(ChatColor.YELLOW + user.getName() + ChatColor.LIGHT_PURPLE + " has joined the faction");
 
             return true;

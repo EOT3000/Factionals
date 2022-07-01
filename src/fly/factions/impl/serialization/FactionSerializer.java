@@ -137,6 +137,11 @@ public class FactionSerializer extends Serializer<Faction> {
 
                 for (String string : plots.getKeys(false)) {
                     ConfigurationSection plot = plots.getConfigurationSection(string);
+
+                    if(Plots.getWorld(plot.getInt("w")) == null) {
+                        continue;
+                    }
+
                     Plot factionPlot = new PlotImpl(plot.getInt("x"), plot.getInt("z"), Plots.getWorld(plot.getInt("w")), faction);
 
                     factionPlot.setAdministrator((LandAdministrator<Plot>) getPlotOwner(plot.getString("administrator")));

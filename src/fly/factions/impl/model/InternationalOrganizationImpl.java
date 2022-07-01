@@ -1,10 +1,13 @@
 package fly.factions.impl.model;
 
+import fly.factions.Factionals;
 import fly.factions.api.model.*;
 import fly.factions.api.model.organizations.IntOrgCouncil;
 import fly.factions.api.model.organizations.IntOrgLevel;
 import fly.factions.api.model.organizations.InternationalOrganization;
+import fly.factions.api.model.organizations.Organization;
 import fly.factions.api.permissions.FactionPermission;
+import fly.factions.api.permissions.Permissibles;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -29,6 +32,11 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
         super(name, leader);
 
         this.creationTime = creationTime;
+
+        Factionals.getFactionals().getRegistry(Organization.class, String.class).set(name, this);
+
+        Permissibles.add(name, this);
+        Permissibles.add("io:" + name, this);
     }
 
     @Override

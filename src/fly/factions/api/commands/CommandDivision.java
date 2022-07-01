@@ -6,6 +6,7 @@ import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;
 import fly.factions.api.model.PlotType;
 import fly.factions.api.model.User;
+import fly.factions.api.model.organizations.Organization;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.Permissibles;
 import fly.factions.api.permissions.PlotPermission;
@@ -32,6 +33,7 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
     protected static final Registry<User, UUID> USERS = API.getRegistry(User.class, UUID.class);
     protected static final Registry<Plot, Integer> PLOTS = API.getRegistry(Plot.class, Integer.class);
     protected static final Registry<Faction, String> FACTIONS = API.getRegistry(Faction.class, String.class);
+    protected static final Registry<Organization, String> ORGANIZATIONS = API.getRegistry(Organization.class, String.class);
 
     protected static final Pattern pattern = Pattern.compile("^((?!([a-z]|[A-Z]|[0-9]|_)).)*$");
 
@@ -551,6 +553,29 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
 
                 for(PlotType permission : PlotType.values()) {
                     list.add(permission.name());
+                }
+
+                return list;
+            }
+        },
+
+        ORGANIZATION {
+            @Override
+            public boolean check(String string) {
+                return ORGANIZATIONS.get(string) != null;
+            }
+
+            @Override
+            public String format(String string) {
+                return ChatColor.RED + "ERROR: the organization " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
+            }
+
+            @Override
+            public List<String> list() {
+                List<String> list = new ArrayList<>();
+
+                for(Organization organization : ORGANIZATIONS.list()) {
+                    list.add(organization.getName());
                 }
 
                 return list;

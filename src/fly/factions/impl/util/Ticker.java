@@ -20,7 +20,7 @@ public class Ticker {
     public static void tick() {
         for(User user : userRegistry.list()) {
             if(Bukkit.getOfflinePlayer(user.getUniqueId()).isOnline()) {
-                user.setPower(user.getPower() + 1);
+                user.setPower(user.getPower() + 10);
             }
         }
     }

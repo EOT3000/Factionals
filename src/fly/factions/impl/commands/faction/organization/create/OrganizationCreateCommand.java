@@ -8,6 +8,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class OrganizationCreateCommand extends CommandDivision {
+    public OrganizationCreateCommand() {
+        addSubCommand("*", this);
+
+        addHelpEntry("/f organization create <internation | private> <name>", "Creates an organization");
+    }
+
     public boolean run(CommandSender sender, String type, String name) {
         User user = USERS.get(((Player) sender).getUniqueId());
 
@@ -17,12 +23,22 @@ public class OrganizationCreateCommand extends CommandDivision {
             return false;
         }
 
-        if(type.equalsIgnoreCase("international")) {
-            new InternationalOrganizationImpl(name, user);
-        } else if(type.equalsIgnoreCase("private")) {
+        if(ORGANIZATIONS.get(name) != null) {
+            sender.sendMessage(ChatColor.RED + "ERROR: an organization with this name already exists");
 
+            return false;
+        }
+
+        if(type.equalsIgnoreCase("international")) {
+            //new InternationalOrganizationImpl(name, user);
+
+            sender.sendMessage("todo");
+        } else if(type.equalsIgnoreCase("private")) {
+            sender.sendMessage("todo");
         }
 
         return true;
     }
+
+
 }

@@ -5,6 +5,7 @@ import fly.factions.api.model.Faction;
 import fly.factions.api.model.PlayerGroup;
 import fly.factions.api.model.Plot;
 import fly.factions.api.model.User;
+import fly.factions.api.model.organizations.Organization;
 import fly.factions.api.registries.Registry;
 import fly.factions.api.serialization.Serializer;
 import fly.factions.impl.commands.FactionCommand;
@@ -69,10 +70,10 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
 
         registries.put(Faction.class, new StringRegistryImpl<>(Faction.class));
+        registries.put(Organization.class, new StringRegistryImpl<>(Organization.class));
         registries.put(Serializer.class, new RegistryImpl<Serializer, Class>(Serializer.class));
         registries.put(User.class, new RegistryImpl<User, UUID>(User.class));
         registries.put(Plot.class, new RegistryImpl<Plot, Integer>(Plot.class));
-
 
         new FactionSerializer(this);
         new UserSerializer(this);

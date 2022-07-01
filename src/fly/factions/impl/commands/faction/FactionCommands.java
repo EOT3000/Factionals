@@ -17,6 +17,7 @@ import fly.factions.impl.commands.faction.leave.LeaveCommand;
 import fly.factions.impl.commands.faction.list.ListCommand;
 import fly.factions.impl.commands.faction.listOpen.ListOpenCommand;
 import fly.factions.impl.commands.faction.map.MapCommand;
+import fly.factions.impl.commands.faction.organization.OrganizationCommand;
 import fly.factions.impl.commands.faction.overclaim.OverclaimCommand;
 import fly.factions.impl.commands.faction.player.PlayerCommand;
 import fly.factions.impl.commands.faction.plot.PlotCommands;
@@ -65,6 +66,8 @@ public class FactionCommands extends CommandDivision {
         addHelpEntry("/f department", "Not Yet Implemented (WIP)");
 
         addHelpEntry("/f plot", "View plot commands");
+
+        addHelpEntry("/f organization", "View organization commands");
 
         addHelpEntry("/f faction", "View faction merger commands");
 
@@ -127,6 +130,7 @@ public class FactionCommands extends CommandDivision {
         addSubCommand("player", new PlayerCommand());
 
         addSubCommand("overclaim", new OverclaimCommand());
+        addSubCommand("organization", new OrganizationCommand());
 
 
     }

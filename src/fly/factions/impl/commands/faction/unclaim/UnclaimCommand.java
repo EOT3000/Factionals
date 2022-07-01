@@ -48,7 +48,7 @@ public class UnclaimCommand extends CommandDivision {
                 plot.setFaction(null);
             }
 
-            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Unclaim for " + user.getFaction(), "All", user.getName());
+            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Unclaim for " + user.getFaction().getId(), "All", user.getName());
 
             return true;
         } else if(type.equalsIgnoreCase("one")) {
@@ -56,7 +56,7 @@ public class UnclaimCommand extends CommandDivision {
                 player.sendMessage(ChatColor.RED + "ERROR: This chunk already unclaimed, or claimed by another faction");
                 return false;
             } else {
-                Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Unclaim for " + user.getFaction(), "One", user.getName());
+                Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Unclaim for " + user.getFaction().getId(), "One", user.getName());
 
                 player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully unclaimed 1 chunk (" + chunk.getX() + "," + chunk.getZ() + "," + chunk.getWorld().getName() + ")");
                 return true;
@@ -80,7 +80,7 @@ public class UnclaimCommand extends CommandDivision {
                 unclaim0(claim.getKey(), claim.getValue(), chunk.getWorld(), user.getFaction());
             }
 
-            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Unclaim for " + user.getFaction(), "Fill", user.getName());
+            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Unclaim for " + user.getFaction().getId(), "Fill", user.getName());
 
             player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully unclaimed area");
 

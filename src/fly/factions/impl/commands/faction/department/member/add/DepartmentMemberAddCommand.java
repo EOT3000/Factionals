@@ -47,7 +47,7 @@ public class DepartmentMemberAddCommand extends CommandDivision {
         }
 
         division.addMember(victimUser);
-        sender.sendMessage(ChatColor.GREEN + "Successfully removed user");
+        sender.sendMessage(ChatColor.GREEN + "Successfully added user");
 
         return false;
     }

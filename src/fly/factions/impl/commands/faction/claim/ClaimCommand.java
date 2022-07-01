@@ -33,10 +33,10 @@ public class ClaimCommand extends CommandDivision {
         User user = USERS.get(player.getUniqueId());
 
         if(type.equalsIgnoreCase("fill")) {
-            List<Pair<Integer, Integer>> list = fillNode(chunk.getX(), chunk.getZ(), chunk.getWorld(), new MutableInt(2500), new ArrayList<>());
+            List<Pair<Integer, Integer>> list = fillNode(chunk.getX(), chunk.getZ(), chunk.getWorld(), new MutableInt(2048), new ArrayList<>());
 
             if(list == null) {
-                sender.sendMessage(ChatColor.RED  + "ERROR: space too large (more than 2500 chunks)");
+                sender.sendMessage(ChatColor.RED  + "ERROR: space too large (more than 2048 chunks)");
 
                 return false;
             }
@@ -51,7 +51,7 @@ public class ClaimCommand extends CommandDivision {
                 claim0(claim.getKey(), claim.getValue(), chunk.getWorld(), user.getFaction());
             }
 
-            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Claim for " + user.getFaction(), "Fill", user.getName());
+            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Claim for " + user.getFaction().getId(), "Fill", user.getName());
 
             player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully filled area");
 
@@ -76,7 +76,7 @@ public class ClaimCommand extends CommandDivision {
         } else {
             player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully claimed 1 chunk (" + chunk.getX() + "," + chunk.getZ() + "," + chunk.getWorld().getName() + ")");
 
-            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Claim for " + user.getFaction(), "One", user.getName());
+            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Claim for " + user.getFaction().getId(), "One", user.getName());
 
             return true;
         }

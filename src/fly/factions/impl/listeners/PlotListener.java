@@ -42,7 +42,7 @@ public class PlotListener extends ListenerImpl {
         Plot to = pr.get(Plots.getLocationId(e.getTo()));
         Plot from = pr.get(Plots.getLocationId(e.getFrom()));
 
-        if(to != from) {
+        if(to != from || to == null) {
             User user = Factionals.getFactionals().getRegistry(User.class, UUID.class).get(e.getPlayer().getUniqueId());
 
             if (user.getFaction() != null && user.getFaction().hasPermission(user, FactionPermission.TERRITORY)) {
@@ -60,7 +60,7 @@ public class PlotListener extends ListenerImpl {
 
                         plot.setFaction(user.getFaction());
 
-                        Plots.printChange(plot, "Claim for " + user.getFaction(), "Auto", user.getName());
+                        Plots.printChange(plot, "Claim for " + user.getFaction().getId(), "Auto", user.getName());
                     }
                 } else if(user.getAutoClaiming() instanceof String && ((String) user.getAutoClaiming()).equalsIgnoreCase("unclaim")) {
                     if (to != null && to.getFaction().equals(user.getFaction())) {
@@ -70,7 +70,7 @@ public class PlotListener extends ListenerImpl {
 
                         plot.setFaction(null);
 
-                        Plots.printChange(plot, "Unclaim for " + user.getFaction(), "Auto", user.getName());
+                        Plots.printChange(plot, "Unclaim for " + user.getFaction().getId(), "Auto", user.getName());
                     }
                 } else if(user.getAutoClaiming() instanceof Region) {
                     if (to != null && to.getFaction().equals(user.getFaction())) {
@@ -80,7 +80,7 @@ public class PlotListener extends ListenerImpl {
 
                         plot.setAdministrator((Region) user.getAutoClaiming());
 
-                        Plots.printChange(plot, "Region change for " + user.getFaction().getName() + " from " + plot.getAdministrator().getName() + " to " + ((Region) user.getAutoClaiming()).getName(), "Auto", user.getName());
+                        Plots.printChange(plot, "Region change for " + user.getFaction().getId() + " from " + plot.getAdministrator().getName() + " to " + ((Region) user.getAutoClaiming()).getName(), "Auto", user.getName());
                     }
                 }
             }
