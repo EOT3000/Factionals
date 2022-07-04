@@ -25,8 +25,10 @@ import fly.factions.impl.util.Ticker;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
@@ -215,8 +217,19 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         Serializer.saveAll(registries.get(User.class).list(), User.class);
     }
 
+
+    //TODO: move to other plugin
+    private List<Location> locs = new ArrayList<>();
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if(command.getName().equalsIgnoreCase("rtpad") && sender.isOp()) {
+            Bukkit.getPlayer(args[0]).teleport(locs.get(new Random().nextInt(locs.size())).clone());
+        } else if(command.getName().equalsIgnoreCase("rtpa")) {
+            if(sender.isOp()) {
+                locs.add(((Player) sender).getLocation().clone());
+            }
+        }
 
         return true;
     }

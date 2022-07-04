@@ -24,7 +24,6 @@ public class ClaimCommand extends CommandDivision {
         addHelpEntry("/f claim <fill | one | auto>", "Claims either one chunk or fills in a hollow spot, or enabled autoclaim");
 
         addSubCommand("*", this);
-        addSubCommand("", this);
     }
 
     public boolean run(CommandSender sender, String type) {

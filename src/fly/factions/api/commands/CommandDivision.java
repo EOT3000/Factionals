@@ -48,6 +48,35 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
         Bukkit.getPluginCommand(command).setExecutor(this);
     }
 
+    protected CommandDivision(String command, String s2) {
+        Bukkit.getPluginCommand(command).setExecutor(this);
+        Bukkit.getPluginCommand(s2).setExecutor(this);
+    }
+
+    protected CommandDivision(String command, String s2, String s3) {
+        Bukkit.getPluginCommand(command).setExecutor(this);
+        Bukkit.getPluginCommand(s2).setExecutor(this);
+        Bukkit.getPluginCommand(s3).setExecutor(this);
+    }
+
+    protected CommandDivision(String command, String s2, String s3, String s4) {
+        Bukkit.getPluginCommand(command).setExecutor(this);
+        Bukkit.getPluginCommand(s2).setExecutor(this);
+        Bukkit.getPluginCommand(s3).setExecutor(this);
+        Bukkit.getPluginCommand(s4).setExecutor(this);
+    }
+
+    protected CommandDivision(String command, String s2, String s3, String s4, String... a) {
+        Bukkit.getPluginCommand(command).setExecutor(this);
+        Bukkit.getPluginCommand(s2).setExecutor(this);
+        Bukkit.getPluginCommand(s3).setExecutor(this);
+        Bukkit.getPluginCommand(s4).setExecutor(this);
+
+        for(String s : a) {
+            Bukkit.getPluginCommand(s).setExecutor(this);
+        }
+    }
+
     protected final void addSubCommand(String command, CommandDivision division) {
         subCommands.put(command, division);
     }

@@ -6,7 +6,6 @@ import fly.factions.api.model.ExecutiveDivision;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.User;
 import fly.factions.api.permissions.FactionPermission;
-import fly.factions.impl.commands.faction.department.member.DepartmentMemberCommand;
 import fly.factions.impl.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

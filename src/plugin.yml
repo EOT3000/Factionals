@@ -13,5 +13,7 @@ commands:
     description:
   factionals:
     description:
-  plot:
+  rtpad:
+    description:
+  rtpa:
     description:

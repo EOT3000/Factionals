@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 
 public abstract class Serializer<T extends Savable> {
     protected Factionals factionals;
@@ -30,13 +31,19 @@ public abstract class Serializer<T extends Savable> {
 
         for(File file : serializer.dir().listFiles()) {
             if(!file.isDirectory()) {
-                X x = serializer.load(file);
+                try {
+                    X x = serializer.load(file);
 
-                if (x == null) {
-                    continue;
+                    if (x == null) {
+                        continue;
+                    }
+
+                    list.add(x);
+                } catch (Exception e) {
+                    Factionals.getFactionals().getLogger().log(Level.SEVERE, "Error on loading file " + file.getName());
+
+                    e.printStackTrace();
                 }
-
-                list.add(x);
             }
         }
 

@@ -1,4 +1,4 @@
-package fly.factions.impl.commands.faction.region.member.remove;
+package fly.factions.impl.commands.faction.province.member.add;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.model.Region;
@@ -9,9 +9,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class RegionMemberRemoveCommand extends CommandDivision {
-    public RegionMemberRemoveCommand() {
-        addHelpEntry("/f region member remove <region> <user>", "Removes a user from a region");
+public class ProvinceMemberAddCommand extends CommandDivision {
+    public ProvinceMemberAddCommand() {
+        addHelpEntry("/f province member add <region> <user>", "Add a user to a province");
 
         addSubCommand("*", this);
     }
@@ -26,7 +26,7 @@ public class RegionMemberRemoveCommand extends CommandDivision {
 
                 if(victim.getFaction().equals(factionRegion.getFaction())) {
 
-                    factionRegion.removeMember(victim);
+                    factionRegion.addMember(victim);
 
                     sender.sendMessage(ChatColor.GREEN + "Success!");
 
@@ -43,7 +43,7 @@ public class RegionMemberRemoveCommand extends CommandDivision {
             return false;
         }
 
-        sender.sendMessage(ChatColor.RED + "ERROR: that region doesn't exist");
+        sender.sendMessage(ChatColor.RED + "ERROR: that province doesn't exist");
 
         return false;
     }

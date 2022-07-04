@@ -1,4 +1,4 @@
-package fly.factions.impl.commands.faction.region.set.format.border;
+package fly.factions.impl.commands.faction.province.set.format.border;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
@@ -11,9 +11,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 
-public class SetRegionFormatBorderCommand extends CommandDivision {
-    public SetRegionFormatBorderCommand() {
-        addHelpEntry("/f region set format border <region name> <borderRed> <borderGreen> <borderBlue>", "Set the region dynmap border color");
+public class ProvinceSetFormatBorderCommand extends CommandDivision {
+    public ProvinceSetFormatBorderCommand() {
+        addHelpEntry("/f province set format border <province name> <borderRed> <borderGreen> <borderBlue>", "Set the province dynmap border color");
 
 
         addSubCommand("*", this);
@@ -26,7 +26,7 @@ public class SetRegionFormatBorderCommand extends CommandDivision {
         Region regionr = faction.getRegion(region);
 
         if (regionr == null) {
-            sender.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + region + ChatColor.RED + " does not exist");
+            sender.sendMessage(ChatColor.RED + "ERROR: the province " + ChatColor.YELLOW + region + ChatColor.RED + " does not exist");
 
             return false;
         }

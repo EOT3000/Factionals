@@ -1,4 +1,4 @@
-package fly.factions.impl.commands.faction.region.create;
+package fly.factions.impl.commands.faction.province.delete;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
@@ -10,9 +10,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class RegionCreateCommand extends CommandDivision {
-    public RegionCreateCommand() {
-        addHelpEntry("/f region create <name>", "Create a region with the given name");
+public class ProvinceDeleteCommand extends CommandDivision {
+    public ProvinceDeleteCommand() {
+        addHelpEntry("/f province delete <name>", "Deletes given province");
 
 
         addSubCommand("*", this);
@@ -21,20 +21,14 @@ public class RegionCreateCommand extends CommandDivision {
     public boolean run(CommandSender sender, String name) {
         User user = USERS.get(Bukkit.getPlayer(sender.getName()).getUniqueId());
 
-        if(!nameGood(name)) {
-            user.sendMessage(ChatColor.RED + "ERROR: invalid characters. Use numbers, english letters, or underscores in your region name (3-24 characters)");
-
-            return false;
-        }
-
-        if (user.getFaction().getRegion(name) != null) {
-            user.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + name + ChatColor.RED + " already exists");
+        if (user.getFaction().getRegion(name) == null) {
+            user.sendMessage(ChatColor.RED + "ERROR: the province " + ChatColor.YELLOW + name + ChatColor.RED + " does not exist");
             return false;
         }
 
         user.getFaction().addRegion(new RegionImpl(name, user, user.getFaction()));
 
-        user.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully created region " + ChatColor.YELLOW + name);
+        user.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully created province " + ChatColor.YELLOW + name);
 
         return true;
     }

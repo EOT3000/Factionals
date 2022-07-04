@@ -21,7 +21,7 @@ import fly.factions.impl.commands.faction.organization.OrganizationCommand;
 import fly.factions.impl.commands.faction.overclaim.OverclaimCommand;
 import fly.factions.impl.commands.faction.player.PlayerCommand;
 import fly.factions.impl.commands.faction.plot.PlotCommands;
-import fly.factions.impl.commands.faction.region.RegionCommand;
+import fly.factions.impl.commands.faction.province.ProvinceCommand;
 import fly.factions.impl.commands.faction.rename.RenameCommand;
 import fly.factions.impl.commands.faction.set.SetCommand;
 import fly.factions.impl.commands.faction.town.TownCommand;
@@ -29,7 +29,7 @@ import fly.factions.impl.commands.faction.unclaim.UnclaimCommand;
 
 public class FactionCommands extends CommandDivision {
     public FactionCommands() {
-        super("f");
+        super("f", "faction", "factions");
 
         addHelpEntry("/f", "Open this menu");
 
@@ -59,7 +59,7 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f set", "View faction settings commands");
 
-        addHelpEntry("/f region", "View region commands");
+        addHelpEntry("/f province", "View province commands");
 
         addHelpEntry("/f town", "View town commands");
 
@@ -106,7 +106,7 @@ public class FactionCommands extends CommandDivision {
         addSubCommand("info", new InfoCommand());
 
 
-        addSubCommand("region", new RegionCommand());
+        addSubCommand("province", new ProvinceCommand());
 
         addSubCommand("town", new TownCommand());
 

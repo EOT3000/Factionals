@@ -1,4 +1,4 @@
-package fly.factions.impl.commands.faction.region.set.leader;
+package fly.factions.impl.commands.faction.province.set.leader;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
@@ -11,9 +11,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class RegionSetLeaderCommand extends CommandDivision {
-    public RegionSetLeaderCommand() {
-        addHelpEntry("/f region set leader <region> <user>", "Set the region leader");
+public class ProvinceSetLeaderCommand extends CommandDivision {
+    public ProvinceSetLeaderCommand() {
+        addHelpEntry("/f province set leader <province> <user>", "Set the province leader");
 
 
         addSubCommand("*", this);
@@ -28,7 +28,7 @@ public class RegionSetLeaderCommand extends CommandDivision {
         User victim = USERS.get(Bukkit.getOfflinePlayer(newUser).getUniqueId());
 
         if (regionr == null) {
-            sender.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + region + ChatColor.RED + " does not exist");
+            sender.sendMessage(ChatColor.RED + "ERROR: the province " + ChatColor.YELLOW + region + ChatColor.RED + " does not exist");
 
             return false;
         }
@@ -41,7 +41,7 @@ public class RegionSetLeaderCommand extends CommandDivision {
 
         regionr.setLeader(victim);
 
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully set region leader to " + ChatColor.YELLOW + newUser);
+        sender.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully set province leader to " + ChatColor.YELLOW + newUser);
 
         return true;
     }

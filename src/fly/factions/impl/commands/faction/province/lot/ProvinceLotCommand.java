@@ -1,20 +1,18 @@
-package fly.factions.impl.commands.faction.region.lot;
+package fly.factions.impl.commands.faction.province.lot;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
-import fly.factions.api.model.Plot;
 import fly.factions.api.model.Region;
 import fly.factions.api.model.User;
 import fly.factions.impl.model.LotImpl;
 import fly.factions.impl.util.Pair;
-import fly.factions.impl.util.Plots;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class RegionLotCommand extends CommandDivision {
-    public RegionLotCommand() {
-        addHelpEntry("/f region lot <region name>", "Add a lot");
+public class ProvinceLotCommand extends CommandDivision {
+    public ProvinceLotCommand() {
+        addHelpEntry("/f region lot <province name>", "Add a lot");
 
         addSubCommand("*", this);
     }
@@ -25,14 +23,14 @@ public class RegionLotCommand extends CommandDivision {
         Region factionRegion = user.getFaction().getRegion(region);
 
         if(factionRegion == null) {
-            sender.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + region + " does not exist");
+            sender.sendMessage(ChatColor.RED + "ERROR: the province " + ChatColor.YELLOW + region + " does not exist");
 
             return false;
         }
 
         factionRegion.setLot(factionRegion.getLots().size(), new LotImpl(factionRegion, factionRegion.getLots().size(), ((Player) sender).getWorld()));
 
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + " lot added: " + ChatColor.YELLOW + (factionRegion.getLots().size()-1));
+        sender.sendMessage(ChatColor.LIGHT_PURPLE + "Lot added: " + ChatColor.YELLOW + (factionRegion.getLots().size()-1));
 
         return true;
     }

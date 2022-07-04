@@ -1,4 +1,4 @@
-package fly.factions.impl.commands.faction.region.info;
+package fly.factions.impl.commands.faction.province.info;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.model.Faction;
@@ -8,11 +8,11 @@ import fly.factions.api.model.User;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class RegionInfoCommand extends CommandDivision {
-    public RegionInfoCommand() {
+public class ProvinceInfoCommand extends CommandDivision {
+    public ProvinceInfoCommand() {
         addSubCommand("*", this);
 
-        addHelpEntry("/f region info <faction name> <region name>", "View information about a region");
+        addHelpEntry("/f province info <faction name> <province name>", "View information about a province");
     }
 
     public boolean run(CommandSender sender, String faction, String regionString) {
@@ -21,10 +21,12 @@ public class RegionInfoCommand extends CommandDivision {
         Region region = factionObject.getRegion(regionString);
 
         if(region == null) {
-            sender.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + regionString + ChatColor.RED + " does not exist");
+            sender.sendMessage(ChatColor.RED + "ERROR: the province " + ChatColor.YELLOW + regionString + ChatColor.RED + " does not exist");
 
             return false;
         }
+
+        sender.sendMessage("");
 
         sender.sendMessage(ChatColor.GOLD + regionString);
         sender.sendMessage(ChatColor.DARK_AQUA + "Leader: " + ChatColor.WHITE + region.getLeader().getName());

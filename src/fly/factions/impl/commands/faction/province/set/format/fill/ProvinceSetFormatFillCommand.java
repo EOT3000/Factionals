@@ -1,4 +1,4 @@
-package fly.factions.impl.commands.faction.region.set.format.fill;
+package fly.factions.impl.commands.faction.province.set.format.fill;
 
 import fly.factions.api.commands.CommandDivision;
 import fly.factions.api.commands.CommandRequirement;
@@ -11,9 +11,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 
-public class SetRegionFormatFillCommand extends CommandDivision {
-    public SetRegionFormatFillCommand() {
-        addHelpEntry("/f region set format fill <region name> <fillRed> <fillGreen> <fillBlue> <fillOpacity>", "Set the region dynmap fill format");
+public class ProvinceSetFormatFillCommand extends CommandDivision {
+    public ProvinceSetFormatFillCommand() {
+        addHelpEntry("/f province set format fill <province name> <fillRed> <fillGreen> <fillBlue> <fillOpacity>", "Set the province dynmap fill format");
 
 
         addSubCommand("*", this);
@@ -26,7 +26,7 @@ public class SetRegionFormatFillCommand extends CommandDivision {
         Region regionr = faction.getRegion(region);
 
         if (regionr == null) {
-            sender.sendMessage(ChatColor.RED + "ERROR: the region " + ChatColor.YELLOW + region + ChatColor.RED + " does not exist");
+            sender.sendMessage(ChatColor.RED + "ERROR: the province " + ChatColor.YELLOW + region + ChatColor.RED + " does not exist");
 
             return false;
         }
