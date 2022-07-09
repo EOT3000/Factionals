@@ -26,9 +26,9 @@ public class ProvinceDeleteCommand extends CommandDivision {
             return false;
         }
 
-        user.getFaction().addRegion(new RegionImpl(name, user, user.getFaction()));
+        user.getFaction().removeRegion(user.getFaction().getRegion(name));
 
-        user.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully created province " + ChatColor.YELLOW + name);
+        user.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully deleted province " + ChatColor.YELLOW + name);
 
         return true;
     }

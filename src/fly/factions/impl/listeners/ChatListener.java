@@ -16,7 +16,7 @@ public class ChatListener extends ListenerImpl {
 
         if(user.getFactionChat()) {
             if(user.getFaction() != null) {
-                user.getFaction().broadcast(ChatColor.translateAlternateColorCodes('&', "&6[Faction Chat] &e<" + event.getPlayer().getName() + "> &8") + event.getMessage());
+                user.getFaction().broadcast(ChatColor.translateAlternateColorCodes('&', "&6[Faction Chat] &e<" + event.getPlayer().getName() + "> &f") + event.getMessage());
 
                 Factionals.getFactionals().getLogger().info("[Faction] " + event.getPlayer() + ": " + event.getMessage());
 

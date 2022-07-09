@@ -238,7 +238,7 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         int maxPower = 0;
 
         for(int x = 1; x <= members.size(); x++) {
-            maxPower+=factionals.getConfiguration().getPowerForPlayer(x);
+            maxPower+=factionals.getConfiguration().getPowerForPlayer(x)+20000;
         }
 
         return maxPower;

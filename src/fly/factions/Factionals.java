@@ -1,6 +1,5 @@
 package fly.factions;
 
-import com.google.common.io.Files;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.PlayerGroup;
 import fly.factions.api.model.Plot;
@@ -21,11 +20,13 @@ import fly.factions.impl.registries.RegistryImpl;
 import fly.factions.impl.registries.StringRegistryImpl;
 import fly.factions.impl.serialization.FactionSerializer;
 import fly.factions.impl.serialization.UserSerializer;
+import fly.factions.impl.util.Plots;
 import fly.factions.impl.util.Ticker;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,9 +38,12 @@ import org.dynmap.markers.MarkerSet;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
     private Map<Class<?>, Registry> registries = new HashMap<>();
@@ -96,8 +100,8 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         configuration = new Configuration();
 
 
-        factionCommand = new FactionCommand(this);
-        plotCommand = new PlotCommand(this);
+        //factionCommand = new FactionCommand(this);
+        //plotCommand = new PlotCommand(this);
 
         new FactionCommands();
 
@@ -132,7 +136,7 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
             for(File file : FactionSerializer.dir.listFiles()) {
                 try {
                     if(!file.isDirectory()) {
-                        Files.copy(file, new File(FactionSerializer.dir.getAbsolutePath() + "/previous/" + file.getName()));
+                        com.google.common.io.Files.copy(file, new File(FactionSerializer.dir.getAbsolutePath() + "/previous/" + file.getName()));
                     }
                 } catch (IOException e) {
                     logger.log(Level.SEVERE, file.getName() + " has errored on autosave");
@@ -143,10 +147,15 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
             Serializer.saveAll(registries.get(Faction.class).list(), Faction.class);
 
+            Serializer.saveAll(registries.get(User.class).list(), User.class);
+
             logger.info("Autosaved factions");
         }, 6000, 6000);
 
         Bukkit.getScheduler().runTaskTimer(this, Ticker::tick, 20, 120);
+
+        dortps();
+
 
 
         /*int count = 0;
@@ -173,6 +182,32 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         }*/
 
         //TODO: FIX THIS HUJDsinjkfjKHJENUDIWQHG(OI#@HNFuiwh9832rhiuewdnsaio
+    }
+
+    private void dortps() {
+        System.out.println("reloading rtps");
+
+        locs = new ArrayList<>();
+
+        File rtps = new File("plugins\\Factionals\\rtps.txt");
+
+        try {
+            List<String> ss = Files.lines(rtps.toPath()).collect(Collectors.toList());
+
+            for(String s : ss) {
+                String[] spl = s.split(",");
+
+                int x = Integer.parseInt(spl[0]);
+                int y = Integer.parseInt(spl[1]);
+                int z = Integer.parseInt(spl[2]);
+
+                World world = Bukkit.getWorld(spl[3]);
+
+                locs.add(new Location(world,x,y,z));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private List<Faction> menuListable(User user) {
@@ -224,14 +259,40 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("rtpad") && sender.isOp()) {
-            Bukkit.getPlayer(args[0]).teleport(locs.get(new Random().nextInt(locs.size())).clone());
+            attemptTp(args[0], 5);
         } else if(command.getName().equalsIgnoreCase("rtpa")) {
             if(sender.isOp()) {
                 locs.add(((Player) sender).getLocation().clone());
             }
+        } else if(command.getName().equalsIgnoreCase("rtpc")) {
+            if(sender.isOp()) {
+                dortps();
+            }
         }
 
         return true;
+    }
+
+    public void attemptTp(String s, int attempts) {
+        if(attempts <= 0) {
+            Bukkit.getPlayer(s).sendMessage(ChatColor.RED + "Failed to find a safe random teleport location in 5 attempts. Please try again");
+
+            return;
+        }
+
+        Random random = new Random();
+
+        Location loc = locs.get(new Random().nextInt(locs.size())).clone().add(random.nextInt(20)-10,0,random.nextInt(20)-10);
+
+        loc = loc.getWorld().getHighestBlockAt(loc).getLocation().clone().add(0,1,0);
+
+        Registry<Plot, Integer> registry = getRegistry(Plot.class, Integer.class);
+
+        if(registry.get(Plots.getLocationId(loc)) == null) {
+            Bukkit.getPlayer(s).teleport(loc);
+        } else {
+            attemptTp(s, attempts-1);
+        }
     }
 
     @EventHandler

@@ -5,6 +5,7 @@ import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;
 import fly.factions.api.model.Region;
 import fly.factions.api.model.User;
+import fly.factions.impl.model.RegionImpl;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,11 +27,14 @@ public class FactionJoinCommand extends CommandDivision {
         Faction want = USERS.get(((Player) sender).getUniqueId()).getFaction();
 
         if(want.hasInviteFrom(join)) {
-            //for(Region region : want.getRegions())
-            //want.joinRegion(join, region);
+            Region region = new RegionImpl("merge_" + random.nextInt(), want.getLeader(), join);
+
+            join.addRegion(region);
 
             for(Plot plot : want.getPlots()) {
                 plot.setFaction(join);
+
+                plot.setAdministrator(region);
             }
 
             for(User user : new ArrayList<>(want.getMembers())) {

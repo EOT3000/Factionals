@@ -32,7 +32,7 @@ public class ClaimCommand extends CommandDivision {
         User user = USERS.get(player.getUniqueId());
 
         if(type.equalsIgnoreCase("fill")) {
-            List<Pair<Integer, Integer>> list = fillNode(chunk.getX(), chunk.getZ(), chunk.getWorld(), new MutableInt(2048), new ArrayList<>());
+            List<Pair<Integer, Integer>> list = fillNode(chunk.getX(), chunk.getZ(), chunk.getWorld(), new MutableInt(2048), new ArrayList<>(), false);
 
             if(list == null) {
                 sender.sendMessage(ChatColor.RED  + "ERROR: space too large (more than 2048 chunks)");
@@ -51,6 +51,24 @@ public class ClaimCommand extends CommandDivision {
             }
 
             Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Claim for " + user.getFaction().getId(), "Fill", user.getName());
+
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully filled area");
+
+            return true;
+        } else if(type.equalsIgnoreCase("fill-unsafe")) {
+            List<Pair<Integer, Integer>> list = fillNode(chunk.getX(), chunk.getZ(), chunk.getWorld(), new MutableInt(2048), new ArrayList<>(), true);
+
+            if(user.getFaction().getPlots().size() + list.size() >= user.getFaction().getCurrentPower()) {
+                sender.sendMessage(ChatColor.RED + "ERROR: not enough power");
+
+                return false;
+            }
+
+            for(Pair<Integer, Integer> claim : list) {
+                claim0(claim.getKey(), claim.getValue(), chunk.getWorld(), user.getFaction());
+            }
+
+            Plots.printChange(chunk.getWorld(), chunk.getX(), chunk.getZ(), "Claim for " + user.getFaction().getId(), "Fill-Unsafe", user.getName());
 
             player.sendMessage(ChatColor.LIGHT_PURPLE + "Successfully filled area");
 
@@ -81,10 +99,14 @@ public class ClaimCommand extends CommandDivision {
         }
     }
 
-    private static List<Pair<Integer, Integer>> fillNode(int x, int z, World w, MutableInt left, List<Pair<Integer, Integer>> permList) {
+    private static List<Pair<Integer, Integer>> fillNode(int x, int z, World w, MutableInt left, List<Pair<Integer, Integer>> permList, boolean unsafe) {
         List<Pair<Integer, Integer>> list = new ArrayList<>();
 
         if(((int)left.getValue()) <= 0) {
+            if(unsafe) {
+                return list;
+            }
+
             return null;
         }
 
@@ -110,7 +132,7 @@ public class ClaimCommand extends CommandDivision {
         }
 
         for(Pair<Integer, Integer> pair : list) {
-            if(fillNode(pair.getKey(), pair.getValue(), w, left, permList) == null) {
+            if(fillNode(pair.getKey(), pair.getValue(), w, left, permList, unsafe) == null) {
                 return null;
             }
         }
