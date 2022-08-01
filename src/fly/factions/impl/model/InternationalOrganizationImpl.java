@@ -20,8 +20,8 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
     private String description = "";
 
     private List<FactionComponent> members = new ArrayList<>();
-    private List<IntOrgCouncil> councils = new ArrayList<>();
-    private List<IntOrgLevel> levels = new ArrayList<>();
+    //private List<IntOrgCouncil> councils = new ArrayList<>();
+    //private List<IntOrgLevel> levels = new ArrayList<>();
 
 
     public InternationalOrganizationImpl(String name, User leader) {
@@ -173,28 +173,8 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
     }
 
     @Override
-    public List<IntOrgCouncil> getCouncils() {
-        return new ArrayList<>(councils);
-    }
-
-    @Override
-    public List<IntOrgLevel> getLevels() {
-        return new ArrayList<>(levels);
-    }
-
-    @Override
     public List<FactionComponent> getMemberOrganizations() {
         return new ArrayList<>(members);
-    }
-
-    @Override
-    public void addCouncil(IntOrgCouncil council) {
-        councils.add(council);
-    }
-
-    @Override
-    public void addLevel(IntOrgLevel level) {
-        levels.add(level);
     }
 
     @Override
@@ -203,23 +183,8 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
     }
 
     @Override
-    public void removeCouncil(IntOrgCouncil council) {
-        councils.remove(council);
-    }
-
-    @Override
-    public void removeLevel(IntOrgLevel level) {
-        levels.remove(level);
-    }
-
-    @Override
     public void removeMemberOrganization(FactionComponent component) {
         members.remove(component);
-    }
-
-    @Override
-    public boolean isLevel(Faction faction, IntOrgLevel level) {
-        return true;
     }
 
     // Misc and Dynmap

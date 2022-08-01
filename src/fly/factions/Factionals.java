@@ -282,7 +282,7 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
         Random random = new Random();
 
-        Location loc = locs.get(new Random().nextInt(locs.size())).clone().add(random.nextInt(20)-10,0,random.nextInt(20)-10);
+        Location loc = locs.get(random.nextInt(locs.size())).clone().add(random.nextInt(20)-10,0,random.nextInt(20)-10);
 
         loc = loc.getWorld().getHighestBlockAt(loc).getLocation().clone().add(0,1,0);
 

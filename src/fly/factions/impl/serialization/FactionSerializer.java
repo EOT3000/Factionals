@@ -10,16 +10,12 @@ import fly.factions.api.serialization.Serializer;
 import fly.factions.impl.model.*;
 import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
-import org.bukkit.Chunk;
 import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.*;
-import java.util.logging.Level;
 
 public class FactionSerializer extends Serializer<Faction> {
     public static final File dir = new File("plugins\\Factionals\\factions");
@@ -320,7 +316,7 @@ public class FactionSerializer extends Serializer<Faction> {
     }
 
     @Override
-    public void save(Faction faction) {
+    public Pair<YamlConfiguration, File> save(Faction faction) {
         File o = ((HasFile) faction).getFile();
 
         File file = o == null ? new File("plugins\\Factionals\\factions\\" + faction.getCreationTime() + "-" + faction.getName()) : o;
@@ -523,10 +519,6 @@ public class FactionSerializer extends Serializer<Faction> {
 
         configuration.set("creationTime", faction.getCreationTime());
 
-        try {
-            configuration.save(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return new Pair<>(configuration, file);
     }
 }

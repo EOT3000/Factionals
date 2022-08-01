@@ -5,7 +5,7 @@ import fly.factions.api.model.Faction;
 import java.util.List;
 
 public interface InternationalOrganization extends Organization, Faction, IntOrgLevel {
-    List<IntOrgCouncil> getCouncils();
+/*    List<IntOrgCouncil> getCouncils();
 
     List<IntOrgLevel> getLevels();
 
@@ -17,5 +17,7 @@ public interface InternationalOrganization extends Organization, Faction, IntOrg
 
     void removeLevel(IntOrgLevel level);
 
-    boolean isLevel(Faction faction, IntOrgLevel level);
+    boolean isLevel(Faction faction, IntOrgLevel level);*/
+
+    //TODO: make this
 }

@@ -4,6 +4,7 @@ import fly.factions.Factionals;
 import fly.factions.api.model.User;
 import fly.factions.api.serialization.Serializer;
 import fly.factions.impl.model.UserImpl;
+import fly.factions.impl.util.Pair;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -33,16 +34,12 @@ public class UserSerializer extends Serializer<User> {
     }
 
     @Override
-    public void save(User savable) {
+    public Pair<YamlConfiguration, File> save(User savable) {
         YamlConfiguration config = new YamlConfiguration();
 
         config.set("uuid", savable.getUniqueId().toString());
         config.set("power", savable.getPower());
 
-        try {
-            config.save(new File(dir.getPath() + "\\" + savable.getUniqueId().toString()));
-        } catch (IOException e) {
-            //
-        }
+        return new Pair<>(config, new File(dir.getPath() + "\\" + savable.getUniqueId().toString()));
     }
 }

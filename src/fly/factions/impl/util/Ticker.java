@@ -21,6 +21,8 @@ public class Ticker {
         for(User user : userRegistry.list()) {
             if(Bukkit.getOfflinePlayer(user.getUniqueId()).isOnline()) {
                 user.setPower(user.getPower() + 10);
+            } else {
+                user.setPower(user.getPower() + 1);
             }
         }
     }

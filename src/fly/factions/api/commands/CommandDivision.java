@@ -37,7 +37,7 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
 
     protected static final Pattern pattern = Pattern.compile("^((?!([a-z]|[A-Z]|[0-9]|_)).)*$");
 
-    private Map<String, CommandDivision> subCommands = new HashMap<>();
+    private Map<String, List<CommandDivision>> subCommands = new HashMap<>();
     private List<Pair<String, String>> helpEntries = new ArrayList<>();
 
     protected CommandDivision() {
@@ -78,7 +78,11 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
     }
 
     protected final void addSubCommand(String command, CommandDivision division) {
-        subCommands.put(command, division);
+        if(!subCommands.containsKey(command)) {
+            subCommands.put(command, new ArrayList<>());
+        }
+
+        subCommands.get(command).add(division);
     }
 
     protected final void addHelpEntry(String syntax, String description) {
@@ -275,7 +279,7 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
     // If nothing and it doesn't terminate here, null
      public CommandDivision getNext(String string) {
          if(subCommands.containsKey(string)) {
-             return subCommands.get(string);
+             return subCommands.get(string).get(0);
          }
         
         if(string.isEmpty()) {

@@ -2,6 +2,9 @@ package fly.factions.api.serialization;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.Savable;
+import fly.factions.impl.util.Pair;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,9 +21,22 @@ public abstract class Serializer<T extends Savable> {
     }
 
     public static void saveAll(Collection<? extends Savable> list, Class clazz) {
+        List<Pair<YamlConfiguration, File>> configs = new ArrayList<>();
+
         for(Savable savable : list) {
-            save0(savable, clazz);
+            configs.add(save0(savable, clazz));
         }
+
+        Bukkit.getScheduler().runTaskAsynchronously(Factionals.getFactionals(), () -> {
+            for(Pair<YamlConfiguration, File> pair : configs) {
+                try {
+                    pair.getKey().save(pair.getValue());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public static <X extends Savable> Collection<X> loadAll(Class<X> clazz) {
@@ -52,10 +68,10 @@ public abstract class Serializer<T extends Savable> {
         return list;
     }
 
-    private static <X extends Savable> void save0(X savable, Class clazz) {
+    private static <X extends Savable> Pair<YamlConfiguration, File> save0(X savable, Class clazz) {
         Serializer<X> serializer = Factionals.getFactionals().getRegistry(Serializer.class, Class.class).get(clazz);
 
-        serializer.save(savable);
+        return serializer.save(savable);
     }
 
     public void onLoad() {
@@ -64,7 +80,7 @@ public abstract class Serializer<T extends Savable> {
 
     public abstract File dir();
 
-    public abstract void save(T t);
+    public abstract Pair<YamlConfiguration, File> save(T t);
 
     public abstract T load(File file);
 }
