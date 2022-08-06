@@ -159,4 +159,8 @@ public interface Faction extends LandAdministrator<Plot> {
     void setOpen(boolean w);
 
     boolean isOpen();
+
+    boolean requiresUpdate();
+
+    void setRequiresUpdate(boolean b);
 }

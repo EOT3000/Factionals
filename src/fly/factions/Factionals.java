@@ -11,7 +11,7 @@ import fly.factions.impl.commands.FactionCommand;
 import fly.factions.impl.commands.PlotCommand;
 import fly.factions.impl.commands.faction.FactionCommands;
 import fly.factions.impl.configuration.Configuration;
-import fly.factions.impl.dynmap.DynmapManager;
+import fly.factions.impl.dynmap.Dynmap;
 import fly.factions.impl.listeners.ChatListener;
 import fly.factions.impl.listeners.DeathListener;
 import fly.factions.impl.listeners.JoinLeaveListener;
@@ -59,6 +59,8 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
     private MarkerSet markerSet;
 
+    public boolean debug = false;
+
     public Factionals() {
         FACTIONALS = this;
     }
@@ -92,7 +94,7 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         //new MenusListener();
 
 
-        new DynmapManager();
+        new Dynmap();
 
 
         economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
@@ -268,6 +270,16 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
             if(sender.isOp()) {
                 dortps();
             }
+        } else if(command.getName().equalsIgnoreCase("fdebug")) {
+            sender.sendMessage("-----");
+
+            sender.sendMessage("before: " + debug);
+
+            debug = !debug;
+
+            sender.sendMessage("now: " + debug);
+
+            sender.sendMessage("-----");
         }
 
         return true;

@@ -186,6 +186,8 @@ public class RegionImpl extends AbstractLandAdministrator<Plot> implements Regio
                     break;
             }
 
+            getFaction().setRequiresUpdate(true);
+
             return true;
         }
 

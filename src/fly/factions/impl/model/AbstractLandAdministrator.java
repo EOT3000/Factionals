@@ -57,10 +57,14 @@ public abstract class AbstractLandAdministrator<T> extends AbstractFactionCompon
     @Override
     public void addPlot(T plot) {
         plots.add(plot);
+
+        getFaction().setRequiresUpdate(true);
     }
 
     @Override
     public void removePlot(T plot) {
         plots.remove(plot);
+
+        getFaction().setRequiresUpdate(true);
     }
 }

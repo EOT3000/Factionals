@@ -36,6 +36,8 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     private boolean open;
 
+    private boolean ru = true;
+
     public FactionImpl(String name, User leader, long time, File file) {
         super(name, leader);
 
@@ -178,11 +180,15 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
     @Override
     public void addRegion(Region region) {
         regions.add(region);
+
+        ru = true;
     }
 
     @Override
     public void removeRegion(Region region) {
         regions.remove(region);
+
+        ru = true;
     }
 
     @Override
@@ -328,6 +334,16 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
     @Override
     public boolean isOpen() {
         return open;
+    }
+
+    @Override
+    public boolean requiresUpdate() {
+        return ru;
+    }
+
+    @Override
+    public void setRequiresUpdate(boolean b) {
+        this.ru = b;
     }
 
     //TODO: Move commands into separate class

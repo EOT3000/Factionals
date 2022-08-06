@@ -3,7 +3,6 @@ package fly.factions.impl.dynmap;
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
 import fly.factions.impl.util.LocationStorage;
-import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,23 +21,32 @@ import java.util.*;
  * This code has been modified
  */
 
-public class DynmapManager {
-    private MarkerSet set;
+public class Dynmap {
+    private Map<String, Map<Integer, AreaMarker>> markers = new HashMap<>();
+
+    private MarkerSet facSet;
+    private MarkerSet outSet;
     private MarkerSet regSet;
     private MarkerSet twnSet;
     private MarkerSet lotSet;
     private DynmapAPI api;
 
-    public DynmapManager() {
+
+
+    public Dynmap() {
         api = (DynmapAPI) Bukkit.getPluginManager().getPlugin("dynmap");
 
-        set = api.getMarkerAPI().getMarkerSet("factions.factionals.dynmap");
+        facSet = api.getMarkerAPI().getMarkerSet("factions.factionals.dynmap");
+        outSet = api.getMarkerAPI().getMarkerSet("outline.factionals.dynmap");
         regSet = api.getMarkerAPI().getMarkerSet("regions.factionals.dynmap");
         twnSet = api.getMarkerAPI().getMarkerSet("towns.factionals.dynmap");
         lotSet = api.getMarkerAPI().getMarkerSet("lots.factionals.dynmap");
 
-        if(set == null) {
-            set = api.getMarkerAPI().createMarkerSet("factions.factionals.dynmap", "Factions", null, false);
+        if(facSet == null) {
+            facSet = api.getMarkerAPI().createMarkerSet("factions.factionals.dynmap", "Factions", null, false);
+        }
+        if(outSet == null) {
+            outSet = api.getMarkerAPI().createMarkerSet("outline.factionals.dynmap", "Outline", null, false);
         }
         if(regSet == null) {
             regSet = api.getMarkerAPI().createMarkerSet("regions.factionals.dynmap", "Regions", null, false);
@@ -50,40 +58,75 @@ public class DynmapManager {
             lotSet = api.getMarkerAPI().createMarkerSet("lots.factionals.dynmap", "Lots", null, false);
         }
 
-        set.setLayerPriority(100);
+        facSet.setLayerPriority(100);
+        outSet.setLayerPriority(75);
         regSet.setLayerPriority(50);
         twnSet.setLayerPriority(25);
         lotSet.setLayerPriority(0);
 
-        Bukkit.getScheduler().runTaskTimer(Factionals.getFactionals(), this::run, 150, 150);
+        Bukkit.getScheduler().runTaskTimer(Factionals.getFactionals(), this::runMacro, 300, 600);
+        Bukkit.getScheduler().runTaskTimer(Factionals.getFactionals(), this::runMicro, 600, 1200);
     }
 
-    enum direction { XPLUS, ZPLUS, XMINUS, ZMINUS }
+    public void runMacro() {
+        List<StoredData> list = new ArrayList<>();
 
-    private void run() {
-        for(AreaMarker marker : set.getAreaMarkers()) {
-            marker.deleteMarker();
-        }
-        for(AreaMarker marker : regSet.getAreaMarkers()) {
-            marker.deleteMarker();
-        }
-        for(AreaMarker marker : twnSet.getAreaMarkers()) {
-            marker.deleteMarker();
-        }
-        for(AreaMarker marker : lotSet.getAreaMarkers()) {
-            marker.deleteMarker();
+        for (Faction faction : Factionals.getFactionals().getRegistry(Faction.class).list()) {
+            for (Region region : faction.getRegions()) {
+                StoredData r = new StoredData();
+
+                r.borderRGB = region.getBorderColor().asRGB();
+                r.fillRGB = region.getFillColor().asRGB();
+                r.fillO = region.getFillOpacity();
+
+                r.id = region.getId();
+                r.clazz = region.getClass().getName();
+                r.desc = region.getDesc();
+
+                r.plots = region.getPlots();
+
+                r.set = regSet;
+
+                r.outline = false;
+
+                list.add(r);
+            }
+
+            StoredData f = new StoredData();
+
+            f.borderRGB = faction.getBorderColor().asRGB();
+            f.fillRGB = faction.getFillColor().asRGB();
+            f.fillO = faction.getFillOpacity();
+
+            f.id = faction.getId();
+            f.clazz = faction.getClass().getName();
+            f.desc = faction.getDesc();
+
+            f.plots = faction.getPlots();
+
+            f.set = facSet;
+
+            f.outline = true;
+
+            list.add(f);
         }
 
-        for(Faction faction : Factionals.getFactionals().getRegistry(Faction.class).list()) {
+        Bukkit.getScheduler().runTaskAsynchronously(Factionals.getFactionals(), () -> {
             for(World world : Bukkit.getWorlds()) {
-                addToMap(set, faction, world, false);
+                for (StoredData data : list) {
+                    addToMap(data.set, data, world, data.outline);
+                }
+            }
+        });
+    }
 
-                for(Region region : faction.getRegions()) {
-                    addToMap(regSet, region, world, false);
-
+    public void runMicro() {
+        for (World world : Bukkit.getWorlds()) {
+            for (Faction faction : Factionals.getFactionals().getRegistry(Faction.class).list()) {
+                for (Region region : faction.getRegions()) {
                     Map<Integer, List<Location>> lotsAreas = new HashMap<>();
 
-                    for(Integer lot : region.getLots().keySet()) {
+                    for (Integer lot : region.getLots().keySet()) {
                         lotsAreas.put(lot, new ArrayList<>());
                     }
 
@@ -91,25 +134,28 @@ public class DynmapManager {
                         lotsAreas.get(region.getLot(area).getId()).add(new Location(world, area.x, 0, area.z));
                     }
 
-                    for(Lot lot : region.getLots().values()) {
-                        addToMapLot(lotSet, lotsAreas.get(lot.getId()), world, "LotImpl", "lot-" + lot.getId() + "-" + region.getId(), false);
+                    for (Lot lot : region.getLots().values()) {
+                        Bukkit.getScheduler().runTaskAsynchronously(Factionals.getFactionals(), () -> {
+                            addToMapLot(lotSet, lotsAreas.get(lot.getId()), world, "LotImpl", "lot-" + lot.getId() + "-" + region.getId(), lot.getType().equals(PlotType.WILDERNESS));
+                        });
                     }
 
-                    for(Town town : region.getTowns()) {
+                    for (Town town : region.getTowns()) {
                         List<Location> townLocations = new ArrayList<>();
 
-                        for(Lot lot : town.getPlots()) {
+                        for (Lot lot : town.getPlots()) {
                             townLocations.addAll(lotsAreas.get(lot.getId()));
                         }
-
-                        addToMapLot(twnSet, townLocations, world, "TownImpl", town.getId(), false);
+                        Bukkit.getScheduler().runTaskAsynchronously(Factionals.getFactionals(), () -> {
+                            addToMapLot(twnSet, townLocations, world, "TownImpl", town.getId(), false);
+                        });
                     }
                 }
-
-                addToMap(regSet, faction, world, true);
             }
         }
     }
+
+    enum direction { XPLUS, ZPLUS, XMINUS, ZMINUS }
 
     private int floodFillTarget(TileFlags src, TileFlags dest, int x, int y) {
         int cnt = 0;
@@ -137,17 +183,12 @@ public class DynmapManager {
         return cnt;
     }
 
-    private void addStyle(LandAdministrator admin, AreaMarker m) {
-        m.setLineStyle(1, admin.getBorderOpacity(), admin.getBorderColor().asRGB());
-        m.setFillStyle(admin.getFillOpacity(), admin.getFillColor().asRGB());
-    }
-
-    private void addToMap(MarkerSet set, LandAdministrator<Plot> admin, World world, boolean outline) {
+    private void addToMap(MarkerSet set, StoredData admin, World world, boolean outline) {
         double[] x;
         double[] z;
         int poly_index = 0; /* Index of polygon for given faction */
 
-        Collection<Plot> blocks = admin.getPlots();
+        Collection<Plot> blocks = new ArrayList<>(admin.plots);
 
         LinkedList<Plot> nodevals = new LinkedList<>();
         TileFlags curblks = new TileFlags();
@@ -259,7 +300,7 @@ public class DynmapManager {
                     }
                 }
                 /* Build information for specific area */
-                String polyid = admin.getClass().getName() + "__" + admin.getId() + "__" + world + "__" + poly_index + "__" + outline;
+                String polyid = admin.clazz + "__" + admin.id + "__" + world + "__" + poly_index + "__" ;
                 int sz = linelist.size();
                 x = new double[sz];
                 z = new double[sz];
@@ -269,18 +310,34 @@ public class DynmapManager {
                     z[i] = (double) line[1] * 16.0;
                 }
 
-                AreaMarker m = set.createAreaMarker(polyid, admin.getDesc(), false, world.getName(), x, z, false);
+                markers.putIfAbsent(admin.clazz + admin.id + "-main-" + world.getName(), new HashMap<>());
 
-                m.setDescription(admin.getDesc());
+                markers.get(admin.clazz + admin.id + "-main-" + world.getName()).putIfAbsent(poly_index, set.createAreaMarker(polyid, admin.desc, false, world.getName(), x, z, false));
+
+                AreaMarker m = markers.get(admin.clazz + admin.id + "-main-" + world.getName()).get(poly_index);
+
+                m.setCornerLocations(x, z);
+
+                m.setDescription(admin.desc);
+
+                m.setLineStyle(1, 1, admin.borderRGB);
+
+                m.setFillStyle(admin.fillO, admin.fillRGB);
 
                 if(outline) {
-                    m.setFillStyle(0, 0);
-                    m.setLineStyle(3, 1, admin.getBorderColor().asRGB());
-                } else {
-                    /* Set line and fill properties */
-                    addStyle(admin, m);
-                }
+                    markers.putIfAbsent(admin.clazz + admin.id + "-outline-" + world.getName(), new HashMap<>());
 
+                    markers.get(admin.clazz + admin.id + "-outline-" + world.getName()).putIfAbsent(poly_index, outSet.createAreaMarker(polyid, admin.desc, false, world.getName(), x, z, false));
+
+                    AreaMarker m2 = markers.get(admin.clazz + admin.id + "-outline-" + world.getName()).get(poly_index);
+
+                    m2.setCornerLocations(x, z);
+
+                    m2.setDescription(admin.desc);
+
+                    m2.setFillStyle(0, 0);
+                    m2.setLineStyle(3, 1, admin.borderRGB);
+                }
 
 
                 /* Add to map */
@@ -289,7 +346,7 @@ public class DynmapManager {
         }
     }
 
-    private void addToMapLot(MarkerSet set, List<Location> locations, World world, String clazz, String id, boolean outline) {
+    private void addToMapLot(MarkerSet set, List<Location> locations, World world, String clazz, String id, boolean wild) {
         double[] x;
         double[] z;
         int poly_index = 0; /* Index of polygon for given faction */
@@ -404,23 +461,23 @@ public class DynmapManager {
                     }
                 }
                 /* Build information for specific area */
-                String polyid = clazz + "__" + id + "__" + world + "__" + poly_index + "__" + outline;
+                String polyid = clazz + "__" + id + "__" + world + "__" + poly_index + "__";
                 int sz = linelist.size();
                 x = new double[sz];
                 z = new double[sz];
                 for (int i = 0; i < sz; i++) {
                     int[] line = linelist.get(i);
-                    x[i] = (double) line[0];
-                    z[i] = (double) line[1];
+                    x[i] = line[0];
+                    z[i] = line[1];
                 }
 
                 AreaMarker m = set.createAreaMarker(polyid, "bruh", false, world.getName(), x, z, false);
 
-                if (outline) {
-                    m.setFillStyle(0, 0);
-                    m.setLineStyle(3, 1, 16777215);
-                } else {
+                if(wild) {
                     /* Set line and fill properties */
+                    m.setLineStyle(1, 1, 0x007F00);
+                    m.setFillStyle(0.1, 0x007F00);
+                } else {
                     m.setLineStyle(1, 1, 16777215);
                     m.setFillStyle(0.1, 16777215);
                 }
@@ -431,5 +488,22 @@ public class DynmapManager {
                 poly_index++;
             }
         }
+    }
+
+    static class StoredData {
+        Collection<Plot> plots;
+
+        double fillO;
+
+        int fillRGB;
+        int borderRGB;
+
+        String id;
+        String clazz;
+        String desc;
+
+        MarkerSet set;
+
+        boolean outline;
     }
 }
