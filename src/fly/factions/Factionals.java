@@ -19,6 +19,7 @@ import fly.factions.impl.listeners.PlotListener;
 import fly.factions.impl.registries.RegistryImpl;
 import fly.factions.impl.registries.StringRegistryImpl;
 import fly.factions.impl.serialization.FactionSerializer;
+import fly.factions.impl.serialization.OrganizationSerializer;
 import fly.factions.impl.serialization.UserSerializer;
 import fly.factions.impl.util.Plots;
 import fly.factions.impl.util.Ticker;
@@ -85,6 +86,7 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
         new FactionSerializer(this);
         new UserSerializer(this);
+        new OrganizationSerializer(this);
 
 
         new JoinLeaveListener();
@@ -122,6 +124,12 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         
         Serializer.loadAll(Faction.class);
 
+        Collection<Organization> orgList = Serializer.loadAll(Organization.class);
+
+        for(Organization org : orgList) {
+            registries.get(Organization.class).set(org.getName(), org);
+        }
+
         //onDisable();
 
         //System.exit(0);
@@ -129,32 +137,56 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             logger.info("Faction autosave start");
 
-            File dir2 = new File(FactionSerializer.dir.getAbsolutePath() + "/previous");
+            Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
 
-            if(!dir2.exists()) {
-                dir2.mkdir();
-            }
+                File dir2 = new File(FactionSerializer.dir.getAbsolutePath() + "/previous");
 
-            for(File file : FactionSerializer.dir.listFiles()) {
-                try {
-                    if(!file.isDirectory()) {
-                        com.google.common.io.Files.copy(file, new File(FactionSerializer.dir.getAbsolutePath() + "/previous/" + file.getName()));
-                    }
-                } catch (IOException e) {
-                    logger.log(Level.SEVERE, file.getName() + " has errored on autosave");
-
-                    e.printStackTrace();
+                if (!dir2.exists()) {
+                    dir2.mkdir();
                 }
-            }
 
-            Serializer.saveAll(registries.get(Faction.class).list(), Faction.class);
+                for (File file : FactionSerializer.dir.listFiles()) {
+                    try {
+                        if (!file.isDirectory()) {
+                            com.google.common.io.Files.copy(file, new File(FactionSerializer.dir.getAbsolutePath() + "/previous/" + file.getName()));
+                        }
+                    } catch (IOException e) {
+                        logger.log(Level.SEVERE, file.getName() + " has errored on autosave (facs)");
 
-            Serializer.saveAll(registries.get(User.class).list(), User.class);
+                        e.printStackTrace();
+                    }
+                }
 
-            logger.info("Autosaved factions");
+                File dir3 = new File(OrganizationSerializer.dir.getAbsolutePath() + "/previous");
+
+                if (!dir3.exists()) {
+                    dir3.mkdir();
+                }
+
+                for (File file : OrganizationSerializer.dir.listFiles()) {
+                    try {
+                        if (!file.isDirectory()) {
+                            com.google.common.io.Files.copy(file, new File(OrganizationSerializer.dir.getAbsolutePath() + "/previous/" + file.getName()));
+                        }
+                    } catch (IOException e) {
+                        logger.log(Level.SEVERE, file.getName() + " has errored on autosave (orgs)");
+
+                        e.printStackTrace();
+                    }
+                }
+
+                Serializer.saveAll(registries.get(Faction.class).list(), Faction.class);
+
+                Serializer.saveAll(registries.get(User.class).list(), User.class);
+
+                Serializer.saveAll(registries.get(Organization.class).list(), Organization.class);
+
+                logger.info("Autosaved factions");
+            });
         }, 6000, 6000);
 
         Bukkit.getScheduler().runTaskTimer(this, Ticker::tick, 20, 120);
+        Bukkit.getScheduler().runTaskTimer(this, Ticker::tickHour, 20, 72000);
 
         dortps();
 
@@ -359,13 +391,15 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
     @Override
     public void broadcast(String s) {
+        logger.info(s);
+
         for(User user : getMembers()) {
             user.sendMessage(s);
         }
     }
 
     @Override
-    public Collection<User> getMembers() {
-        return getRegistry(User.class, UUID.class).list();
+    public Set<User> getMembers() {
+        return new HashSet<>(getRegistry(User.class, UUID.class).list());
     }
 }

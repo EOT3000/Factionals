@@ -6,6 +6,7 @@ import fly.factions.api.commands.CommandRequirement;
 import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;
 import fly.factions.api.model.User;
+import fly.factions.api.model.organizations.InternationalOrganization;
 import fly.factions.impl.util.Pair;
 import fly.factions.impl.util.Plots;
 import org.bukkit.ChatColor;
@@ -58,6 +59,8 @@ public class MapCommand extends CommandDivision {
                     chunkAddition = ChatColor.GRAY + "";
                 } else if(faction.equals(userFaction)) {
                     chunkAddition = ChatColor.GREEN + "";
+                } else if(faction instanceof InternationalOrganization) {
+                    chunkAddition = ChatColor.BLUE + "";
                 } else {
                     chunkAddition = ChatColor.DARK_GRAY + "";
                 }

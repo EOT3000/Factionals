@@ -8,6 +8,7 @@ import fly.factions.api.model.organizations.InternationalOrganization;
 import fly.factions.api.model.organizations.Organization;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.Permissibles;
+import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
     //private List<IntOrgCouncil> councils = new ArrayList<>();
     //private List<IntOrgLevel> levels = new ArrayList<>();
 
+    private List<FactionComponent> invites = new ArrayList<>();
+
 
     public InternationalOrganizationImpl(String name, User leader) {
         this(name, leader, System.currentTimeMillis());
@@ -36,7 +39,11 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
         Factionals.getFactionals().getRegistry(Organization.class, String.class).set(name, this);
 
         Permissibles.add(name, this);
+        Permissibles.add(getId(), this);
         Permissibles.add("io:" + name, this);
+
+        fillColor = Color.AQUA;
+        borderColor = Color.BLUE;
     }
 
     @Override
@@ -96,7 +103,7 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
 
     @Override
     public boolean hasPermission(User user, FactionPermission permission) {
-        return false;
+        return user.equals(leader);
     }
 
     @Override
@@ -137,12 +144,12 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
 
     @Override
     public void addInvite(Faction faction) {
-
+        invites.add(faction);
     }
 
     @Override
     public boolean hasInviteFrom(Faction faction) {
-        return false;
+        return invites.contains(faction);
     }
 
     @Override
@@ -211,7 +218,13 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
 
     @Override
     public boolean userHasPlotPermissions(User user, boolean owner, boolean pub) {
-        return false;
+        for(FactionComponent m : members) {
+            if(m.getMembers().contains(user)) {
+                return true;
+            }
+        }
+
+        return leader.equals(user);
     }
 
     // IDs and Names
@@ -236,5 +249,35 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
     @Override
     public void removeMember(User user) {
 
+    }
+
+    @Override
+    public boolean requiresUpdate() {
+        return false;
+    }
+
+    @Override
+    public void setRequiresUpdate(boolean b) {
+
+    }
+
+    @Override
+    public void inviteFaction() {
+
+    }
+
+    @Override
+    public void cancelFactionInvite(Faction faction) {
+
+    }
+
+    @Override
+    public boolean isInvited(Faction faction) {
+        return false;
+    }
+
+    @Override
+    public void broadcast(String s) {
+        super.broadcast(s);
     }
 }

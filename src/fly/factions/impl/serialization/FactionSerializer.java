@@ -317,6 +317,8 @@ public class FactionSerializer extends Serializer<Faction> {
 
     @Override
     public Pair<YamlConfiguration, File> save(Faction faction) {
+        long start = System.currentTimeMillis();
+
         File o = ((HasFile) faction).getFile();
 
         File file = o == null ? new File("plugins\\Factionals\\factions\\" + faction.getCreationTime() + "-" + faction.getName()) : o;
@@ -518,6 +520,8 @@ public class FactionSerializer extends Serializer<Faction> {
         configuration.set("fo", faction.getFillOpacity());
 
         configuration.set("creationTime", faction.getCreationTime());
+
+        System.out.println(faction.getName() + (System.currentTimeMillis()-start));
 
         return new Pair<>(configuration, file);
     }

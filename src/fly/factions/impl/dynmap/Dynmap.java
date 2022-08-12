@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.AreaMarker;
+import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerSet;
 
 import java.util.*;
@@ -22,7 +23,7 @@ import java.util.*;
  */
 
 public class Dynmap {
-    private Map<String, Map<Integer, AreaMarker>> markers = new HashMap<>();
+    private Map<String, AreaMarker> markers = new HashMap<>();
 
     private MarkerSet facSet;
     private MarkerSet outSet;
@@ -112,15 +113,31 @@ public class Dynmap {
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(Factionals.getFactionals(), () -> {
+            Map<String, AreaMarker> newmap = new HashMap<>();
+
             for(World world : Bukkit.getWorlds()) {
                 for (StoredData data : list) {
-                    addToMap(data.set, data, world, data.outline);
+                    addToMap(data.set, data, world, data.outline, newmap);
                 }
             }
+
+            for(AreaMarker marker : markers.values()) {
+                marker.deleteMarker();
+            }
+
+            markers = newmap;
         });
     }
 
     public void runMicro() {
+        for(Marker marker : lotSet.getMarkers()) {
+            marker.deleteMarker();
+        }
+
+        for(Marker marker : twnSet.getMarkers()) {
+            marker.deleteMarker();
+        }
+
         for (World world : Bukkit.getWorlds()) {
             for (Faction faction : Factionals.getFactionals().getRegistry(Faction.class).list()) {
                 for (Region region : faction.getRegions()) {
@@ -183,7 +200,7 @@ public class Dynmap {
         return cnt;
     }
 
-    private void addToMap(MarkerSet set, StoredData admin, World world, boolean outline) {
+    private void addToMap(MarkerSet set, StoredData admin, World world, boolean outline, Map<String, AreaMarker> newmap) {
         double[] x;
         double[] z;
         int poly_index = 0; /* Index of polygon for given faction */
@@ -310,26 +327,38 @@ public class Dynmap {
                     z[i] = (double) line[1] * 16.0;
                 }
 
-                markers.putIfAbsent(admin.clazz + admin.id + "-main-" + world.getName(), new HashMap<>());
+                AreaMarker m = markers.remove(polyid);
 
-                markers.get(admin.clazz + admin.id + "-main-" + world.getName()).putIfAbsent(poly_index, set.createAreaMarker(polyid, admin.desc, false, world.getName(), x, z, false));
+                if(m == null) {
+                    m = set.createAreaMarker(polyid, admin.desc, false, world.getName(), x, z, false);
+                }
 
-                AreaMarker m = markers.get(admin.clazz + admin.id + "-main-" + world.getName()).get(poly_index);
+                if(m == null) {
+                    return;
+                }
 
-                m.setCornerLocations(x, z);
+                newmap.put(polyid, m);
+
+                {m.setCornerLocations(x, z);
 
                 m.setDescription(admin.desc);
 
                 m.setLineStyle(1, 1, admin.borderRGB);
 
-                m.setFillStyle(admin.fillO, admin.fillRGB);
+                m.setFillStyle(admin.fillO, admin.fillRGB);}
 
                 if(outline) {
-                    markers.putIfAbsent(admin.clazz + admin.id + "-outline-" + world.getName(), new HashMap<>());
+                    AreaMarker m2 = markers.remove(polyid + "__out");
 
-                    markers.get(admin.clazz + admin.id + "-outline-" + world.getName()).putIfAbsent(poly_index, outSet.createAreaMarker(polyid, admin.desc, false, world.getName(), x, z, false));
+                    if(m2 == null) {
+                        m2 = outSet.createAreaMarker(polyid + "__out", admin.desc, false, world.getName(), x, z, false);
+                    }
 
-                    AreaMarker m2 = markers.get(admin.clazz + admin.id + "-outline-" + world.getName()).get(poly_index);
+                    if(m2 == null) {
+                        return;
+                    }
+
+                    newmap.put(polyid + "__out", m2);
 
                     m2.setCornerLocations(x, z);
 
@@ -344,6 +373,8 @@ public class Dynmap {
                 poly_index++;
             }
         }
+
+
     }
 
     private void addToMapLot(MarkerSet set, List<Location> locations, World world, String clazz, String id, boolean wild) {
@@ -472,6 +503,10 @@ public class Dynmap {
                 }
 
                 AreaMarker m = set.createAreaMarker(polyid, "bruh", false, world.getName(), x, z, false);
+
+                if(m == null) {
+                    return;
+                }
 
                 if(wild) {
                     /* Set line and fill properties */

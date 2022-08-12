@@ -6,6 +6,7 @@ import fly.factions.api.model.Faction;
 import fly.factions.api.model.Plot;
 import fly.factions.api.model.PlotType;
 import fly.factions.api.model.User;
+import fly.factions.api.model.organizations.InternationalOrganization;
 import fly.factions.api.model.organizations.Organization;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.Permissibles;
@@ -609,6 +610,31 @@ public abstract class CommandDivision implements CommandExecutor, TabExecutor {
 
                 for(Organization organization : ORGANIZATIONS.list()) {
                     list.add(organization.getName());
+                }
+
+                return list;
+            }
+        },
+
+        INTERNATIONAL_ORGANIZATION {
+            @Override
+            public boolean check(String string) {
+                return ORGANIZATIONS.get(string) instanceof InternationalOrganization;
+            }
+
+            @Override
+            public String format(String string) {
+                return ChatColor.RED + "ERROR: the international organization " + ChatColor.YELLOW + string + ChatColor.RED + " does not exist";
+            }
+
+            @Override
+            public List<String> list() {
+                List<String> list = new ArrayList<>();
+
+                for(Organization organization : ORGANIZATIONS.list()) {
+                    if(organization instanceof InternationalOrganization) {
+                        list.add(organization.getName());
+                    }
                 }
 
                 return list;

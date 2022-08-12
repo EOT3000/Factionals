@@ -36,8 +36,8 @@ public abstract class AbstractFactionComponent implements FactionComponent {
     }
 
     @Override
-    public Collection<User> getMembers() {
-        return new ArrayList<>(members);
+    public Set<User> getMembers() {
+        return new HashSet<>(members);
     }
 
 

@@ -19,5 +19,11 @@ public interface InternationalOrganization extends Organization, Faction, IntOrg
 
     boolean isLevel(Faction faction, IntOrgLevel level);*/
 
+    void inviteFaction();
+
+    void cancelFactionInvite(Faction faction);
+
+    boolean isInvited(Faction faction);
+
     //TODO: make this
 }

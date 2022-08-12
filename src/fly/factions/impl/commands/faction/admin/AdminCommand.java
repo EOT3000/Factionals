@@ -5,6 +5,7 @@ import fly.factions.impl.commands.faction.admin.claim.AdminClaimCommand;
 import fly.factions.impl.commands.faction.admin.delete.AdminDeleteCommand;
 import fly.factions.impl.commands.faction.admin.leader.AdminLeaderCommand;
 import fly.factions.impl.commands.faction.admin.mode.AdminModeCommand;
+import fly.factions.impl.commands.faction.admin.transfer.AdminTransferCommand;
 
 public class AdminCommand extends CommandDivision {
     public AdminCommand() {
@@ -12,5 +13,6 @@ public class AdminCommand extends CommandDivision {
         addSubCommand("mode", new AdminModeCommand());
         addSubCommand("leader", new AdminLeaderCommand());
         addSubCommand("delete", new AdminDeleteCommand());
+        addSubCommand("transfer", new AdminTransferCommand());
     }
 }

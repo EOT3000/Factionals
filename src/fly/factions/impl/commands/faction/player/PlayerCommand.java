@@ -19,7 +19,9 @@ public class PlayerCommand extends CommandDivision {
         User userObject = USERS.get(Bukkit.getOfflinePlayer(player).getUniqueId());
 
         sender.sendMessage(ChatColor.GOLD + userObject.getName());
-        sender.sendMessage(ChatColor.DARK_AQUA + "Faction: " + ChatColor.WHITE + userObject.getFaction().getName());
+        if(userObject.getFaction() != null) {
+            sender.sendMessage(ChatColor.DARK_AQUA + "Faction: " + ChatColor.WHITE + userObject.getFaction().getName());
+        }
         sender.sendMessage(ChatColor.DARK_AQUA + "Power: " + ChatColor.WHITE + userObject.getPower());
 
         return true;

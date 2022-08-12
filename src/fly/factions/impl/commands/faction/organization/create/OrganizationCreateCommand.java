@@ -30,9 +30,9 @@ public class OrganizationCreateCommand extends CommandDivision {
         }
 
         if(type.equalsIgnoreCase("international")) {
-            //new InternationalOrganizationImpl(name, user);
+            new InternationalOrganizationImpl(name, user);
 
-            sender.sendMessage("todo");
+            sender.sendMessage("done");
         } else if(type.equalsIgnoreCase("private")) {
             sender.sendMessage("todo");
         }
