@@ -130,6 +130,7 @@ public class OrganizationSerializer extends Serializer<Organization> {
         configuration.set("creationTime", io.getCreationTime());
         configuration.set("leader", io.getLeader().getUniqueId().toString());
         configuration.set("type", "international");
+        configuration.set("name", io.getName());
 
         return new Pair<>(configuration, file);
     }

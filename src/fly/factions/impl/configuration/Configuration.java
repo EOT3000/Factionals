@@ -18,7 +18,7 @@ public class Configuration {
         int total = 0;
 
         for(Map.Entry<Integer, Integer> entry : configuration.powerPerPlayer.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue()*entry.getKey());
+            System.out.println(entry.getKey() + ": " + (total+=entry.getValue()));
         }
     }
 
@@ -27,15 +27,7 @@ public class Configuration {
     private final Map<Integer, Integer> powerPerPlayer = new HashMap<>();
 
     public Configuration() {
-        powerPerPlayer.put(1, 9000);
-        powerPerPlayer.put(2, 10000);
-        powerPerPlayer.put(3, 11000);
-        powerPerPlayer.put(4, 12000);
-        powerPerPlayer.put(5, 12000);
-        powerPerPlayer.put(6, 9000);
-        powerPerPlayer.put(7, 6000);
-        powerPerPlayer.put(8, 3000);
-        powerPerPlayer.put(0, 1000);
+        powerPerPlayer.put(0, 10000);
 
         //powerPerPlayer.put(0, 23600);
     }

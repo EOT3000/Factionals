@@ -278,6 +278,10 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
 
     @Override
     public void broadcast(String s) {
-        super.broadcast(s);
+        for(FactionComponent component : members) {
+            for(User user : component.getMembers()) {
+                user.sendMessage(s);
+            }
+        }
     }
 }
