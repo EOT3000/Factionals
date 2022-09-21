@@ -110,6 +110,8 @@ public interface Faction extends LandAdministrator<Plot> {
     @Deprecated
     void removeMember(User user);
 
+    boolean isAnyPlayerOnline();
+
     /**
      * Checks if a user has a specific permission in the faction
      *

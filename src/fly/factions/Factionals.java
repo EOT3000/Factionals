@@ -74,7 +74,7 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
     @Override
     public void onEnable() {
         logger.info(ChatColor.DARK_AQUA + "---------------------------------------------");
-        logger.info(ChatColor.AQUA + "Starting Factionals!");
+        logger.info(ChatColor.RED + "Starting Factionals!");
         logger.info(ChatColor.DARK_AQUA + "---------------------------------------------");
 
 

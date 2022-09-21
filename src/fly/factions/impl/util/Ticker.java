@@ -43,7 +43,7 @@ public class Ticker {
             long l = player.getLastSeen();
 
             if(user.getFaction() != null && user.getFaction().getLeader().equals(user)) {
-                if(System.currentTimeMillis() - l >= 21 * 24 * 60 * 60 * 1000) {
+                if(System.currentTimeMillis() - l >= 49L * 24 * 60 * 60 * 1000) {
                     Faction faction = user.getFaction();
 
                     if(faction.getMembers().size() == 1) {
@@ -75,7 +75,7 @@ public class Ticker {
                     }
                 }
             } else {
-                if (System.currentTimeMillis() - l >= 14 * 24 * 60 * 60 * 1000) {
+                if (System.currentTimeMillis() - l >= 42L * 24 * 60 * 60 * 1000) {
                     if (user.getFaction() != null) {
                         user.getFaction().broadcast(ChatColor.YELLOW + user.getName() + ChatColor.LIGHT_PURPLE + " was kicked for inactivity");
 

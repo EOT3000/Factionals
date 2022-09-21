@@ -29,7 +29,7 @@ public class OverclaimCommand extends CommandDivision {
         Location location = player.getLocation();
 
         if(plot != null && !plot.getFaction().equals(user.getFaction())) {
-            if(plot.getFaction().getCurrentPower() > plot.getFaction().getPlots().size()) {
+            if(plot.getFaction().getCurrentPower() < plot.getFaction().getPlots().size()) {
                 user.getFaction().broadcast(ChatColor.YELLOW + player.getName() + ChatColor.LIGHT_PURPLE + " overclaimed " + ChatColor.YELLOW + plot.getFaction().getName());
 
                 plot.getFaction().broadcast(ChatColor.YELLOW + player.getName() + ChatColor.LIGHT_PURPLE + " overclaimed you. " + ChatColor.GREEN + "{x},{y},{z},{w}".

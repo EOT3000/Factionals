@@ -141,6 +141,17 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
         }
     }
 
+    @Override
+    public boolean isAnyPlayerOnline() {
+        for(User user : members) {
+            if(Bukkit.getOfflinePlayer(user.getUniqueId()).isOnline()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     //PERMISSIONS
 
     @Override

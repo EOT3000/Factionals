@@ -2,6 +2,7 @@ package fly.factions.impl.listeners;
 
 import fly.factions.Factionals;
 import fly.factions.api.model.*;
+import fly.factions.api.model.organizations.Organization;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.PermissionContext;
 import fly.factions.api.permissions.PlotPermission;
@@ -21,10 +22,12 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -261,14 +264,37 @@ public class PlotListener extends ListenerImpl {
         }
     }
 
-    @EventHandler
-    public void onExplosion(BlockExplodeEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onExplosion1(BlockExplodeEvent event) {
         Registry<Plot, Integer> pr = Factionals.getFactionals().getRegistry(Plot.class, Integer.class);
 
         for(Block block : new ArrayList<>(event.blockList())) {
             Plot plot = pr.get(Plots.getLocationId(block.getLocation()));
 
-            if(plot != null) {
+            if (plot == null) {
+                continue;
+            }
+
+
+            if (!plot.getFaction().isAnyPlayerOnline()) {
+                event.blockList().remove(block);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onExplosion2(EntityExplodeEvent event) {
+        Registry<Plot, Integer> pr = Factionals.getFactionals().getRegistry(Plot.class, Integer.class);
+
+        for(Block block : new ArrayList<>(event.blockList())) {
+            Plot plot = pr.get(Plots.getLocationId(block.getLocation()));
+
+            if (plot == null) {
+                continue;
+            }
+
+
+            if (!plot.getFaction().isAnyPlayerOnline()) {
                 event.blockList().remove(block);
             }
         }

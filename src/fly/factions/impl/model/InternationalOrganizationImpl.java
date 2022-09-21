@@ -8,6 +8,7 @@ import fly.factions.api.model.organizations.InternationalOrganization;
 import fly.factions.api.model.organizations.Organization;
 import fly.factions.api.permissions.FactionPermission;
 import fly.factions.api.permissions.Permissibles;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 
@@ -249,6 +250,19 @@ public class InternationalOrganizationImpl extends AbstractLandAdministrator<Plo
     @Override
     public void removeMember(User user) {
 
+    }
+
+    @Override
+    public boolean isAnyPlayerOnline() {
+        for(FactionComponent faction : members) {
+            for (User user : faction.getMembers()) {
+                if (Bukkit.getOfflinePlayer(user.getUniqueId()).isOnline()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
