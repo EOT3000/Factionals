@@ -39,7 +39,11 @@ public class MedievalFactionsConverter {
                     OfflinePlayer bukkit = getUser(player);
 
                     if(uReg.get(bukkit.getUniqueId()) == null) {
-                        uReg.set(bukkit.getUniqueId(), new UserImpl(bukkit));
+                        User user = new UserImpl(bukkit);
+
+                        user.setPower(4500);
+
+                        uReg.set(bukkit.getUniqueId(), user);
                     }
                 }
 
@@ -49,12 +53,6 @@ public class MedievalFactionsConverter {
 
                 Color color = Color.fromRGB(Integer.decode(faction.getFlags().get(mf.flags.getColor())));
 
-                System.out.println(color.getRed());
-                System.out.println(color.getGreen());
-                System.out.println(color.getBlue());
-                System.out.println(ourFaction.getName());
-                System.out.println();
-
                 ourFaction.setBorderColor(color);
                 ourFaction.setFillColor(color);
 
@@ -62,27 +60,12 @@ public class MedievalFactionsConverter {
                     uReg.get(getUser(member).getUniqueId()).setFaction(ourFaction);
                 }
 
-                int count = 0;
-
-                System.out.println("size");
-                System.out.println(medievalFactions.getClaimService().getClaimsByFactionId(faction.getId()).size());
-
                 for(MfClaimedChunk chunk : medievalFactions.getClaimService().getClaimsByFactionId(faction.getId())) {
-                    if(count++ < 50) {
-                        System.out.println(chunk.getX());
-                        System.out.println(chunk.getZ());
-                        System.out.println(chunk.getWorldId());
-                        System.out.println(Bukkit.getWorld(chunk.getWorldId()));
-                        System.out.println();
-                    }
-
                     if(Bukkit.getWorld(chunk.getWorldId()) == null) {
                         continue;
                     }
                     new PlotImpl(chunk.getX(), chunk.getZ(), Bukkit.getWorld(chunk.getWorldId()), ourFaction);
                 }
-
-                System.out.println();
             }
         }
     }
