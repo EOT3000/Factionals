@@ -55,7 +55,7 @@ public class Plots {
                 for(World world : Bukkit.getWorlds()) {
                     to.put(count, world);
                     from.put(world, count);
-                    data.append(world.getName()).append(":").append(count);
+                    data.append(world.getName()).append(":").append(count).append("\n");
 
                     count++;
                 }

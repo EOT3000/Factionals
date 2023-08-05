@@ -18,6 +18,7 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class MedievalFactionsConverter {
@@ -26,6 +27,8 @@ public class MedievalFactionsConverter {
     static Registry<Faction, String> uFac = fac.getRegistry(Faction.class, String.class);
     static MedievalFactions mf = MedievalFactions.getPlugin(MedievalFactions.class);
     static Services medievalFactions = mf.getServices();
+
+    private static Random random = new Random();
 
     public static void convertIfContains() {
         boolean containsData = uFac.list().size() > 0;
@@ -40,21 +43,46 @@ public class MedievalFactionsConverter {
                     }
                 }
 
-                Faction ourFaction = new FactionImpl(getLeader(faction), faction.getName());
+                Faction ourFaction = new FactionImpl(getLeader(faction), faction.getName().replaceAll(" ", "_"));
 
                 uFac.set(ourFaction.getName(), ourFaction);
 
                 Color color = Color.fromRGB(Integer.decode(faction.getFlags().get(mf.flags.getColor())));
 
+                System.out.println(color.getRed());
+                System.out.println(color.getGreen());
+                System.out.println(color.getBlue());
+                System.out.println(ourFaction.getName());
+                System.out.println();
+
                 ourFaction.setBorderColor(color);
                 ourFaction.setFillColor(color);
 
+                for(MfFactionMember member : faction.getMembers()) {
+                    uReg.get(getUser(member).getUniqueId()).setFaction(ourFaction);
+                }
+
+                int count = 0;
+
+                System.out.println("size");
+                System.out.println(medievalFactions.getClaimService().getClaimsByFactionId(faction.getId()).size());
+
                 for(MfClaimedChunk chunk : medievalFactions.getClaimService().getClaimsByFactionId(faction.getId())) {
+                    if(count++ < 50) {
+                        System.out.println(chunk.getX());
+                        System.out.println(chunk.getZ());
+                        System.out.println(chunk.getWorldId());
+                        System.out.println(Bukkit.getWorld(chunk.getWorldId()));
+                        System.out.println();
+                    }
+
                     if(Bukkit.getWorld(chunk.getWorldId()) == null) {
                         continue;
                     }
                     new PlotImpl(chunk.getX(), chunk.getZ(), Bukkit.getWorld(chunk.getWorldId()), ourFaction);
                 }
+
+                System.out.println();
             }
         }
     }
