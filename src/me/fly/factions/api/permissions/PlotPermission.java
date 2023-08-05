@@ -1,5 +1,6 @@
 package me.fly.factions.api.permissions;
 
+import me.fly.factions.integrations.slimefun.SlimefunIntegration;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -12,15 +13,6 @@ import org.bukkit.event.block.Action;
 public enum PlotPermission {
     //Block placing and breaking
     BUILD {
-        @Override
-        public boolean required(Block block, Action action, boolean shift) {
-            return false;
-        }
-
-        @Override
-        public boolean required(Entity entity) {
-            return false;
-        }
     },
 
     //Doors and trapdoors
@@ -31,11 +23,6 @@ public enum PlotPermission {
 
             return data instanceof TrapDoor || data instanceof Door || data instanceof Gate;
         }
-
-        @Override
-        public boolean required(Entity entity) {
-            return false;
-        }
     },
 
     //Levers and buttons
@@ -44,20 +31,10 @@ public enum PlotPermission {
         public boolean required(Block block, Action action, boolean shift) {
             return block.getState().getBlockData() instanceof Switch;
         }
-
-        @Override
-        public boolean required(Entity entity) {
-            return false;
-        }
     },
 
     //Chests etc
     CONTAINER {
-        @Override
-        public boolean required(Block block, Action action, boolean shift) {
-            return false;
-        }
-
         @Override
         public boolean required(Entity entity) {
             return entity instanceof Minecart && ((Minecart) entity).getDisplayBlock() instanceof Container;
@@ -72,24 +49,11 @@ public enum PlotPermission {
 
             return data instanceof Repeater || data instanceof Comparator || data instanceof DaylightDetector;
         }
-
-        @Override
-        public boolean required(Entity entity) {
-            return false;
-        }
     },
 
     //Boats and minecarts
     VEHICLES {
-        @Override
-        public boolean required(Block block, Action action, boolean shift) {
-            return false;
-        }
 
-        @Override
-        public boolean required(Entity entity) {
-            return false;
-        }
     },
 
     //Plants, composters and beehives
@@ -100,11 +64,6 @@ public enum PlotPermission {
 
             return data instanceof Sapling || block.getType().equals(Material.COMPOSTER) || data instanceof Beehive;
         }
-
-        @Override
-        public boolean required(Entity entity) {
-            return false;
-        }
     },
 
     //Pressure plates, trip wires, and crop trampling
@@ -113,10 +72,12 @@ public enum PlotPermission {
         public boolean required(Block block, Action action, boolean shift) {
             return action.equals(Action.PHYSICAL);
         }
+    },
 
+    SLIMEFUN {
         @Override
-        public boolean required(Entity entity) {
-            return false;
+        public boolean present() {
+            return SlimefunIntegration.isEnabled();
         }
     };
 
@@ -124,7 +85,15 @@ public enum PlotPermission {
 
     }
 
-    public abstract boolean required(Block block, Action action, boolean shift);
+    public boolean present() {
+        return true;
+    }
 
-    public abstract boolean required(Entity entity);
+    public boolean required(Block block, Action action, boolean shift) {
+        return false;
+    }
+
+    public boolean required(Entity entity) {
+        return false;
+    }
 }

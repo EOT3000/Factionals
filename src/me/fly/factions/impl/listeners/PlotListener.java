@@ -132,17 +132,20 @@ public class PlotListener extends ListenerImpl {
             if (!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.VEHICLES)) {
                 if (Tag.ITEMS_BOATS.isTagged(t)) {
                     event.setCancelled(true);
+                    return;
                 }
 
                 if (t.equals(Material.MINECART) || t.equals(Material.CHEST_MINECART) || t.equals(Material.COMMAND_BLOCK_MINECART) || t.equals(Material.FURNACE_MINECART) ||
                         t.equals(Material.HOPPER_MINECART) || t.equals(Material.TNT_MINECART)) {
                     event.setCancelled(true);
+                    return;
                 }
             }
 
             if (!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.BUILD)) {
                 if (t.equals(Material.FLINT_AND_STEEL)) {
                     event.setCancelled(true);
+                    return;
                 }
             }
         }
@@ -150,6 +153,7 @@ public class PlotListener extends ListenerImpl {
         for (PlotPermission permission : PlotPermission.values()) {
             if (permission.required(event.getClickedBlock(), event.getAction(), event.getPlayer().isSneaking()) && !PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, permission)) {
                 event.setCancelled(true);
+                return;
             }
         }
     }
