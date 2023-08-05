@@ -9,20 +9,85 @@ import me.fly.factions.api.permissions.FactionPermission;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Plots {
-    static {
+    public static void init() {
+        boolean worked = false;
+
         try {
             getXMask = binaryToInteger("00000000000000000011111111111111");
             getZMask = binaryToInteger("00001111111111111100000000000000");
             getWMask = binaryToInteger("11110000000000000000000000000000");
+
+            File file = new File("plugins/Factionals/world-ids.txt");
+
+            Map<Integer, World> to = new HashMap<>();
+            Map<World, Integer> from = new HashMap<>();
+
+            if(file.exists()) {
+                for(String line : Files.readAllLines(file.toPath())) {
+                    String[] spl = line.split(":");
+
+                    String world = spl[0];
+                    int id = Integer.parseInt(spl[1]);
+
+                    if(Bukkit.getWorld(world) == null) {
+                        continue;
+                    }
+
+                    to.put(id, Bukkit.getWorld(world));
+                    from.put(Bukkit.getWorld(world), id);
+
+                    worldsTo = to;
+                    worldsFrom = from;
+                    worked = true;
+                }
+            } else {
+                int count = 0;
+                StringBuilder data = new StringBuilder();
+
+                for(World world : Bukkit.getWorlds()) {
+                    to.put(count, world);
+                    from.put(world, count);
+                    data.append(world.getName()).append(":").append(count);
+
+                    count++;
+                }
+
+                worldsTo = to;
+                worldsFrom = from;
+                worked = true;
+
+                file.createNewFile();
+
+                try (FileOutputStream stream = new FileOutputStream(file)) {
+                    stream.write(data.toString().getBytes(StandardCharsets.UTF_8));
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if(!worked) {
+            throw new RuntimeException();
+        }
     }
+
 
     public static int getXMask;
     public static int getZMask;
     public static int getWMask;
+
+    private static Map<Integer, World> worldsTo;
+    private static Map<World, Integer> worldsFrom;
+
 
     private static int binaryToInteger(String binary) {
         char[] numbers = binary.toCharArray();
@@ -64,55 +129,18 @@ public class Plots {
     //TODO: other worlds
     public static int getWorldId(World world) {
         if(world == null) {
-            System.out.println("uh oh");
-            return 100;
+            return -1;
         }
 
-        switch (world.getName()) {
-            case "world":
-                return 0;
-
-            case "world_nether":
-                return 1;
-
-            case "world_the_end":
-                return 2;
-
-            case "earth2":
-                return 3;
-
-            default:
-                System.out.println(world.getName());
-                return 100;
-        }
+        return worldsFrom.getOrDefault(world, -1);
     }
-
-    // I have no idea why I made there be 2 methods. I'll keep it...
 
     public static World getWorld(int worldId) {
-        return getWorld0(worldId);
-    }
-
-    public static World getWorld0(int worldId) {
-        switch (worldId) {
-            // Haha I love hard coding things
-
-            case 0:
-                return Bukkit.getWorld("world");
-
-            case 1:
-                return Bukkit.getWorld("world_nether");
-
-            case 2:
-                return Bukkit.getWorld("world_the_end");
-
-            case 3:
-                return Bukkit.getWorld("earth2");
-
-            default:
-                System.out.println(worldId);
-                return null;
+        if(worldId == -1) {
+            return null;
         }
+
+        return worldsTo.getOrDefault(worldId, null);
     }
 
     public static void printChange(Plot plot, String context, String type, String doer) {
