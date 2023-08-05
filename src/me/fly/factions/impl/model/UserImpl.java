@@ -28,6 +28,10 @@ public class UserImpl implements User {
 
     private boolean factionChat = false;
 
+    public UserImpl(OfflinePlayer player) {
+        this(player.getUniqueId(), player.getName());
+    }
+
     public UserImpl(UUID uuid) {
         this(uuid, Bukkit.getOfflinePlayer(uuid).getName());
     }

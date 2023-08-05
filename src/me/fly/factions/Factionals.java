@@ -23,6 +23,7 @@ import me.fly.factions.impl.serialization.OrganizationSerializer;
 import me.fly.factions.impl.serialization.UserSerializer;
 import me.fly.factions.impl.util.Plots;
 import me.fly.factions.impl.util.Ticker;
+import me.fly.factions.integrations.medievalfactions.MedievalFactionsConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -213,6 +214,8 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         }*/
 
         //TODO: FIX THIS HUJDsinjkfjKHJENUDIWQHG(OI#@HNFuiwh9832rhiuewdnsaio
+
+        MedievalFactionsConverter.convertIfContains();
     }
 
     private void dortps() {

@@ -27,7 +27,7 @@ public class Configuration {
     private final Map<Integer, Integer> powerPerPlayer = new HashMap<>();
 
     public Configuration() {
-        powerPerPlayer.put(0, 10000);
+        powerPerPlayer.put(0, 4500);
 
         //powerPerPlayer.put(0, 23600);
     }

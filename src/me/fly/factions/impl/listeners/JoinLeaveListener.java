@@ -11,7 +11,7 @@ public class JoinLeaveListener extends ListenerImpl {
         User user = getUserFromPlayer(event.getPlayer());
 
         if(user == null) {
-            user = addUser(new UserImpl(event.getPlayer().getUniqueId(), event.getPlayer().getDisplayName()));
+            user = addUser(new UserImpl(event.getPlayer()));
         } else {
             getUserFromPlayer(event.getPlayer()).updateName();
         }
