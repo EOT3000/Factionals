@@ -24,6 +24,7 @@ import me.fly.factions.impl.serialization.UserSerializer;
 import me.fly.factions.impl.util.Plots;
 import me.fly.factions.impl.util.Ticker;
 import me.fly.factions.integrations.medievalfactions.MedievalFactionsConverter;
+import me.fly.factions.integrations.slimefun.SlimefunIntegration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -220,6 +221,8 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
         if(Bukkit.getPluginManager().isPluginEnabled("MedievalFactions")) {
             MedievalFactionsConverter.convertIfContains();
         }
+
+        SlimefunIntegration.checkAndDo();
     }
 
     private void dortps() {
