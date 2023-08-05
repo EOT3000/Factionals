@@ -1,5 +1,5 @@
 name: Factionals
-main: fly.factions.Factionals
+main: me.fly.factions.Factionals
 version: 1.0.0
 api-version: 1.13
 depend: [dynmap]

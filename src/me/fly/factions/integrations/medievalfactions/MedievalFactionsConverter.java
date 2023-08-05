@@ -60,7 +60,9 @@ public class MedievalFactionsConverter {
         List<MfFactionMember> potentialLeaders = new ArrayList<>();
 
         for(MfFactionMember player : faction.getMembers()) {
-            if(player.getRole().getPermissionValue(mf.factionPermissions.getDisband()) || player.getRole().getName().equalsIgnoreCase("owner")) {
+            Boolean v = player.getRole().getPermissionValue(mf.factionPermissions.getDisband());
+
+            if((v != null && v) || player.getRole().getName().equalsIgnoreCase("owner")) {
                 potentialLeaders.add(player);
             }
         }
