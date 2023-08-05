@@ -33,7 +33,7 @@ public class MedievalFactionsConverter {
     public static void convertIfContains() {
         boolean containsData = uFac.list().size() > 0;
 
-        if(!containsData && Bukkit.getPluginManager().isPluginEnabled("MedievalFactions")) {
+        if(!containsData) {
             for(MfFaction faction : medievalFactions.getFactionService().getFactions()) {
                 for(MfFactionMember player : faction.getMembers()) {
                     OfflinePlayer bukkit = getUser(player);
@@ -55,6 +55,10 @@ public class MedievalFactionsConverter {
 
                 ourFaction.setBorderColor(color);
                 ourFaction.setFillColor(color);
+
+                if(faction.getHome() != null) {
+                    ourFaction.setHome(faction.getHome().toBukkitLocation());
+                }
 
                 for(MfFactionMember member : faction.getMembers()) {
                     uReg.get(getUser(member).getUniqueId()).setFaction(ourFaction);

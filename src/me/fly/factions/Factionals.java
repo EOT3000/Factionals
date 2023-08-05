@@ -217,7 +217,9 @@ public class Factionals extends JavaPlugin implements Listener, PlayerGroup {
 
         //TODO: FIX THIS HUJDsinjkfjKHJENUDIWQHG(OI#@HNFuiwh9832rhiuewdnsaio
 
-        MedievalFactionsConverter.convertIfContains();
+        if(Bukkit.getPluginManager().isPluginEnabled("MedievalFactions")) {
+            MedievalFactionsConverter.convertIfContains();
+        }
     }
 
     private void dortps() {
