@@ -5,7 +5,7 @@ public enum FactionPermission {
     //Every permission, including faction disbanding
     OWNER,
 
-    //Create ranks and regions. Assign perms to ranks, and land to regions
+    //Create ranks and regions. Assign perms to ranks, and land to regions. Set the faction home
     INTERNAL_MANAGEMENT,
 
     //Claim/unclaim land

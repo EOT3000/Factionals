@@ -9,6 +9,7 @@ import me.fly.factions.impl.commands.faction.create.CreateCommand;
 import me.fly.factions.impl.commands.faction.department.DepartmentCommand;
 import me.fly.factions.impl.commands.faction.disband.DisbandCommand;
 import me.fly.factions.impl.commands.faction.faction.FactionCommand;
+import me.fly.factions.impl.commands.faction.home.HomeCommand;
 import me.fly.factions.impl.commands.faction.info.InfoCommand;
 import me.fly.factions.impl.commands.faction.invite.InviteCommand;
 import me.fly.factions.impl.commands.faction.join.JoinCommand;
@@ -83,6 +84,8 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f overclaim", "Claims the chunk you are on for your faction");
 
+        addHelpEntry("/f home", "Teleports you to your faction home");
+
 
 
         addSubCommand("create", new CreateCommand());
@@ -113,6 +116,8 @@ public class FactionCommands extends CommandDivision {
         addSubCommand("department", new DepartmentCommand());
 
         addSubCommand("set", new SetCommand());
+
+        addSubCommand("home", new HomeCommand());
 
         //Broken shit
         addSubCommand("plot", new PlotCommands());
