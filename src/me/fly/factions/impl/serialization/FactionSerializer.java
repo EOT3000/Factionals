@@ -62,6 +62,14 @@ public class FactionSerializer extends Serializer<Faction> {
                     faction.setFillOpacity(configuration.getDouble("fo"));
                     faction.setDescription(configuration.getString("description", "No description"));
 
+                    if(configuration.contains("home")) {
+                        faction.setHome(new Location(
+                                Plots.getWorld(configuration.getInt("home.w")),
+                                configuration.getInt("home.x"),
+                                configuration.getInt("home.y"),
+                                configuration.getInt("home.z")));
+                    }
+
                     //Departments
 
                     type = "departments";
@@ -512,7 +520,10 @@ public class FactionSerializer extends Serializer<Faction> {
         if(faction.getHome() != null) {
             Location h = faction.getHome();
 
-            configuration.set("homew", h.getWorld().getName());
+            configuration.set("home.w", Plots.getWorldId(h.getWorld()));
+            configuration.set("home.x", h.getBlockX());
+            configuration.set("home.y", h.getBlockY());
+            configuration.set("home.z", h.getBlockZ());
         }
 
         configuration.set("br", faction.getBorderColor().getRed());
