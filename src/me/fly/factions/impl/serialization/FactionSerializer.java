@@ -11,6 +11,7 @@ import me.fly.factions.impl.model.*;
 import me.fly.factions.impl.util.Pair;
 import me.fly.factions.impl.util.Plots;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -508,6 +509,11 @@ public class FactionSerializer extends Serializer<Faction> {
         configuration.set("name", faction.getName());
         configuration.set("deleted", faction.isDeleted());
         configuration.set("description", faction.getDescription());
+        if(faction.getHome() != null) {
+            Location h = faction.getHome();
+
+            configuration.set("homew", h.getWorld().getName());
+        }
 
         configuration.set("br", faction.getBorderColor().getRed());
         configuration.set("bg", faction.getBorderColor().getGreen());

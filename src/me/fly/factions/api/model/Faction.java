@@ -1,6 +1,7 @@
 package me.fly.factions.api.model;
 
 import me.fly.factions.api.permissions.FactionPermission;
+import org.bukkit.Location;
 
 import java.util.Collection;
 
@@ -165,4 +166,8 @@ public interface Faction extends LandAdministrator<Plot> {
     boolean requiresUpdate();
 
     void setRequiresUpdate(boolean b);
+
+    default void setHome(Location home) {};
+
+    default Location getHome() {return null;}
 }

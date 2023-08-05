@@ -38,6 +38,8 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
 
     private boolean ru = true;
 
+    private Location home;
+
     public FactionImpl(String name, User leader, long time, File file) {
         super(name, leader);
 
@@ -355,6 +357,16 @@ public class FactionImpl extends AbstractLandAdministrator<Plot> implements Fact
     @Override
     public void setRequiresUpdate(boolean b) {
         this.ru = b;
+    }
+
+    @Override
+    public void setHome(Location home) {
+        this.home = home;
+    }
+
+    @Override
+    public Location getHome() {
+        return home;
     }
 
     //TODO: Move commands into separate class

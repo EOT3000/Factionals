@@ -61,6 +61,7 @@ public class Plots {
         return (location & getWMask) >> 28;
     }
 
+    //TODO: other worlds
     public static int getWorldId(World world) {
         if(world == null) {
             System.out.println("uh oh");
