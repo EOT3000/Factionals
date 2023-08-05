@@ -1,8 +1,7 @@
 package dsds;
 
-import fly.factions.api.model.Plot;
-import fly.factions.impl.util.Plots;
-import org.bukkit.World;
+import me.fly.factions.api.model.Plot;
+import me.fly.factions.impl.util.Plots;
 
 public class PlotLotComponent extends RectanglePlotComponent {
     public PlotLotComponent(Plot plot) {
