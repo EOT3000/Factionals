@@ -39,6 +39,22 @@ public abstract class Serializer<T extends Savable> {
         });
     }
 
+    public static void saveAllFinal(Collection<? extends Savable> list, Class clazz) {
+        List<Pair<YamlConfiguration, File>> configs = new ArrayList<>();
+
+        for (Savable savable : list) {
+            configs.add(save0(savable, clazz));
+        }
+
+        for (Pair<YamlConfiguration, File> pair : configs) {
+            try {
+                pair.getKey().save(pair.getValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static <X extends Savable> Collection<X> loadAll(Class<X> clazz) {
         Serializer<X> serializer = Factionals.getFactionals().getRegistry(Serializer.class, Class.class).get(clazz);
         List<X> list = new ArrayList<>();

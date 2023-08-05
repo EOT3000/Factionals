@@ -50,6 +50,9 @@ public class MedievalFactionsConverter {
                 ourFaction.setFillColor(color);
 
                 for(MfClaimedChunk chunk : medievalFactions.getClaimService().getClaimsByFactionId(faction.getId())) {
+                    if(Bukkit.getWorld(chunk.getWorldId()) == null) {
+                        continue;
+                    }
                     new PlotImpl(chunk.getX(), chunk.getZ(), Bukkit.getWorld(chunk.getWorldId()), ourFaction);
                 }
             }
