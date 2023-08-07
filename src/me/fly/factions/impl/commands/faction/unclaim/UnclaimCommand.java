@@ -1,5 +1,6 @@
 package me.fly.factions.impl.commands.faction.unclaim;
 
+import me.fly.factions.api.claiming.ClaimType;
 import me.fly.factions.api.commands.CommandDivision;
 import me.fly.factions.api.commands.CommandRequirement;
 import me.fly.factions.api.model.Faction;
@@ -8,7 +9,7 @@ import me.fly.factions.api.model.User;
 import me.fly.factions.api.permissions.FactionPermission;
 import me.fly.factions.impl.util.Pair;
 import me.fly.factions.impl.util.Plots;
-import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -61,9 +62,9 @@ public class UnclaimCommand extends CommandDivision {
                 return true;
             }
         }  else if(type.equalsIgnoreCase("auto")) {
-            user.setAutoClaiming("unclaim");
+            user.setAutoClaiming(ClaimType.UNCLAIM);
 
-            user.sendMessage(ChatColor.LIGHT_PURPLE + "Now Auto-unclaiming, run '/f claim auto' twice to disable");
+            user.sendMessage(ChatColor.LIGHT_PURPLE + "Now auto-unclaiming, run '/f stopClaiming' to disable");
 
             return true;
         } else if(type.equalsIgnoreCase("fill")) {

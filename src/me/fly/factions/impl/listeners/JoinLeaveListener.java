@@ -1,5 +1,6 @@
 package me.fly.factions.impl.listeners;
 
+import me.fly.factions.api.claiming.ClaimType;
 import me.fly.factions.api.model.User;
 import me.fly.factions.impl.model.UserImpl;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,6 @@ public class JoinLeaveListener extends ListenerImpl {
             getUserFromPlayer(event.getPlayer()).updateName();
         }
 
-        user.setAutoClaiming(false);
+        user.setAutoClaiming(ClaimType.NONE);
     }
 }

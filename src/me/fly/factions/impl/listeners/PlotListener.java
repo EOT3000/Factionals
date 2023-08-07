@@ -1,6 +1,7 @@
 package me.fly.factions.impl.listeners;
 
 import me.fly.factions.Factionals;
+import me.fly.factions.api.claiming.ClaimType;
 import me.fly.factions.api.model.*;
 import me.fly.factions.api.permissions.FactionPermission;
 import me.fly.factions.api.permissions.PermissionContext;
@@ -16,10 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.block.DoubleChest;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -49,7 +47,7 @@ public class PlotListener extends ListenerImpl {
             User user = Factionals.getFactionals().getRegistry(User.class, UUID.class).get(e.getPlayer().getUniqueId());
 
             if (user.getFaction() != null && user.getFaction().hasPermission(user, FactionPermission.TERRITORY)) {
-                if(Boolean.parseBoolean(String.valueOf(user.getAutoClaiming()))) {
+                if(user.getAutoClaiming().equals(user.getFaction())) {
                     if (to == null) {
                         Chunk chunk = e.getTo().getChunk();
 
@@ -65,7 +63,7 @@ public class PlotListener extends ListenerImpl {
 
                         Plots.printChange(plot, "Claim for " + user.getFaction().getId(), "Auto", user.getName());
                     }
-                } else if(user.getAutoClaiming() instanceof String && ((String) user.getAutoClaiming()).equalsIgnoreCase("unclaim")) {
+                } else if(user.getAutoClaiming().equals(ClaimType.UNCLAIM)) {
                     if (to != null && to.getFaction().equals(user.getFaction())) {
                         Chunk chunk = e.getTo().getChunk();
 
@@ -248,11 +246,11 @@ public class PlotListener extends ListenerImpl {
 
     @EventHandler
     public void onMobSpawn(EntitySpawnEvent event) {
-        if(event.getEntity().getEntitySpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
+        if(!event.getEntity().getEntitySpawnReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL) ) {
             return;
         }
 
-        if(event.getEntity() instanceof Monster) {
+        if(event.getEntity() instanceof Enemy) {
             Plot plot = Factionals.getFactionals().getRegistry(Plot.class, Integer.class).get(Plots.getLocationId((event.getEntity()).getLocation()));
 
             if(plot == null) {

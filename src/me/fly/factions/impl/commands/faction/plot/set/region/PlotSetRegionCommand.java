@@ -9,7 +9,7 @@ import me.fly.factions.api.permissions.FactionPermission;
 import me.fly.factions.impl.util.Pair;
 import me.fly.factions.impl.util.Plots;
 import me.fly.factions.api.model.Plot;
-import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -76,6 +76,8 @@ public class PlotSetRegionCommand extends CommandDivision {
             return false;
         } else if(type.equalsIgnoreCase("auto")) {
             user.setAutoClaiming(factionRegion);
+
+            user.sendMessage(ChatColor.LIGHT_PURPLE + "Now auto-setting for the region, run '/f stopClaiming' to disable");
         }
 
         if(factionRegion.getFaction().equals(plot.getFaction())) {

@@ -1,6 +1,9 @@
 package me.fly.factions.impl.model;
 
+import me.fly.factions.api.claiming.ClaimType;
 import me.fly.factions.api.model.Faction;
+import me.fly.factions.api.model.LandAdministrator;
+import me.fly.factions.api.model.Plot;
 import me.fly.factions.api.model.User;
 import me.fly.factions.api.permissions.Permissibles;
 import org.bukkit.Bukkit;
@@ -21,7 +24,7 @@ public class UserImpl implements User {
 
     private boolean adminMode = false;
 
-    private Object autoClaiming;
+    private ClaimType autoClaiming;
     //private OpenedMenu menu;
 
     private final Set<Faction> invites = new HashSet<>();
@@ -183,12 +186,12 @@ public class UserImpl implements User {
     }*/
 
     @Override
-    public Object getAutoClaiming() {
+    public ClaimType getAutoClaiming() {
         return autoClaiming;
     }
 
     @Override
-    public void setAutoClaiming(Object autoClaiming) {
+    public void setAutoClaiming(ClaimType autoClaiming) {
         this.autoClaiming = autoClaiming;
     }
 

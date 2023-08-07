@@ -31,7 +31,7 @@ public class SlimefunListener extends ListenerImpl {
                 lot = ((Region) plot.getAdministrator()).getLot(event.getClickedBlock().get().getLocation());
             }
 
-            if(!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.BUILD)) {
+            if(!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.SLIMEFUN)) {
                 event.setUseBlock(Event.Result.DENY);
                 event.setUseItem(Event.Result.DENY);
             }
@@ -54,7 +54,7 @@ public class SlimefunListener extends ListenerImpl {
             lot = ((Region) plot.getAdministrator()).getLot(event.getClickedBlock().getLocation());
         }
 
-        if(!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.BUILD)) {
+        if(!PermissionContext.canDoPlots(getUserFromPlayer(event.getPlayer()), plot.getAdministrator(), lot, PlotPermission.SLIMEFUN)) {
             event.setCancelled(true);
         }
     }

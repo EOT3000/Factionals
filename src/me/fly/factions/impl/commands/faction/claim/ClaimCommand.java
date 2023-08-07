@@ -9,7 +9,7 @@ import me.fly.factions.api.permissions.FactionPermission;
 import me.fly.factions.impl.model.PlotImpl;
 import me.fly.factions.impl.util.Pair;
 import me.fly.factions.impl.util.Plots;
-import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -74,9 +74,9 @@ public class ClaimCommand extends CommandDivision {
 
             return true;
         } else if (type.equalsIgnoreCase("auto")) {
-            user.setAutoClaiming(!Boolean.parseBoolean(String.valueOf(user.getAutoClaiming())));
+            user.setAutoClaiming(user.getFaction());
 
-            user.sendMessage((boolean) user.getAutoClaiming() ? ChatColor.LIGHT_PURPLE + "Now AutoClaiming" : ChatColor.LIGHT_PURPLE + "No longer AutoClaiming");
+            user.sendMessage(ChatColor.LIGHT_PURPLE + "Now AutoClaiming for your faction. Run '/f stopClaiming' to stop");
 
             return true;
         }

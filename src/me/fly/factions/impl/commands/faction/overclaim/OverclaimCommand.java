@@ -44,7 +44,7 @@ public class OverclaimCommand extends CommandDivision {
 
                 return true;
             } else {
-                sender.sendMessage(ChatColor.RED + "ERROR: this faction doesn't have low enough power for that you dumb fucking idiot");
+                sender.sendMessage(ChatColor.RED + "ERROR: this faction doesn't have low enough power to overclaim.");
             }
         } else {
             sender.sendMessage(ChatColor.RED + "ERROR: this land is not claimed by a different faction");

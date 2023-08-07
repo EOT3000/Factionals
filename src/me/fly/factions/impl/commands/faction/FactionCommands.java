@@ -25,6 +25,7 @@ import me.fly.factions.impl.commands.faction.plot.PlotCommands;
 import me.fly.factions.impl.commands.faction.province.ProvinceCommand;
 import me.fly.factions.impl.commands.faction.rename.RenameCommand;
 import me.fly.factions.impl.commands.faction.set.SetCommand;
+import me.fly.factions.impl.commands.faction.stopClaiming.StopClaimingCommand;
 import me.fly.factions.impl.commands.faction.town.TownCommand;
 import me.fly.factions.impl.commands.faction.unclaim.UnclaimCommand;
 
@@ -42,9 +43,11 @@ public class FactionCommands extends CommandDivision {
 
         addHelpEntry("/f join <faction>", "Attempt to join the given faction");
 
-        addHelpEntry("/f claim <fill | one | auto>", "Claims either one chunk or fills in a hollow spot, or enabled autoclaim");
+        addHelpEntry("/f claim <fill | one | auto>", "Claims either one chunk or fills in a hollow spot, or enables autoclaim");
 
-        addHelpEntry("/f autoClaim", "Toggle whether you are auto claiming");
+        //addHelpEntry("/f autoClaim", "Toggle whether you are auto claiming");
+
+        addHelpEntry("/f stopClaiming", "Stop auto claiming");
 
         //addHelpEntry("/f claim fill", "Fills in a hollow-ly filled area with chunks");
 
@@ -118,6 +121,8 @@ public class FactionCommands extends CommandDivision {
         addSubCommand("set", new SetCommand());
 
         addSubCommand("home", new HomeCommand());
+
+        addSubCommand("stopClaiming", new StopClaimingCommand());
 
         //Broken shit
         addSubCommand("plot", new PlotCommands());

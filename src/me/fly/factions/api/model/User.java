@@ -1,5 +1,7 @@
 package me.fly.factions.api.model;
 
+import me.fly.factions.api.claiming.ClaimType;
+
 import java.util.Collection;
 import java.util.UUID;
 
@@ -24,9 +26,9 @@ public interface User extends PlotOwner {
 
     boolean isAdminMode();
 
-    Object getAutoClaiming();
+    ClaimType getAutoClaiming();
 
-    void setAutoClaiming(Object autoClaiming);
+    void setAutoClaiming(ClaimType autoClaiming);
 
     int getPower();
 

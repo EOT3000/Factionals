@@ -1,10 +1,11 @@
 package me.fly.factions.api.model;
 
+import me.fly.factions.api.claiming.ClaimType;
 import org.bukkit.Color;
 
 import java.util.Collection;
 
-public interface LandAdministrator<T> extends FactionComponent {
+public interface LandAdministrator<T> extends FactionComponent, ClaimType {
     Collection<T> getPlots();
 
     void addPlot(T plot);
