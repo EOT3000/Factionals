@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class OrganizationInviteCommand extends CommandDivision {
     public OrganizationInviteCommand() {
-        addHelpEntry("/f organization invite <organization> <faction>", "");
+        addHelpEntry("/f organization invite <organization> <faction>", "Invite a faction to an organization");
 
         addSubCommand("*", this);
     }
