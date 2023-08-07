@@ -9,7 +9,7 @@ import me.fly.factions.api.permissions.Permissibles;
 import me.fly.factions.api.serialization.Serializer;
 import me.fly.factions.impl.util.Pair;
 import me.fly.factions.impl.util.Plots;
-import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

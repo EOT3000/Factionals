@@ -60,9 +60,9 @@ public class OrganizationSerializer extends Serializer<Organization> {
                         new PlotImpl(plot.getInt("x"), plot.getInt("z"), Plots.getWorld(plot.getInt("w")), io);
                     }
 
-                    ConfigurationSection orgmembers = configuration.getConfigurationSection("orgmembers");
+                    List<String> orgmembers = configuration.getStringList("orgmembers");
 
-                    for(String string : orgmembers.getKeys(false)) {
+                    for(String string : orgmembers) {
                         io.addMemberOrganization((FactionComponent) Permissibles.get(string));
                     }
 
