@@ -81,14 +81,16 @@ public class PlotImpl implements Plot {
             }
         }
 
-        if(admin != null && !(admin instanceof Faction)) {
-            admin.removePlot(this);
+        if(this.admin != null && !(this.admin instanceof Faction)) {
+            this.admin.removePlot(this);
         }
 
         this.admin = administrator;
 
-        if(admin != null) {
-            admin.addPlot(this);
+        if(this.admin != null) {
+            this.admin.addPlot(this);
+        } else {
+            this.admin = faction;
         }
     }
 
